@@ -1,0 +1,745 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournaments &amp; Events — VRGC</title>
+  <meta name="description" content="Register your squad for collegiate esports tournaments, 48-hour VR Game Jams, and campus LAN battles with prize pools exceeding ₹15,00,000.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1788435876">
+</head>
+<body>
+
+  <!-- INKGAMES NAVIGATION BAR -->
+  <header class="ink-nav scrolled" id="ink-navbar">
+    <div class="nav-brand-wrap">
+      <a href="index.html" style="display:flex;align-items:center;gap:0.75rem">
+        <img src="vrgc_logo.jpg" alt="VRGC Logo" class="nav-brand-logo">
+        <span class="nav-brand-text">VRGC</span>
+      </a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu" style="min-height:44px;min-width:44px;">
+      <span class="nmt-bar"></span>
+      <span class="nmt-bar"></span>
+      <span class="nmt-bar"></span>
+    </button>
+    <nav class="ink-nav-links" id="navLinks">
+      <a href="index.html" class="ink-nl">Home</a>
+      <a href="about.html" class="ink-nl">Studio</a>
+      <a href="events.html" class="ink-nl active">Events</a>
+      <a href="live.html" class="ink-nl">Live</a>
+      <a href="community.html" class="ink-nl">Community</a>
+    </nav>
+    <div class="ink-nav-actions">
+      <a href="events.html" class="btn-login" style="min-height:44px;display:inline-flex;align-items:center;">Events</a>
+      <a href="#register" class="btn-signup" style="min-height:44px;display:inline-flex;align-items:center;" onclick="openRegModal('val')">Join Club</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ══════════════════════════════════════════════════
+         HERO SECTION: MONUMENTAL TOURNAMENT HEADER
+         ══════════════════════════════════════════════════ -->
+    <section class="ink-hero" style="min-height: 75vh; padding-top: 8.5rem; padding-bottom: 3rem;">
+      <div class="hero-glow-backlight"></div>
+
+      <div class="hero-badge-pill">
+        <span class="hbp-dot"></span>
+        SEASON 4 &bull; ₹15,00,000+ ANNUAL CIRCUIT
+      </div>
+
+      <h1 class="ink-mega-title">
+        <span>COLLEGIATE</span>
+        <span class="title-accent">TOURNAMENTS</span>
+      </h1>
+
+      <p class="ink-hero-sub" style="margin-bottom: 2rem;">
+        From 100-player Battle Royale LANs in the central auditorium to 48-hour VR Game Jams in the spatial lab. Assemble your squad, secure your slot, and claim collegiate glory.
+      </p>
+
+      <div class="ink-hero-actions">
+        <button class="btn-ink-primary" style="min-height:46px;cursor:pointer;" onclick="openRegModal('val')">
+          Register Squad &nbsp;&nearr;
+        </button>
+        <a href="live.html" class="btn-ink-outline" style="min-height:46px;display:inline-flex;align-items:center;">
+          Watch Live Arena
+        </a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         TRUST & CREDIBILITY STRIP
+         ══════════════════════════════════════════════════ -->
+    <div class="trust-signals-bar">
+      <div class="trust-item">
+        <span class="trust-icon">✓</span>
+        <span>VERIFIED VIT BHOPAL DSW / STUDENT WELFARE APPROVED</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">★</span>
+        <span>1,850+ STUDENTS REGISTERED THIS SEASON</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">⚡</span>
+        <span>₹15,00,000+ CASH PRIZES DISTRIBUTED</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">🔒</span>
+        <span>100% SECURE DISCORD BOT CHECK-IN</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TOURNAMENTS SHOWCASE & FILTER SYSTEM
+         ══════════════════════════════════════════════════ -->
+    <section class="ink-sec-layout" style="padding-top: 1rem;">
+      <!-- Category Filter Pills -->
+      <div class="filter-bar">
+        <button class="filter-pill active" onclick="filterTourneys('all', this)" style="min-height:44px;">ALL EVENTS</button>
+        <button class="filter-pill" onclick="filterTourneys('esports', this)" style="min-height:44px;">ESPORTS LANs</button>
+        <button class="filter-pill" onclick="filterTourneys('hackathon', this)" style="min-height:44px;">VR GAME JAMS</button>
+        <button class="filter-pill" onclick="filterTourneys('scrims', this)" style="min-height:44px;">WEEKLY SCRIMS</button>
+        <button class="filter-pill" onclick="filterTourneys('community', this)" style="min-height:44px;">COMMUNITY CUPS</button>
+      </div>
+
+      <!-- Tournaments Grid (6 Distinct Events with Unique Images & Urgent Signals) -->
+      <div class="tourney-grid" id="tourneyGrid">
+
+        <!-- Tournament 1: VALORANT (Genuine Urgency, Red Bar, Countdown) -->
+        <div class="tourney-card" data-cat="esports">
+          <div class="tourney-banner-wrap">
+            <span class="tourney-status-badge live">&bull; REGISTRATION CLOSING</span>
+            <img src="hero_purple.jpg" alt="VALORANT Invitational" class="tourney-banner">
+          </div>
+          <div class="tourney-body">
+            <!-- Time-Sensitive Countdown -->
+            <div class="tourney-urgency-timer">
+              <span class="pulse-dot-red"></span>
+              CLOSES IN: <span class="countdown-val">2d 14h 32m</span>
+            </div>
+
+            <h3 class="tourney-title">VALORANT CAMPUS INVITATIONAL</h3>
+            <p class="tourney-desc">
+              The flagship 5v5 tactical FPS collegiate cup. 32 collegiate teams battle across Ascent, Haven, and Lotus. Grand Finals broadcast live on the Main Stage with student shoutcasters.
+            </p>
+            
+            <div class="tourney-meta-row">
+              <div class="tourney-prize-wrap">
+                <div class="tp-label">PRIZE POOL</div>
+                <div class="tp-val">₹1,50,000</div>
+              </div>
+              <div class="tourney-slots-wrap">
+                <div class="ts-label">SLOTS (28 / 32 TEAMS)</div>
+                <div class="ts-val" style="color: #ef4444; font-weight: 700;">4 Slots Left!</div>
+                <div class="slots-progress-track">
+                  <div class="slots-progress-fill fill-red" style="width: 88%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="tourney-btn" style="min-height:46px;width:100%;cursor:pointer;" onclick="openRegModal('val')" title="Click to open multi-step squad registration flow">
+              Register Squad &nbsp;&nearr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Tournament 2: BGMI (Amber Bar, Stadium LAN) -->
+        <div class="tourney-card" data-cat="esports">
+          <div class="tourney-banner-wrap">
+            <span class="tourney-status-badge">&bull; UPCOMING LAN</span>
+            <img src="event_trophy.jpg" alt="BGMI Dominance" class="tourney-banner">
+          </div>
+          <div class="tourney-body">
+            <h3 class="tourney-title">BGMI DOMINANCE BATTLE ROYALE</h3>
+            <p class="tourney-desc">
+              100 players, 25 squads, 6 gruelling rounds across Erangel and Miramar. Offline finals hosted in the central campus auditorium with 1,200 cheering fans.
+            </p>
+            
+            <div class="tourney-meta-row">
+              <div class="tourney-prize-wrap">
+                <div class="tp-label">PRIZE POOL</div>
+                <div class="tp-val">₹2,00,000</div>
+              </div>
+              <div class="tourney-slots-wrap">
+                <div class="ts-label">SLOTS (14 / 25 SQUADS)</div>
+                <div class="ts-val" style="color: #f59e0b;">11 Slots Left</div>
+                <div class="slots-progress-track">
+                  <div class="slots-progress-fill fill-amber" style="width: 56%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="tourney-btn" style="min-height:46px;width:100%;cursor:pointer;" onclick="openRegModal('bgmi')" title="Click to open multi-step squad registration flow">
+              Register Squad &nbsp;&nearr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Tournament 3: VR Game Jam (Quest 3 Headset Image, 48h Countdown) -->
+        <div class="tourney-card" data-cat="hackathon">
+          <div class="tourney-banner-wrap">
+            <span class="tourney-status-badge">&bull; 48-HOUR JAM</span>
+            <img src="asset_vr_headset.jpg" alt="VR Game Jam" class="tourney-banner">
+          </div>
+          <div class="tourney-body">
+            <!-- Time-Sensitive Countdown -->
+            <div class="tourney-urgency-timer" style="background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.35); color: #f59e0b;">
+              <span class="pulse-dot-red" style="background:#f59e0b;"></span>
+              JAM COMMENCES IN: <span class="countdown-val">4d 08h 15m</span>
+            </div>
+
+            <h3 class="tourney-title">CAMPUS VR HACKATHON 2025</h3>
+            <p class="tourney-desc">
+              A 48-hour non-stop immersive game development hackathon. Build a working prototype on Unity or Unreal Engine 5. Meta Quest 3 test hardware and developer workstations provided.
+            </p>
+            
+            <div class="tourney-meta-row">
+              <div class="tourney-prize-wrap">
+                <div class="tp-label">INNOVATION POOL</div>
+                <div class="tp-val">₹1,00,000</div>
+              </div>
+              <div class="tourney-slots-wrap">
+                <div class="ts-label">CAPACITY (18 / 20 TEAMS)</div>
+                <div class="ts-val" style="color: #ef4444;">2 Slots Left!</div>
+                <div class="slots-progress-track">
+                  <div class="slots-progress-fill fill-red" style="width: 90%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="tourney-btn" style="min-height:46px;width:100%;cursor:pointer;" onclick="openRegModal('vr')" title="Click to open multi-step squad registration flow">
+              Register Dev Team &nbsp;&nearr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Tournament 4: CS2 (Distinct Controller Hardware Asset, Cyan/Amber Bar) -->
+        <div class="tourney-card" data-cat="esports">
+          <div class="tourney-banner-wrap">
+            <span class="tourney-status-badge">&bull; DOUBLE ELIMINATION</span>
+            <img src="asset_controller.jpg" alt="CS2 Clash" class="tourney-banner">
+          </div>
+          <div class="tourney-body">
+            <h3 class="tourney-title">CS2 INTER-COLLEGIATE CLASH</h3>
+            <p class="tourney-desc">
+              Premier Counter-Strike 2 collegiate bracket. Sub-tick precision, MR12 regulation, and double elimination bracket play. Official Valve anti-cheat verified servers.
+            </p>
+            
+            <div class="tourney-meta-row">
+              <div class="tourney-prize-wrap">
+                <div class="tp-label">PRIZE POOL</div>
+                <div class="tp-val">₹75,000</div>
+              </div>
+              <div class="tourney-slots-wrap">
+                <div class="ts-label">SLOTS (8 / 16 TEAMS)</div>
+                <div class="ts-val" style="color: #38bdf8;">8 Slots Left</div>
+                <div class="slots-progress-track">
+                  <div class="slots-progress-fill fill-amber" style="width: 50%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="tourney-btn" style="min-height:46px;width:100%;cursor:pointer;" onclick="openRegModal('cs2')" title="Click to open multi-step squad registration flow">
+              Register Squad &nbsp;&nearr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Tournament 5: EA FC 25 (Console Derby, Green Bar) -->
+        <div class="tourney-card" data-cat="scrims">
+          <div class="tourney-banner-wrap">
+            <span class="tourney-status-badge">&bull; 1v1 CONSOLE SHOWDOWN</span>
+            <img src="vrgc_logo.jpg" alt="EA FC 25" class="tourney-banner">
+          </div>
+          <div class="tourney-body">
+            <h3 class="tourney-title">EA FC 25 CAMPUS DERBY</h3>
+            <p class="tourney-desc">
+              1v1 console soccer championship. 64-player single elimination bracket played on PS5 setups inside the student recreation center.
+            </p>
+            
+            <div class="tourney-meta-row">
+              <div class="tourney-prize-wrap">
+                <div class="tp-label">PRIZE POOL</div>
+                <div class="tp-val">₹50,000</div>
+              </div>
+              <div class="tourney-slots-wrap">
+                <div class="ts-label">SLOTS (19 / 64 PLAYERS)</div>
+                <div class="ts-val" style="color: #22c55e;">45 Slots Open</div>
+                <div class="slots-progress-track">
+                  <div class="slots-progress-fill fill-green" style="width: 30%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="tourney-btn" style="min-height:46px;width:100%;cursor:pointer;" onclick="openRegModal('eafc')" title="Click to open multi-step squad registration flow">
+              Register Solo &nbsp;&nearr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Tournament 6: Friday Scrims (Gold Coin Asset, Open Lobby) -->
+        <div class="tourney-card" data-cat="scrims">
+          <div class="tourney-banner-wrap">
+            <span class="tourney-status-badge">&bull; EVERY FRIDAY</span>
+            <img src="asset_gold_coin.jpg" alt="Friday Scrims" class="tourney-banner">
+          </div>
+          <div class="tourney-body">
+            <h3 class="tourney-title">FRIDAY NIGHT CAMPUS SCRIMS</h3>
+            <p class="tourney-desc">
+              Open to all skill levels. Jump into organized 10-mans, test new agent compositions, and get scouted by VRGC Varsity coaches.
+            </p>
+            
+            <div class="tourney-meta-row">
+              <div class="tourney-prize-wrap">
+                <div class="tp-label">WEEKLY REWARDS</div>
+                <div class="tp-val">Club Points &amp; Merch</div>
+              </div>
+              <div class="tourney-slots-wrap">
+                <div class="ts-label">LOBBY CAPACITY</div>
+                <div class="ts-val" style="color: #22c55e;">Unlimited Access</div>
+                <div class="slots-progress-track">
+                  <div class="slots-progress-fill fill-green" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="tourney-btn" style="min-height:46px;width:100%;cursor:pointer;" onclick="openRegModal('scrims')" title="Click to open multi-step squad registration flow">
+              Join Lobby &nbsp;&nearr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Empty State (Shown when 0 cards match) -->
+        <div class="tourney-empty-state" id="tourneyEmptyState">
+          <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎮</div>
+          <h4 style="font-family: var(--font-display); font-size: 2rem; color: #fff; margin-bottom: 0.5rem;">NO TOURNAMENTS FOUND IN THIS CATEGORY</h4>
+          <p style="color: var(--white-muted); max-width: 500px; margin: 0 auto 1.5rem; font-size: 0.95rem;">
+            We don't have scheduled matches for this specific filter right now. New events are published every Monday at 18:00 IST!
+          </p>
+          <button class="btn-ink-primary" style="min-height:44px;cursor:pointer;" onclick="filterTourneys('all', document.querySelector('.filter-pill'))">
+            View All Active Tournaments
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ══════════════════════════════════════════════════
+           UNIFIED HALL OF FAME CHAMPIONS (MATCHES CARD SYSTEM)
+           ══════════════════════════════════════════════════ -->
+      <div style="margin-top: 7rem; text-align: center;">
+        <div class="ink-sec-tag" style="justify-content: center;"><span class="tag-sq"></span> LEGACY &bull; REIGNING KINGS</div>
+        <h2 style="font-family: var(--font-display); font-size: clamp(2.8rem, 6vw, 4.5rem); color: #fff; line-height: 1; margin-bottom: 3.5rem;">
+          HALL OF FAME CHAMPIONS
+        </h2>
+
+        <div class="tourney-grid">
+          <!-- HOF 1: Team Eclipse -->
+          <div class="tourney-card">
+            <div class="tourney-banner-wrap">
+              <span class="hof-champion-badge">★ REIGNING CHAMPION // S3</span>
+              <img src="hero_purple.jpg" alt="Team Eclipse" class="tourney-banner">
+            </div>
+            <div class="tourney-body">
+              <span class="dept-badge" style="width: fit-content; margin-bottom: 0.5rem;">VALORANT &bull; WINTER LAN</span>
+              <h3 class="tourney-title">TEAM ECLIPSE</h3>
+              <p class="tourney-desc">
+                Undefeated 7-0 bracket run in the 2024 Inter-College Winter LAN. Took home the ₹1,20,000 grand prize with an emphatic 3-1 series victory on Haven.
+              </p>
+              <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; color: #ffd700; font-family: var(--font-mono); font-size: 0.85rem;">
+                ★ FINALS MVP: Phantom#IND (1.42 K/D &bull; 24 Assists)
+              </div>
+            </div>
+          </div>
+
+          <!-- HOF 2: Soul Survivors -->
+          <div class="tourney-card">
+            <div class="tourney-banner-wrap">
+              <span class="hof-champion-badge">★ REIGNING CHAMPION // S3</span>
+              <img src="event_trophy.jpg" alt="Soul Survivors" class="tourney-banner">
+            </div>
+            <div class="tourney-body">
+              <span class="dept-badge" style="width: fit-content; margin-bottom: 0.5rem;">BGMI &bull; ERANGEL FINALS</span>
+              <h3 class="tourney-title">SOUL SURVIVORS</h3>
+              <p class="tourney-desc">
+                Scored 118 total points across 6 matches with 4 Winner Winner Chicken Dinners on Miramar. Set collegiate record for most squad eliminations in history.
+              </p>
+              <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; color: #ffd700; font-family: var(--font-mono); font-size: 0.85rem;">
+                ★ FINALS MVP: Rexxar (34 Frags &bull; 8,420 Damage)
+              </div>
+            </div>
+          </div>
+
+          <!-- HOF 3: Studio Quantum -->
+          <div class="tourney-card">
+            <div class="tourney-banner-wrap">
+              <span class="hof-champion-badge">★ BEST TECHNICAL ARCHITECTURE</span>
+              <img src="asset_vr_headset.jpg" alt="Studio Quantum" class="tourney-banner">
+            </div>
+            <div class="tourney-body">
+              <span class="dept-badge" style="width: fit-content; margin-bottom: 0.5rem;">VR GAME JAM &bull; INNOVATION</span>
+              <h3 class="tourney-title">STUDIO QUANTUM</h3>
+              <p class="tourney-desc">
+                Designed "CyberGlove VR", an innovative haptic spatial physics puzzle built from scratch in 48 hours using Unreal Engine 5 and Meta Quest 3 hand tracking.
+              </p>
+              <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; color: #ffd700; font-family: var(--font-mono); font-size: 0.85rem;">
+                ★ HIGHEST JURY SCORE: 98.4 / 100
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════
+       INTERACTIVE MULTI-STEP SQUAD REGISTRATION MODAL
+       ══════════════════════════════════════════════════ -->
+  <div class="reg-modal-backdrop" id="registrationModal" onclick="handleBackdropClick(event)">
+    <div class="reg-modal-card">
+      <div class="reg-modal-header">
+        <div>
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; color: #ef4444; font-weight: 700; letter-spacing: 0.1em;">
+            ● OFFICIAL SQUAD ENTRY
+          </div>
+          <h3 style="font-family: var(--font-display); font-size: 1.8rem; color: #fff; margin-top: 0.15rem;" id="modalTourneyTitle">
+            VALORANT CAMPUS INVITATIONAL
+          </h3>
+        </div>
+        <button class="reg-modal-close" onclick="closeRegModal()" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="reg-modal-body">
+        <!-- Step Progress Indicator -->
+        <div class="reg-step-indicator">
+          <div class="reg-step-item active" id="stepIndicator1">
+            <div class="reg-step-circle">1</div>
+            <span>CAPTAIN INFO</span>
+          </div>
+          <div class="reg-step-item" id="stepIndicator2">
+            <div class="reg-step-circle">2</div>
+            <span>ROSTER PLAYERS</span>
+          </div>
+          <div class="reg-step-item" id="stepIndicator3">
+            <div class="reg-step-circle">3</div>
+            <span>CONFIRMATION</span>
+          </div>
+        </div>
+
+        <!-- Event Recap Details -->
+        <div class="modal-event-recap">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--white-muted);">PRIZE POOL</div>
+            <div style="font-family: var(--font-display); font-size: 1.4rem; color: #ffd700;" id="modalPrize">₹1,50,000</div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--white-muted);">SLOT STATUS</div>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: #ef4444; font-weight: 700;" id="modalSlots">4 SLOTS LEFT</div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--white-muted);">FORMAT</div>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: #fff;" id="modalFormat">5v5 LAN BO3</div>
+          </div>
+        </div>
+
+        <!-- Registration Form Steps -->
+        <form id="multiStepForm" onsubmit="handleModalSubmit(event)">
+          <!-- STEP 1: Captain Info -->
+          <div id="modalStep1">
+            <div class="reg-form-grid" style="grid-template-columns: 1fr 1fr;">
+              <div style="grid-column: 1 / -1;">
+                <label class="reg-label">Squad / Team Name</label>
+                <input type="text" class="reg-input" id="mTeamName" placeholder="e.g. Velocity Esports" style="min-height:46px;" required>
+              </div>
+              <div>
+                <label class="reg-label">Captain In-Game Name (IGN)</label>
+                <input type="text" class="reg-input" id="mCaptainIgn" placeholder="e.g. Aether#IND" style="min-height:46px;" required>
+              </div>
+              <div>
+                <label class="reg-label">Captain Discord Tag</label>
+                <input type="text" class="reg-input" id="mCaptainDiscord" placeholder="e.g. aether_07" style="min-height:46px;" required>
+              </div>
+              <div>
+                <label class="reg-label">VIT Registration Number</label>
+                <input type="text" class="reg-input" id="mCaptainReg" placeholder="e.g. 23BCE10429" style="min-height:46px;" required>
+              </div>
+              <div>
+                <label class="reg-label">WhatsApp / Contact</label>
+                <input type="tel" class="reg-input" id="mCaptainPhone" placeholder="e.g. +91 98765 43210" style="min-height:46px;" required>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.75rem; text-align: right;">
+              <button type="button" class="btn-ink-primary" style="min-height:46px;cursor:pointer;" onclick="goToModalStep(2)">
+                Next: Add Roster Members &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Roster Details -->
+          <div id="modalStep2" style="display: none;">
+            <div class="reg-form-grid" style="grid-template-columns: 1fr;">
+              <div>
+                <label class="reg-label">Player 2 (IGN &amp; Reg No)</label>
+                <input type="text" class="reg-input" id="mP2" placeholder="e.g. Phantom#2024 · 23BCSE101" style="min-height:46px;" required>
+              </div>
+              <div>
+                <label class="reg-label">Player 3 (IGN &amp; Reg No)</label>
+                <input type="text" class="reg-input" id="mP3" placeholder="e.g. Viper#777 · 23BCSE102" style="min-height:46px;" required>
+              </div>
+              <div>
+                <label class="reg-label">Player 4 (IGN &amp; Reg No)</label>
+                <input type="text" class="reg-input" id="mP4" placeholder="e.g. Jett#001 · 23BCSE103" style="min-height:46px;" required>
+              </div>
+              <div>
+                <label class="reg-label">Player 5 / Substitute (IGN &amp; Reg No)</label>
+                <input type="text" class="reg-input" id="mP5" placeholder="e.g. Cypher#404 · 23BCSE104" style="min-height:46px;">
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 1.75rem;">
+              <button type="button" class="btn-ink-outline" style="min-height:46px;cursor:pointer;" onclick="goToModalStep(1)">
+                &larr; Back
+              </button>
+              <button type="button" class="btn-ink-primary" style="min-height:46px;cursor:pointer;" onclick="goToModalStep(3)">
+                Next: Review &amp; Confirm &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Review & Fair Play Confirmation -->
+          <div id="modalStep3" style="display: none;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: #ff4d6d; margin-bottom: 0.5rem; font-weight: 700;">
+                CHECKLIST BEFORE FINAL SUBMISSION:
+              </div>
+              <ul style="font-size: 0.85rem; color: var(--white-muted); line-height: 1.6; padding-left: 1.25rem;">
+                <li>All players must be active VIT students with valid IDs.</li>
+                <li>Third-party macros, radar hacks, and unfair exploits result in immediate disqualification.</li>
+                <li>Discord check-in opens 45 minutes prior to match schedule.</li>
+              </ul>
+            </div>
+
+            <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; margin-bottom: 1.5rem; font-size: 0.85rem; color: #fff;">
+              <input type="checkbox" id="mFairPlayCheck" required style="width: 20px; height: 20px; accent-color: #ef4444;">
+              <span>I confirm all roster handles are accurate and agree to collegiate fair-play regulations.</span>
+            </label>
+
+            <div style="display: flex; justify-content: space-between;">
+              <button type="button" class="btn-ink-outline" style="min-height:46px;cursor:pointer;" onclick="goToModalStep(2)">
+                &larr; Back
+              </button>
+              <button type="submit" class="reg-submit-btn" style="min-height:46px;cursor:pointer;">
+                CONFIRM SQUAD REGISTRATION &nbsp;&nearr;
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- STEP 4: Success Screen -->
+        <div id="modalSuccess" style="display: none; text-align: center; padding: 2.5rem 1rem;">
+          <div style="font-size: 3.5rem; color: #4ade80; margin-bottom: 1rem;">✓</div>
+          <h4 style="font-family: var(--font-display); font-size: 2.4rem; color: #fff; line-height: 1; margin-bottom: 0.5rem;">
+            SQUAD REGISTRATION CONFIRMED!
+          </h4>
+          <p style="color: var(--white-muted); font-size: 0.95rem; max-width: 480px; margin: 0 auto 1.5rem; line-height: 1.5;">
+            Your entry has been locked into the official bracket database. A verification bot has logged your roster.
+          </p>
+          <div style="display: inline-block; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.4); padding: 0.75rem 1.5rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.85rem; color: #c084fc; margin-bottom: 2rem;">
+            ENTRY CODE: <span id="mGeneratedCode" style="color: #fff; font-weight: 700;">VRGC-2025-4819</span>
+          </div>
+          <div>
+            <button class="btn-ink-primary" style="min-height:46px;cursor:pointer;" onclick="closeRegModal()">
+              Done &amp; Return to Events
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- INKGAMES FOOTER -->
+  <footer class="ink-footer">
+    <div class="if-top">
+      <div>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
+          <img src="vrgc_logo.jpg" alt="VRGC" style="height:38px;border-radius:4px">
+          <span class="if-brand-title">VRGC</span>
+        </div>
+        <p class="if-brand-desc">
+          Virtual Reality and Gaming Club &mdash; VIT Bhopal University.<br>
+          E-SPORTS &bull; DEVELOPMENT &bull; WORKSHOP &bull; BOOTCAMP
+        </p>
+      </div>
+      <div class="if-links-grid">
+        <div class="if-col">
+          <h4>PAGES</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">Studio &amp; About</a></li>
+            <li><a href="events.html">Tournaments</a></li>
+            <li><a href="live.html">Live Arena</a></li>
+            <li><a href="community.html">Community</a></li>
+          </ul>
+        </div>
+        <div class="if-col">
+          <h4>DOMAINS</h4>
+          <ul>
+            <li><a href="#">Esports Division</a></li>
+            <li><a href="#">VR Development</a></li>
+            <li><a href="#">Workshops</a></li>
+            <li><a href="#">Bootcamps</a></li>
+          </ul>
+        </div>
+        <div class="if-col">
+          <h4>CONNECT</h4>
+          <ul>
+            <li><a href="#">Discord Server</a></li>
+            <li><a href="#">Instagram @vrgcvitbhopal</a></li>
+            <li><a href="#">YouTube Channel</a></li>
+            <li><a href="#">Twitter / X</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="if-bottom">
+      <span>&copy; 2025 VIRTUAL REALITY AND GAMING CLUB (VRGC) &mdash; VIT BHOPAL. ALL RIGHTS RESERVED.</span>
+      <span style="color:var(--purple-bright)">SEASON 4 REGISTERED &bull; DSW VERIFIED</span>
+    </div>
+  </footer>
+
+  
+  <script src="script.js?v=1788435876"></script>
+  <script>
+    // Event Metadata Dictionary for Modal
+    const EVENT_DETAILS = {
+      val: {
+        title: "VALORANT CAMPUS INVITATIONAL",
+        prize: "₹1,50,000",
+        slots: "4 SLOTS LEFT",
+        format: "5v5 LAN BO3"
+      },
+      bgmi: {
+        title: "BGMI DOMINANCE BATTLE ROYALE",
+        prize: "₹2,00,000",
+        slots: "11 SLOTS LEFT",
+        format: "4-MAN SQUAD ERANGEL"
+      },
+      vr: {
+        title: "CAMPUS VR HACKATHON 2025",
+        prize: "₹1,00,000",
+        slots: "2 SLOTS LEFT",
+        format: "48-HOUR QUEST 3 JAM"
+      },
+      cs2: {
+        title: "CS2 INTER-COLLEGIATE CLASH",
+        prize: "₹75,000",
+        slots: "8 SLOTS LEFT",
+        format: "MR12 DOUBLE ELIM"
+      },
+      eafc: {
+        title: "EA FC 25 CAMPUS DERBY",
+        prize: "₹50,000",
+        slots: "45 SLOTS OPEN",
+        format: "1v1 PS5 CONSOLE"
+      },
+      scrims: {
+        title: "FRIDAY NIGHT CAMPUS SCRIMS",
+        prize: "Club Points & Merch",
+        slots: "UNLIMITED",
+        format: "WEEKLY 10-MANS"
+      }
+    };
+
+    // Filter Logic with Animation & Empty State Handling
+    function filterTourneys(cat, btn) {
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('#tourneyGrid .tourney-card');
+      const emptyState = document.getElementById('tourneyEmptyState');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const matches = cat === 'all' || card.getAttribute('data-cat') === cat;
+        if (matches) {
+          card.style.display = 'flex';
+          setTimeout(() => card.classList.remove('fade-out'), 20);
+          visibleCount++;
+        } else {
+          card.classList.add('fade-out');
+          setTimeout(() => {
+            if (card.classList.contains('fade-out')) card.style.display = 'none';
+          }, 250);
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyState.classList.add('active');
+      } else {
+        emptyState.classList.remove('active');
+      }
+    }
+
+    // Interactive Multi-Step Registration Modal
+    function openRegModal(eventKey) {
+      const data = EVENT_DETAILS[eventKey] || EVENT_DETAILS.val;
+      document.getElementById('modalTourneyTitle').textContent = data.title;
+      document.getElementById('modalPrize').textContent = data.prize;
+      document.getElementById('modalSlots').textContent = data.slots;
+      document.getElementById('modalFormat').textContent = data.format;
+
+      // Reset Modal Steps
+      goToModalStep(1);
+      document.getElementById('multiStepForm').style.display = 'block';
+      document.getElementById('modalSuccess').style.display = 'none';
+
+      // Open Modal
+      document.getElementById('registrationModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeRegModal() {
+      document.getElementById('registrationModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function handleBackdropClick(e) {
+      if (e.target.id === 'registrationModal') {
+        closeRegModal();
+      }
+    }
+
+    function goToModalStep(step) {
+      document.getElementById('modalStep1').style.display = step === 1 ? 'block' : 'none';
+      document.getElementById('modalStep2').style.display = step === 2 ? 'block' : 'none';
+      document.getElementById('modalStep3').style.display = step === 3 ? 'block' : 'none';
+
+      document.querySelectorAll('.reg-step-item').forEach((el, idx) => {
+        if (idx + 1 === step) el.classList.add('active');
+        else if (idx + 1 < step) el.classList.add('completed');
+        else el.classList.remove('active');
+      });
+    }
+
+    function handleModalSubmit(e) {
+      e.preventDefault();
+      const code = 'VRGC-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('mGeneratedCode').textContent = code;
+
+      document.getElementById('multiStepForm').style.display = 'none';
+      document.getElementById('modalSuccess').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+

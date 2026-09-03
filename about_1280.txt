@@ -1,0 +1,49 @@
+Created At: 2026-09-03T16:57:44+05:30
+Completed At: 2026-09-03T16:57:45+05:30
+File Path: `file:///e:/vrgc-live/about.html`
+Total Lines: 1037
+Total Bytes: 54433
+Showing lines 50 to 90
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+50:       <div class="polaroid-float pf-2 iss-floating-photo">
+51:         <img src="event_trophy.jpg" alt="Trophy Victory">
+52:       </div>
+53: 
+54:       <div class="ink-sec-tag-dark reveal-parent">
+55:         <span class="text-reveal-tag"><span class="tag-sq"></span> WHO WE ARE &bull; EST. 2021</span>
+56:       </div>
+57:       <h1 class="isl-title reveal-parent">
+58:         <span class="text-reveal-wrap"><span class="text-reveal-line">DESIGNERS,</span></span>
+59:         <span class="text-reveal-wrap"><span class="text-reveal-line">DEVELOPERS &amp;</span></span>
+60:         <span class="text-reveal-wrap"><span class="text-reveal-line">CHAMPIONS.</span></span>
+61:       </h1>
+62:       <p class="isl-desc text-reveal-sub">
+63:         Virtual Reality &amp; Gaming Club (VRGC) is VIT Bhopal University's premier collegiate esports organization and immersive media research collective. With over 2,400 active members, we engineer cutting-edge virtual experiences and field varsity rosters that dominate regional and national leagues.
+64:       </p>
+65: 
+66:       <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+67:            CIRCULAR COORDINATOR & LEADERSHIP GALLERY (CARD CONTAINERS)
+68:            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+69:       <div style="margin-top: 5rem; text-align: center; position: relative; z-index: 2; max-width: 1240px; margin-left: auto; margin-right: auto;">
+70:         <div class="ink-sec-tag-dark" style="justify-content: center;"><span class="tag-sq"></span> EXECUTIVE COUNCIL</div>
+71:         <h2 style="font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); color: #05000A; line-height: 1; margin-top: 0.5rem; margin-bottom: 3rem;">
+72:           THE MINDS BEHIND THE METAVERSE
+73:         </h2>
+74: 
+75:         <div class="circular-team-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem;">
+76:           <!-- Lead 1: Club Lead / Founder -->
+77:           <div class="circ-member-card">
+78:             <div class="circ-avatar-wrap">
+79:               <div class="circ-ring" style="border-color: rgba(124, 58, 237, 0.4);"></div>
+80:               <img src="vrgc_logo.jpg" alt="Parardha" class="circ-avatar" style="border-color: #7c3aed;">
+81:             </div>
+82:             <h3 class="circ-name" style="color: #05000A; font-size: 1.6rem; margin-bottom: 0.2rem;">PARARDHA</h3>
+83:             <span class="circ-role" style="color: #7c3aed; font-weight: 700;">President &amp; Founder</span>
+84:             <span class="circ-member-badge" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">FOUNDER</span>
+85:             <p class="circ-bio" style="color: #334155; margin-top: 0.85rem; font-size: 0.88rem; line-height: 1.5;">Directing overall vision, university partnerships, institutional scaling, and championship roadmap.</p>
+86:           </div>
+87: 
+88:           <!-- Lead 2: Esports Lead -->
+89:           <div class="circ-member-card">
+90:             <div class="circ-avatar-wrap">
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

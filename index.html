@@ -1,821 +1,275 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VRGC.exe — Redefining Play & The Metaverse</title>
-    <meta name="description" content="VRGC.exe is the ultimate virtual gaming collective and metaverse playground. Compete in high-stakes tournaments, build custom voxel worlds, and experience next-gen interactive gaming.">
-    
-    <!-- Google Fonts: Archivo Narrow, Plus Jakarta Sans, JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,600;0,700;0,800;0,900;1,800;1,900&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Material Symbols -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
-    
-    <!-- Three.js for interactive 3D WebGL background -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VRGC — Virtual Reality &amp; Gaming Club</title>
+  <meta name="description" content="Virtual Reality & Gaming Club — VIT Bhopal University. Esports, Development, Workshop, Bootcamp.">
+  <meta name="theme-color" content="#080010">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1788435876">
+  <script src="https://www.youtube.com/iframe_api" async defer></script>
 </head>
-<body class="dark-theme">
+<body>
 
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-ring" id="cursor-ring"></div>
+  <!-- INKGAMES NAVIGATION BAR -->
+  <header class="ink-nav" id="ink-navbar">
+    <div class="nav-brand-wrap">
+      <a href="index.html" style="display:flex;align-items:center;gap:0.75rem">
+        <img src="vrgc_logo.jpg" alt="VRGC Logo" class="nav-brand-logo">
+        <span class="nav-brand-text">VRGC</span>
+      </a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="ink-nav-links" id="navLinks">
+      <a href="index.html" class="ink-nl active">Home</a>
+      <a href="about.html" class="ink-nl">Studio</a>
+      <a href="events.html" class="ink-nl">Events</a>
+      <a href="live.html" class="ink-nl">Live</a>
+      <a href="community.html" class="ink-nl">Community</a>
+    </nav>
+    <div class="ink-nav-actions">
+      <a href="events.html" class="btn-login">Events</a>
+      <a href="events.html#register" class="btn-signup">Join Club</a>
+    </div>
+    <button class="nav-mobile-toggle" aria-label="Toggle menu">
+      <span class="nmt-bar"></span>
+      <span class="nmt-bar"></span>
+      <span class="nmt-bar"></span>
+    </button>
+  </header>
 
-    <!-- STORYBOARD PROGRESS TRACKER HUD -->
-    <div class="storyboard-progress-tracker" id="storyboard-tracker">
-        <div class="storyboard-indicator-pill">
-            <span class="storyboard-dot"></span>
-            <span class="storyboard-chap-id" id="storyboard-chap-id">ACT 01</span>
-            <span class="storyboard-chap-divider">//</span>
-            <span class="storyboard-chap-title" id="storyboard-chap-title">THE ASYLUM</span>
+  <main>
+    <!-- ══════════════════════════════════════════════════
+         HERO SECTION: INKGAMES EXACT FORMAT
+         MASSIVE BEBAS NEUE CONDENSED HEADLINE
+         DEDICATED 3D FLOATING ANIMATION SYSTEM
+         ══════════════════════════════════════════════════ -->
+    <section class="ink-hero">
+      <!-- YouTube Video Ambient Background Layer (z-0) -->
+      <div class="ink-hero-video-bg">
+        <div id="yt-player-target">
+          <iframe 
+            src="https://www.youtube.com/embed/AlySUwPFcNA?autoplay=1&mute=1&controls=0&loop=1&playlist=AlySUwPFcNA,ZLO9BAA1G0I,zX0AV6yxyrQ,cMt7RigFfb8,kp2UB4Qzsq8&playsinline=1&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            tabindex="-1"
+            aria-hidden="true"
+            title="VRGC Esports Trailer"
+          ></iframe>
         </div>
+        <div class="ink-hero-video-scrim"></div>
+      </div>
+
+      <!-- Monumental Centered Headline -->
+      <div class="ink-hero-content">
+        <div class="hero-badge-pill text-reveal-tag">
+          <span class="hbp-dot"></span>
+          VIRTUAL REALITY &amp; GAMING CLUB &bull; VIT BHOPAL
+        </div>
+
+        <h1 class="ink-mega-title">
+          <span class="text-reveal-wrap"><span class="text-reveal-line">JOIN THE</span></span>
+          <span class="text-reveal-wrap"><span class="text-reveal-line">NEW ERA OF</span></span>
+          <span class="text-reveal-wrap"><span class="text-reveal-line title-accent">GAMING</span></span>
+        </h1>
+
+        <p class="ink-hero-sub text-reveal-sub">
+          India's premier collegiate esports collective and VR development studio. 2,400+ competitors, national tournaments, and immersive hardware labs.
+        </p>
+
+        <div class="ink-hero-actions text-reveal-sub" style="transition-delay:0.48s">
+          <a href="events.html" class="btn-ink-primary">Explore Tournaments &nbsp;&nearr;</a>
+          <a href="about.html" class="btn-ink-outline">Discover Studio</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE METRIC TICKER -->
+    <div class="ink-marquee" aria-hidden="true">
+      <div class="ink-marquee-track">
+        <div class="ink-marquee-item"><span>E-SPORTS</span><span class="star">&#10022;</span><span>DEVELOPMENT</span><span class="star">&#10022;</span><span>WORKSHOP</span><span class="star">&#10022;</span><span>BOOTCAMP</span><span class="star">&#10022;</span><span>VR LAB</span><span class="star">&#10022;</span><span>2,400+ MEMBERS</span><span class="star">&#10022;</span><span>&#8377;5L+ PRIZE POOL</span><span class="star">&#10022;</span></div>
+        <div class="ink-marquee-item"><span>E-SPORTS</span><span class="star">&#10022;</span><span>DEVELOPMENT</span><span class="star">&#10022;</span><span>WORKSHOP</span><span class="star">&#10022;</span><span>BOOTCAMP</span><span class="star">&#10022;</span><span>VR LAB</span><span class="star">&#10022;</span><span>2,400+ MEMBERS</span><span class="star">&#10022;</span><span>&#8377;5L+ PRIZE POOL</span><span class="star">&#10022;</span></div>
+      </div>
     </div>
 
-    <!-- NAVIGATION HEADER -->
-    <header class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="#" class="brand-logo" id="logo">
-                    <span class="logo-symbol">❖</span>
-                    VRGC<span class="ext">.exe</span>
-                </a>
-
-                <div class="hud-pill">
-                    <span class="pulsing-dot green-dot"></span>
-                    <span class="hud-text">SEASON 3 LIVE</span>
-                </div>
-
-                <div class="hud-telemetry-pill">
-                    <span class="telemetry-item"><span class="telemetry-dot"></span>144 FPS</span>
-                    <span class="telemetry-sep">/</span>
-                    <span class="telemetry-item">12MS PING</span>
-                </div>
-            </div>
-
-            <nav class="nav-menu" id="nav-menu">
-                <a href="#hero" class="nav-link active">Home</a>
-                <a href="#core-loop" class="nav-link">Features</a>
-                <a href="#featured-event" class="nav-link">Events</a>
-                <a href="#games" class="nav-link">Games</a>
-                <a href="#crew" class="nav-link">Crew</a>
-                <a href="#radio" class="nav-link radio-link">
-                    <span class="live-dot"></span>Radio
-                </a>
-            </nav>
-
-            <div class="nav-right">
-                <button class="sound-toggle-btn" id="sound-toggle" aria-label="Toggle Sound Effects">
-                    <span class="material-symbols-outlined" id="sound-icon">volume_up</span>
-                    <span class="btn-label-mono">SFX</span>
-                </button>
-
-                <a href="#join" class="btn btn-primary join-btn">
-                    <span class="btn-text-wrapper">
-                        <span class="btn-text-slide">JOIN ASYLUM</span>
-                        <span class="btn-text-slide hover-slide">ENTER NOW →</span>
-                    </span>
-                </a>
-
-                <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Navigation Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+    <!-- ══════════════════════════════════════════════════
+         SECTION 2: DEFINING THE NEXT GENERATION (INKGAMES SPLIT FEATURE)
+         ══════════════════════════════════════════════════ -->
+    <section class="ink-section">
+      <div class="ink-split-feature">
+        <div>
+          <div class="ink-sec-tag"><span class="tag-sq"></span> VRGC VIT BHOPAL</div>
+          <h2 class="isf-title">DEFINING THE NEXT GENERATION OF ESPORTS &amp; VR</h2>
+          <p style="color:var(--white-muted);font-size:1.05rem;line-height:1.75;margin-bottom:2.5rem">
+            We merge high-octane collegiate tournaments, hands-on virtual reality hardware research, and game development bootcamps into an institutional benchmark for university gaming in India.
+          </p>
+          <a href="about.html" class="btn-ink-explore">EXPLORE &nbsp;&nearr;</a>
         </div>
-    </header>
-
-    <!-- MOBILE MENU DRAWER -->
-    <div class="mobile-drawer" id="mobile-drawer">
-        <div class="mobile-drawer-content">
-            <a href="#hero" class="mobile-link">Home</a>
-            <a href="#core-loop" class="mobile-link">Features</a>
-            <a href="#featured-event" class="mobile-link">Events</a>
-            <a href="#games" class="mobile-link">Games</a>
-            <a href="#crew" class="mobile-link">Crew</a>
-            <a href="#radio" class="mobile-link">Radio</a>
-            <a href="#join" class="btn btn-primary mobile-join-btn">JOIN ASYLUM</a>
+        <div class="isf-card-media">
+          <img src="hero_purple.jpg" alt="Esports Arena Broadcast" style="width:100%;height:100%;object-fit:cover;">
         </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 3: FULL WIDTH PURPLE BLOCK WITH FLOATING GAME CARDS
+         ══════════════════════════════════════════════════ -->
+    <section class="ink-purple-block">
+      <!-- Floating Tilted Game Cards Drifting on Scroll -->
+      <div class="ipb-floating-card card-pos-1"><img src="event_trophy.jpg" alt="VALORANT"></div>
+      <div class="ipb-floating-card card-pos-2"><img src="hero_purple.jpg" alt="CS2"></div>
+      <div class="ipb-floating-card card-pos-3"><img src="event_trophy.jpg" alt="BGMI"></div>
+      <div class="ipb-floating-card card-pos-4"><img src="hero_purple.jpg" alt="CHESS"></div>
+
+      <div style="position:relative;z-index:2;max-width:960px;margin:0 auto">
+        <div class="ink-sec-tag" style="color:rgba(255,255,255,0.8);justify-content:center"><span class="tag-sq" style="background:#fff"></span> COMPETITIVE ECOSYSTEM</div>
+        <h2 class="ipb-title">EXPLORE THE WORLD OF VRGC COMPETITIONS</h2>
+        <p style="color:rgba(255,255,255,0.85);font-size:1.1rem;line-height:1.75;margin-bottom:2.5rem">
+          From the flagship VRGC OPEN with ₹5,00,000+ prize pools to weekly ranked scrims in VALORANT, CS2, BGMI, and EA FC 25.
+        </p>
+        <a href="events.html" class="btn-ink-primary" style="background:#fff;color:#080010">View Tournaments &nbsp;&nearr;</a>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 4: PLAY. COMPETE. DOMINATE. (THE 3 TALL CARDS)
+         ══════════════════════════════════════════════════ -->
+    <section class="ink-section">
+      <div class="ink-three-pillars">
+        <div class="itp-header">
+          <div class="ink-sec-tag" style="justify-content:center"><span class="tag-sq"></span> THE THREE PILLARS</div>
+          <h2 class="itp-title">PLAY. COMPETE. DOMINATE.</h2>
+        </div>
+
+        <div class="pillar-cards-grid">
+          <!-- CARD 1: PLAY -->
+          <div class="pillar-card">
+            <div class="pillar-asset-wrap">
+              <img src="asset_vr_headset.jpg" alt="VR Headset">
+            </div>
+            <div>
+              <span class="pillar-tag">&#9632; PLAY</span>
+              <h3 class="pillar-title">BUILD YOUR SQUAD</h3>
+              <p class="pillar-desc">Step into our state-of-the-art VR laboratory, join casual campus scrims, and link up with over 2,400 active student gamers.</p>
+            </div>
+          </div>
+
+          <!-- CARD 2: COMPETE -->
+          <div class="pillar-card">
+            <div class="pillar-asset-wrap">
+              <img src="asset_controller.jpg" alt="Controller">
+            </div>
+            <div>
+              <span class="pillar-tag">&#9632; COMPETE</span>
+              <h3 class="pillar-title">CRUSH YOUR RIVALS</h3>
+              <p class="pillar-desc">Test your team's mettle in official university brackets, collegiate invitationals, and national inter-VIT championships.</p>
+            </div>
+          </div>
+
+          <!-- CARD 3: DOMINATE -->
+          <div class="pillar-card">
+            <div class="pillar-asset-wrap">
+              <img src="asset_gold_coin.jpg" alt="Gold Coin">
+            </div>
+            <div>
+              <span class="pillar-tag">&#9632; DOMINATE</span>
+              <h3 class="pillar-title">EARN REAL GLORY</h3>
+              <p class="pillar-desc">Compete for seasonal cash prize pools exceeding ₹5,00,000, secure MVP titles, and climb to the pinnacle of Season 4.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 5: WHO WE ARE (INKGAMES STUDIO & TEAM)
+         ══════════════════════════════════════════════════ -->
+    <section class="ink-studio-section">
+      <!-- Floating Lab & Coordinator Photos Drifting Around Text -->
+      <div class="iss-floating-photo fp-1"><img src="vrgc_logo.jpg" alt="VRGC Brand"></div>
+      <div class="iss-floating-photo fp-2"><img src="event_trophy.jpg" alt="Trophy Arena"></div>
+      <div class="iss-floating-photo fp-3"><img src="hero_purple.jpg" alt="Lab Rig"></div>
+      <div class="iss-floating-photo fp-4"><img src="vrgc_logo.jpg" alt="VRGC Esports"></div>
+
+      <div class="ink-sec-tag" style="justify-content:center"><span class="tag-sq"></span> WHO WE ARE</div>
+      <h2 class="iss-title">
+        DESIGNERS,<br>
+        DEVELOPERS &amp;<br>
+        CHAMPIONS.
+      </h2>
+      <p class="iss-desc">
+        With over 2,400 active members and university-wide collegiate dominance, we're merging high-octane competitive play, VR hardware development, and live tournament broadcast production into an unforgettable collegiate experience.
+      </p>
+
+      <div style="margin-top:3rem;display:flex;justify-content:center;gap:1rem;position:relative;z-index:2">
+        <a href="about.html" class="btn-ink-primary">Meet The Coordinators &nbsp;&nearr;</a>
+        <a href="community.html" class="btn-ink-outline">Join Discord</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- INKGAMES FOOTER -->
+  <footer class="ink-footer">
+    <div class="if-top">
+      <div>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
+          <img src="vrgc_logo.jpg" alt="VRGC" style="height:38px;border-radius:4px">
+          <span class="if-brand-title">VRGC</span>
+        </div>
+        <p class="if-brand-desc">
+          Virtual Reality and Gaming Club &mdash; VIT Bhopal University.<br>
+          E-SPORTS &bull; DEVELOPMENT &bull; WORKSHOP &bull; BOOTCAMP
+        </p>
+      </div>
+      <div class="if-links-grid">
+        <div class="if-col">
+          <h4>PAGES</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">Studio &amp; About</a></li>
+            <li><a href="events.html">Tournaments</a></li>
+            <li><a href="live.html">Live Arena</a></li>
+            <li><a href="community.html">Community</a></li>
+          </ul>
+        </div>
+        <div class="if-col">
+          <h4>DOMAINS</h4>
+          <ul>
+            <li><a href="#">Esports Division</a></li>
+            <li><a href="#">VR Development</a></li>
+            <li><a href="#">Workshops</a></li>
+            <li><a href="#">Bootcamps</a></li>
+          </ul>
+        </div>
+        <div class="if-col">
+          <h4>CONNECT</h4>
+          <ul>
+            <li><a href="#">Discord Server</a></li>
+            <li><a href="#">Instagram @vrgcvitbhopal</a></li>
+            <li><a href="#">YouTube Channel</a></li>
+            <li><a href="#">Twitter / X</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-
-    <main>
-        <!-- HERO SECTION -->
-        <section id="hero" class="hero-section">
-            <!-- Background Video Layer -->
-            <div class="hero-video-container">
-                <video autoplay loop muted playsinline class="hero-video" id="hero-bg-video" poster="https://lh3.googleusercontent.com/aida-public/AB6AXuAp6E0FlGMk1vFxhwcQcoSTQsz69S8sBv42qQlgHYZQ9desMwLZg0le4NsSP7mOnDxk0EnBP_XeyJl7YgiKJ6tkF6w0mvRD_VUT7HoWZN-Tpz5g4_qxwLwcOaZrskpf_BVC9dl5f1Ztl9Z-QqFFLDT9_at5vznoPpjPwbBO_2mKRlS0ZEx7VXwvFM6VpnaGSLqzSYOMAT5jAA6i4DzwGF9DCMoFE7xwnN6zmLBFCFwrfud5vMWayFNF">
-                    <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-at-night-41544-large.mp4" type="video/mp4">
-                </video>
-                <div class="video-overlay"></div>
-                <div class="scanline-overlay"></div>
-            </div>
-
-            <!-- 3D Three.js WebGL Canvas (Stitch MCP Interactive Model) -->
-            <div id="threejs-hero-container" class="threejs-hero-container"></div>
-
-            <!-- Hero Foreground Content -->
-            <div class="hero-inner container">
-                <div class="hero-badge reveal">
-                    <span class="badge-status-dot"></span>
-                    <span class="badge-text">NEXT-GEN METAVERSE GAMING ECOSYSTEM</span>
-                </div>
-
-                <h1 class="hero-title reveal delay-1">
-                    <span>ENTER</span>
-                    <span class="title-highlight">THE</span>
-                    <span>ASYLUM</span>
-                </h1>
-
-                <p class="hero-subtitle reveal delay-2">
-                    The ultimate virtual playground. Build your legacy, conquer high-stakes tournaments, 
-                    and unite with the most electric gaming collective in web3 and esports.
-                </p>
-
-                <div class="hero-cta-group reveal delay-3">
-                    <a href="#games" class="btn btn-lime btn-large">
-                        <span class="btn-text-wrapper">
-                            <span class="btn-text-slide">PLAY NOW</span>
-                            <span class="btn-text-slide hover-slide">LAUNCH GAME ↗</span>
-                        </span>
-                    </a>
-
-                    <button class="btn btn-secondary btn-large" id="watch-trailer-btn">
-                        <span class="material-symbols-outlined icon-glow">play_circle</span>
-                        <span class="btn-text-wrapper">
-                            <span class="btn-text-slide">WATCH TRAILER</span>
-                            <span class="btn-text-slide hover-slide">PREVIEW 4K</span>
-                        </span>
-                    </button>
-                </div>
-
-                <!-- Interactive Hero Metrics -->
-                <div class="hero-metrics-bar reveal delay-4">
-                    <div class="metric-item">
-                        <div class="metric-number">150,000+</div>
-                        <div class="metric-label">ACTIVE PLAYERS</div>
-                    </div>
-                    <div class="metric-divider"></div>
-                    <div class="metric-item">
-                        <div class="metric-number">$2.5M+</div>
-                        <div class="metric-label">PRIZES AWARDED</div>
-                    </div>
-                    <div class="metric-divider"></div>
-                    <div class="metric-item">
-                        <div class="metric-number">0.02s</div>
-                        <div class="metric-label">SUB-SECOND LATENCY</div>
-                    </div>
-                    <div class="metric-divider"></div>
-                    <div class="metric-item">
-                        <div class="metric-number highlight-lime">99.9%</div>
-                        <div class="metric-label">COMMUNITY OWNED</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Scroll Indicator -->
-            <a href="#core-loop" class="scroll-down-indicator" aria-label="Scroll Down">
-                <span class="scroll-text">EXPLORE</span>
-                <span class="material-symbols-outlined scroll-arrow">expand_more</span>
-            </a>
-        </section>
-
-        <!-- LIVE GAMING OPERATIONS DECK (3 GAMING WIDGETS) -->
-        <section class="gaming-deck-section">
-            <div class="container">
-                <div class="gaming-deck-grid">
-                    <!-- Widget 1: Live Arena Spectator -->
-                    <div class="gaming-widget-card live-match-widget">
-                        <div class="widget-header">
-                            <span class="widget-badge red-badge"><span class="pulsing-dot red-dot"></span>LIVE ARENA</span>
-                            <span class="widget-meta">144 FPS // 128-TICK</span>
-                        </div>
-                        <div class="widget-body">
-                            <div class="match-arena-title">SECTOR 07: ZERO GRAVITY</div>
-                            <div class="match-score-board">
-                                <div class="team-score-col">
-                                    <span class="team-tag-txt">OMEGA</span>
-                                    <span class="score-num lime-num">14</span>
-                                </div>
-                                <span class="score-versus">VS</span>
-                                <div class="team-score-col">
-                                    <span class="team-tag-txt">PHANTOM</span>
-                                    <span class="score-num">12</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="widget-footer">
-                            <span class="player-count">● 6/6 OPERATORS</span>
-                            <a href="#games" class="widget-link-btn">SPECTATE MATCH →</a>
-                        </div>
-                    </div>
-
-                    <!-- Widget 2: Battle Pass Quest Tracker -->
-                    <div class="gaming-widget-card quest-widget">
-                        <div class="widget-header">
-                            <span class="widget-badge purple-badge">SEASON 3 BOUNTY</span>
-                            <span class="widget-meta">RESETS IN 18H</span>
-                        </div>
-                        <div class="widget-body">
-                            <div class="quest-title">OVERDRIVE FIREWALL BREACH</div>
-                            <p class="quest-desc">Clear 10 CyberVoid mainframe nodes with melee weapons.</p>
-                            <div class="quest-progress-bar">
-                                <div class="progress-fill" style="width: 80%;"></div>
-                            </div>
-                            <div class="progress-status">
-                                <span>PROGRESS: 8/10 NODES</span>
-                                <span class="progress-pct">80%</span>
-                            </div>
-                        </div>
-                        <div class="widget-footer">
-                            <span class="bounty-reward">REWARD: +2,500 XP // VOID SKIN</span>
-                        </div>
-                    </div>
-
-                    <!-- Widget 3: Server Cluster Telemetry -->
-                    <div class="gaming-widget-card telemetry-widget">
-                        <div class="widget-header">
-                            <span class="widget-badge lime-badge">CLUSTER TELEMETRY</span>
-                            <span class="widget-meta">US-EAST-1</span>
-                        </div>
-                        <div class="widget-body">
-                            <div class="telemetry-grid">
-                                <div class="telemetry-stat">
-                                    <span class="stat-label">PING</span>
-                                    <span class="stat-val highlight-lime">9ms</span>
-                                </div>
-                                <div class="telemetry-stat">
-                                    <span class="stat-label">TICKRATE</span>
-                                    <span class="stat-val">128Hz</span>
-                                </div>
-                                <div class="telemetry-stat">
-                                    <span class="stat-label">PACKET LOSS</span>
-                                    <span class="stat-val">0.00%</span>
-                                </div>
-                                <div class="telemetry-stat">
-                                    <span class="stat-label">ACTIVE GAMERS</span>
-                                    <span class="stat-val highlight-purple">4,892</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="widget-footer">
-                            <span class="server-status-pill"><span class="pulsing-dot green-dot"></span>ALL SERVERS NOMINAL</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- THE CORE LOOP / 3D TILT FEATURE CARDS -->
-        <section id="core-loop" class="section core-loop-section storyboard-scene">
-            <div class="storyboard-stage">
-                <div class="container">
-                    <div class="section-header">
-                        <div class="kicker-tag">
-                            <span class="kicker-square"></span>
-                            ARCHITECTURE OF CHAOS
-                        </div>
-                        <h2 class="section-title">THE CORE LOOP</h2>
-                        <p class="section-desc">
-                            Engineered for thrill-seekers and creators alike. Play curated matches, build worlds with real physics, and battle for global dominance.
-                        </p>
-                    </div>
-
-                    <div class="cards-grid">
-                        <!-- Card 1: Play -->
-                        <div class="tilt-card card-play storyboard-card" data-tilt data-storyboard-step="1">
-                            <div class="card-content">
-                                <div class="card-hud-header">
-                                    <div class="card-hud-left">
-                                        <span class="card-storyboard-badge">ACT 02.1</span>
-                                        <span class="card-num">01</span>
-                                    </div>
-                                    <span class="card-chip">ARCADE & ARENA</span>
-                                </div>
-                                <div class="card-icon-wrapper purple-glow">
-                                    <span class="material-symbols-outlined">stadia_controller</span>
-                                </div>
-                                <h3 class="card-title">PLAY</h3>
-                                <p class="card-body">
-                                    Dive into hand-crafted minigames, adrenaline battle royales, and immersive social districts engineered at 144 FPS.
-                                </p>
-                                <div class="card-footer">
-                                    <span class="card-link-text">EXPLORE MODES</span>
-                                    <div class="card-arrow-circle">
-                                        <span class="material-symbols-outlined">arrow_forward</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 2: Build -->
-                        <div class="tilt-card card-build storyboard-card" data-tilt data-storyboard-step="2">
-                            <div class="card-content">
-                                <div class="card-hud-header">
-                                    <div class="card-hud-left">
-                                        <span class="card-storyboard-badge lime-badge">ACT 02.2</span>
-                                        <span class="card-num">02</span>
-                                    </div>
-                                    <span class="card-chip lime-chip">VOXEL & SHADER</span>
-                                </div>
-                                <div class="card-icon-wrapper lime-glow">
-                                    <span class="material-symbols-outlined">architecture</span>
-                                </div>
-                                <h3 class="card-title">BUILD</h3>
-                                <p class="card-body">
-                                    Construct bespoke arenas and interactive game loops using our ultra-fast in-engine voxel pipeline and visual scripting.
-                                </p>
-                                <div class="card-footer">
-                                    <span class="card-link-text">START CRAFTING</span>
-                                    <div class="card-arrow-circle">
-                                        <span class="material-symbols-outlined">arrow_forward</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3: Compete -->
-                        <div class="tilt-card card-compete storyboard-card" data-tilt data-storyboard-step="3">
-                            <div class="card-content">
-                                <div class="card-hud-header">
-                                    <div class="card-hud-left">
-                                        <span class="card-storyboard-badge pink-badge">ACT 02.3</span>
-                                        <span class="card-num">03</span>
-                                    </div>
-                                    <span class="card-chip pink-chip">RANKED LEAGUES</span>
-                                </div>
-                                <div class="card-icon-wrapper pink-glow">
-                                    <span class="material-symbols-outlined">trophy</span>
-                                </div>
-                                <h3 class="card-title">COMPETE</h3>
-                                <p class="card-body">
-                                    Climb real-time competitive ladders in weekly tournament gauntlets for authentic cash pools, trophies, and digital bragging rights.
-                                </p>
-                                <div class="card-footer">
-                                    <span class="card-link-text">VIEW RANKINGS</span>
-                                    <div class="card-arrow-circle">
-                                        <span class="material-symbols-outlined">arrow_forward</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FEATURED MAJOR EVENT: GAMER'S ASYLUM -->
-        <section id="featured-event" class="section event-section storyboard-scene">
-            <div class="storyboard-stage">
-                <div class="container">
-                    <div class="event-banner-card">
-                        <div class="event-content-col">
-                            <div class="event-badge">
-                                <span class="material-symbols-outlined fire-icon">local_fire_department</span>
-                                <span class="badge-text">MAJOR 48-HR SURVIVAL GAUNTLET</span>
-                            </div>
-
-                            <h2 class="event-title">
-                                GAMER'S <br>
-                                <span class="italic-lime">ASYLUM</span>
-                            </h2>
-
-                            <p class="event-description">
-                                A non-stop 48-hour survival crucible. Only the top 100 crews survive the preliminaries to battle in the cybernetic arena. High production, live casters, and high-stakes chaos.
-                            </p>
-
-                            <!-- Live Countdown Clock -->
-                            <div class="countdown-widget">
-                                <div class="countdown-unit">
-                                    <span class="count-val" id="timer-days">02</span>
-                                    <span class="count-lbl">DAYS</span>
-                                </div>
-                                <span class="count-colon">:</span>
-                                <div class="countdown-unit">
-                                    <span class="count-val" id="timer-hours">14</span>
-                                    <span class="count-lbl">HRS</span>
-                                </div>
-                                <span class="count-colon">:</span>
-                                <div class="countdown-unit">
-                                    <span class="count-val" id="timer-minutes">38</span>
-                                    <span class="count-lbl">MIN</span>
-                                </div>
-                                <span class="count-colon">:</span>
-                                <div class="countdown-unit">
-                                    <span class="count-val" id="timer-seconds">52</span>
-                                    <span class="count-lbl">SEC</span>
-                                </div>
-                            </div>
-
-                            <div class="event-actions">
-                                <button class="btn btn-lime btn-large" id="register-crew-btn">
-                                    <span class="btn-text-wrapper">
-                                        <span class="btn-text-slide">REGISTER CREW</span>
-                                        <span class="btn-text-slide hover-slide">CLAIM SLOT #24 →</span>
-                                    </span>
-                                </button>
-                                <div class="prize-tag">
-                                    <span class="prize-icon">🏆</span>
-                                    <div class="prize-details">
-                                        <span class="prize-title">PRIZE POOL</span>
-                                        <span class="prize-amount">$50,000 USDT</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- LIVE ARCADE LEADERBOARD -->
-                            <div class="arcade-leaderboard">
-                                <div class="leaderboard-hdr">
-                                    <span class="hdr-label">⚡ TOP SURVIVOR CREWS</span>
-                                    <span class="hdr-round"><span class="pulsing-dot green-dot"></span>STAGE 04</span>
-                                </div>
-                                <div class="leaderboard-list">
-                                    <div class="leaderboard-entry rank-gold">
-                                        <span class="lb-rank">01</span>
-                                        <span class="lb-name">👑 APEX // TEAM OMEGA</span>
-                                        <span class="lb-score">98,420 PTS</span>
-                                    </div>
-                                    <div class="leaderboard-entry rank-silver">
-                                        <span class="lb-rank">02</span>
-                                        <span class="lb-name">🥈 MASTER // PHANTOM CORPS</span>
-                                        <span class="lb-score">94,110 PTS</span>
-                                    </div>
-                                    <div class="leaderboard-entry rank-bronze">
-                                        <span class="lb-rank">03</span>
-                                        <span class="lb-name">🥉 DIAMOND // VOXEL GUILD</span>
-                                        <span class="lb-score">89,350 PTS</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="event-visual-col">
-                            <div class="event-image-wrapper">
-                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp6E0FlGMk1vFxhwcQcoSTQsz69S8sBv42qQlgHYZQ9desMwLZg0le4NsSP7mOnDxk0EnBP_XeyJl7YgiKJ6tkF6w0mvRD_VUT7HoWZN-Tpz5g4_qxwLwcOaZrskpf_BVC9dl5f1Ztl9Z-QqFFLDT9_at5vznoPpjPwbBO_2mKRlS0ZEx7VXwvFM6VpnaGSLqzSYOMAT5jAA6i4DzwGF9DCMoFE7xwnN6zmLBFCFwrfud5vMWayFNF" 
-                                     alt="Gamer's Asylum 3D Cyber Arena" 
-                                     class="event-banner-img"
-                                     loading="lazy">
-                                <div class="event-visual-overlay"></div>
-                                <div class="live-stream-badge">
-                                    <span class="rec-dot"></span>
-                                    LIVE BROADCAST READY
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- GAMES SHOWCASE & VIDEO PREVIEWS -->
-        <section id="games" class="section games-section storyboard-scene">
-            <div class="storyboard-stage">
-                <div class="container">
-                    <div class="section-header-flex">
-                        <div>
-                            <div class="kicker-tag">
-                                <span class="kicker-square"></span>
-                                PRODUCED TITLES & DEMOS
-                            </div>
-                            <h2 class="section-title">THE GAME CATALOG</h2>
-                        </div>
-
-                        <div class="game-filter-tabs">
-                            <button class="filter-tab active" data-filter="all">ALL TITLES</button>
-                            <button class="filter-tab" data-filter="action">ACTION</button>
-                            <button class="filter-tab" data-filter="sandbox">SANDBOX</button>
-                            <button class="filter-tab" data-filter="esports">ESPORTS</button>
-                        </div>
-                    </div>
-
-                    <div class="games-grid">
-                        <!-- Game Card 1 -->
-                        <div class="game-card" data-category="action">
-                            <div class="game-media-wrapper">
-                                <img src="https://lh3.googleusercontent.com/aida/AEtjO1WmA6OiG79fwUDeb6jJGwyhCpp1Tnp5EbwlEX6chy089NC2afYalp8X4e4S8B2JQ1ArOsgL731myXgA_mHetNm4I8oySn0Szx9Q9ZGW__xQ5yIge92YWY30Vj0oukjezRO7Au6TsQbJ0teVnefY5bBo1JGzx4wObTvnzQALPL447CDqCuNx-vuW2WmW2_n2Uh2kxGBjLq38ZRW9i2Ajh1ecy288F8PT-FoQEpaXVz1Dud_lra3B0fkxves" 
-                                     alt="CyberVoid: Neon Overdrive gameplay" 
-                                     class="game-thumb"
-                                     loading="lazy">
-                                <div class="game-media-tag">EARLY ACCESS</div>
-                                <div class="game-hover-overlay">
-                                    <button class="play-preview-btn" data-video="https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42998-large.mp4">
-                                        <span class="material-symbols-outlined">play_arrow</span>
-                                        <span>PLAY DEMO</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="game-info">
-                                <div class="game-meta">
-                                    <span class="genre">CYBERPUNK ROGUELIKE</span>
-                                    <span class="rating">★ 4.9</span>
-                                </div>
-                                <h3 class="game-name">CYBERVOID: OVERDRIVE</h3>
-                                <p class="game-desc">A hyper-fast neon roguelike shooter set inside an AI mainframe. Hack nodes, upgrade weapons, and break the firewall.</p>
-                            </div>
-                        </div>
-
-                        <!-- Game Card 2 -->
-                        <div class="game-card" data-category="sandbox">
-                            <div class="game-media-wrapper">
-                                <img src="https://lh3.googleusercontent.com/aida/AEtjO1WlGMt_sxobGM9pDWjsOyMUmpLuRDbQWYBHXFRmyMUcHH9iC1tiIwmOrleloxTYaI_CnTfgcoFRgIRIkTSaXLPt5kdBsueaP6iGmftNaoggfQDtemY6EM_OqXrrMXnw7LSRnlCXVeFBdP29O_mkCZN4RREIgrrcnWRVfq3Fn8a7vJtszacOHTOxy6PUyXmQ2l1gS0v78uEGl1DEy1uSUFjbBXFpX5stEnZUkDTna1Ue0_rdV4QDBxe4Gw" 
-                                     alt="Synapse Lab Studio" 
-                                     class="game-thumb"
-                                     loading="lazy">
-                                <div class="game-media-tag lime-tag">MULTIPLAYER</div>
-                                <div class="game-hover-overlay">
-                                    <button class="play-preview-btn" data-video="https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-at-night-41544-large.mp4">
-                                        <span class="material-symbols-outlined">play_arrow</span>
-                                        <span>EXPLORE LAB</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="game-info">
-                                <div class="game-meta">
-                                    <span class="genre">VOXEL METAVERSE</span>
-                                    <span class="rating">★ 4.8</span>
-                                </div>
-                                <h3 class="game-name">SYNAPSE LAB & ARENAS</h3>
-                                <p class="game-desc">Collaborative real-time building laboratory. Design physics experiments, craft mini-games, and host instant tournaments.</p>
-                            </div>
-                        </div>
-
-                        <!-- Game Card 3 -->
-                        <div class="game-card" data-category="esports">
-                            <div class="game-media-wrapper">
-                                <div class="game-video-preview">
-                                    <video autoplay loop muted playsinline class="card-loop-video">
-                                        <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-space-travel-animation-43000-large.mp4" type="video/mp4">
-                                    </video>
-                                </div>
-                                <div class="game-media-tag purple-tag">TOURNAMENT</div>
-                                <div class="game-hover-overlay">
-                                    <button class="play-preview-btn" data-video="https://assets.mixkit.co/videos/preview/mixkit-futuristic-space-travel-animation-43000-large.mp4">
-                                        <span class="material-symbols-outlined">play_arrow</span>
-                                        <span>WATCH MATCH</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="game-info">
-                                <div class="game-meta">
-                                    <span class="genre">HIGH-SPEED BRAWLER</span>
-                                    <span class="rating">★ 5.0</span>
-                                </div>
-                                <h3 class="game-name">ECHO PROTOCOL: ZERO</h3>
-                                <p class="game-desc">3v3 antigravity tactical arena shooter. Zero gravity physics, teleport anchors, and high-velocity team synergy.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CYBERWAVE RADIO BAR & AUDIO VISUALIZER -->
-        <section id="radio" class="section radio-section storyboard-scene">
-            <div class="storyboard-stage">
-                <div class="container">
-                    <div class="radio-bar-card">
-                        <div class="radio-status-col">
-                            <div class="radio-badge">
-                                <span class="radio-ping"></span>
-                                24/7 BROADCAST
-                            </div>
-                            <h3 class="radio-title">VRGC CYBERWAVE FM</h3>
-                            <p class="radio-meta">Channel 108.4 MHz • Synthwave, Darksynth & Chiptune</p>
-                        </div>
-
-                        <!-- Real-Time Equalizer Waveform -->
-                        <div class="visualizer-container">
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                            <div class="eq-bar"></div>
-                        </div>
-
-                        <div class="radio-controls-col">
-                            <div class="now-playing-info">
-                                <span class="track-status">NOW PLAYING:</span>
-                                <span class="track-title" id="track-title">Cyberwave Mix 04 — Obsidian Pulse</span>
-                            </div>
-
-                            <button class="btn btn-secondary radio-play-btn" id="radio-play-btn">
-                                <span class="material-symbols-outlined" id="radio-icon">play_arrow</span>
-                                <span id="radio-btn-text">PLAY STREAM</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CREW ROSTER / COMMUNITY -->
-        <section id="crew" class="section crew-section storyboard-scene">
-            <div class="storyboard-stage">
-                <div class="container">
-                    <div class="section-header">
-                        <div class="kicker-tag">
-                            <span class="kicker-square"></span>
-                            ARCHITECTS & LEADERSHIP
-                        </div>
-                        <h2 class="section-title">THE CREW</h2>
-                        <p class="section-desc">Game designers, shader engineers, sound architects, and competitive tournament directors.</p>
-                    </div>
-
-                    <div class="crew-grid">
-                        <div class="crew-card">
-                            <div class="crew-avatar-wrapper">
-                                <div class="crew-avatar-inner avatar-1">
-                                    <span class="crew-tag">LEAD</span>
-                                </div>
-                            </div>
-                            <h3 class="crew-name">KAIROS</h3>
-                            <span class="crew-role">Game Director & Systems Architect</span>
-                            <div class="crew-socials">
-                                <a href="#" class="crew-social-link">X / Twitter</a>
-                                <a href="#" class="crew-social-link">Discord</a>
-                            </div>
-                        </div>
-
-                        <div class="crew-card">
-                            <div class="crew-avatar-wrapper">
-                                <div class="crew-avatar-inner avatar-2">
-                                    <span class="crew-tag lime-tag">TECH</span>
-                                </div>
-                            </div>
-                            <h3 class="crew-name">NOVA_V</h3>
-                            <span class="crew-role">WebGL & Shader Engineer</span>
-                            <div class="crew-socials">
-                                <a href="#" class="crew-social-link">GitHub</a>
-                                <a href="#" class="crew-social-link">Discord</a>
-                            </div>
-                        </div>
-
-                        <div class="crew-card">
-                            <div class="crew-avatar-wrapper">
-                                <div class="crew-avatar-inner avatar-3">
-                                    <span class="crew-tag purple-tag">AUDIO</span>
-                                </div>
-                            </div>
-                            <h3 class="crew-name">SYNTHETIX</h3>
-                            <span class="crew-role">Composer & Radio Host</span>
-                            <div class="crew-socials">
-                                <a href="#" class="crew-social-link">Spotify</a>
-                                <a href="#" class="crew-social-link">SoundCloud</a>
-                            </div>
-                        </div>
-
-                        <div class="crew-card">
-                            <div class="crew-avatar-wrapper">
-                                <div class="crew-avatar-inner avatar-4">
-                                    <span class="crew-tag pink-tag">OPS</span>
-                                </div>
-                            </div>
-                            <h3 class="crew-name">AURA.EXE</h3>
-                            <span class="crew-role">Tournament Arbiter & Community</span>
-                            <div class="crew-socials">
-                                <a href="#" class="crew-social-link">Twitch</a>
-                                <a href="#" class="crew-social-link">Discord</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- JOIN THE ASYLUM / TERMINAL CTA -->
-        <section id="join" class="section join-section storyboard-scene">
-            <div class="storyboard-stage">
-                <div class="container">
-                    <div class="terminal-card">
-                        <div class="terminal-header">
-                            <div class="terminal-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <span class="terminal-title">AUTH_GATEWAY // VRGC_PROTOCOL_V3</span>
-                        </div>
-
-                        <div class="terminal-body">
-                            <div class="terminal-line"><span class="prompt">$</span> system init --asylum-pass --season=3</div>
-                            <div class="terminal-line text-success"><span class="prompt">></span> ACCESS GRANTED: 1,420 SLOTS REMAINING</div>
-                            
-                            <h2 class="terminal-heading">CLAIM YOUR ASYLUM PASS</h2>
-                            <p class="terminal-text">
-                                Enter your credentials to receive exclusive tournament whitelist access, instant alpha builds, and genesis cosmetic drops.
-                            </p>
-
-                            <form class="terminal-form" id="join-form">
-                                <div class="input-wrapper">
-                                    <span class="material-symbols-outlined input-icon">terminal</span>
-                                    <input type="email" placeholder="gamer@metaverse.gg" required class="terminal-input" id="join-email">
-                                </div>
-                                <button type="submit" class="btn btn-lime submit-btn">
-                                    <span class="btn-text-wrapper">
-                                        <span class="btn-text-slide">INITIALIZE PASS</span>
-                                        <span class="btn-text-slide hover-slide">SECURE KEY ↗</span>
-                                    </span>
-                                </button>
-                            </form>
-                            <div class="form-feedback" id="form-feedback"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-top">
-                <div class="footer-brand">
-                    <a href="#" class="brand-logo">
-                        <span class="logo-symbol">❖</span>
-                        VRGC<span class="ext">.exe</span>
-                    </a>
-                    <p class="footer-tagline">
-                        The premier virtual gaming collective. High-production esports, community-governed minigames, and authentic virtual culture.
-                    </p>
-                    <div class="footer-version-tag">
-                        <span class="mono-badge">BUILD 2026.09.VRGC</span>
-                        <span class="mono-badge">STATUS: OPTIMAL</span>
-                    </div>
-                </div>
-
-                <div class="footer-nav-col">
-                    <h4 class="footer-heading">NAVIGATION</h4>
-                    <ul class="footer-links">
-                        <li><a href="#hero">Overview</a></li>
-                        <li><a href="#core-loop">Features</a></li>
-                        <li><a href="#featured-event">Asylum Tournament</a></li>
-                        <li><a href="#games">Game Catalog</a></li>
-                        <li><a href="#crew">Leadership</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-nav-col">
-                    <h4 class="footer-heading">COMMUNITY</h4>
-                    <ul class="footer-links">
-                        <li><a href="#" target="_blank" rel="noopener">Discord Community</a></li>
-                        <li><a href="#" target="_blank" rel="noopener">Twitter / X</a></li>
-                        <li><a href="#" target="_blank" rel="noopener">Twitch Channel</a></li>
-                        <li><a href="#" target="_blank" rel="noopener">YouTube Gaming</a></li>
-                        <li><a href="#" target="_blank" rel="noopener">GitHub Org</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-nav-col">
-                    <h4 class="footer-heading">DISPATCH</h4>
-                    <p class="footer-dispatch-desc">Receive real-time tournament patch notes and server notices.</p>
-                    <div class="status-indicator">
-                        <span class="pulsing-dot green-dot"></span>
-                        <span class="status-name">ALL SERVERS OPERATIONAL</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p class="copyright">© 2024–2026 VRGC.exe. All Rights Reserved. Inspired by next-generation web aesthetics.</p>
-                <div class="footer-legal">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Security Protocol</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- VIDEO TRAILER MODAL DIALOG -->
-    <div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Game Trailer Player">
-        <div class="modal-backdrop" id="modal-backdrop"></div>
-        <div class="modal-window">
-            <button class="modal-close-btn" id="modal-close-btn" aria-label="Close Video Player">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-            <div class="modal-video-container">
-                <video controls playsinline class="modal-video" id="modal-video">
-                    <source src="https://assets.mixkit.co/videos/preview/mixkit-game-animation-of-a-robot-character-42998-large.mp4" type="video/mp4">
-                    Your browser does not support HTML5 video.
-                </video>
-            </div>
-        </div>
+    <div class="if-bottom">
+      <span>&copy; 2025 VIRTUAL REALITY AND GAMING CLUB (VRGC) &mdash; VIT BHOPAL. ALL RIGHTS RESERVED.</span>
+      <span style="color:var(--purple-bright)">E-SPORTS | DEVELOPMENT | WORKSHOP | BOOTCAMP</span>
     </div>
+  </footer>
 
-    <!-- JAVASCRIPT -->
-    <script src="script.js"></script>
+  
+  <script src="script.js?v=1788435876"></script>
 </body>
 </html>
+
+
+
+
+
+
+

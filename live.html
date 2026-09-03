@@ -1,0 +1,618 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Arena &amp; Broadcast Network — VRGC</title>
+  <meta name="description" content="Official VRGC collegiate esports broadcast network. Live stadium stream, real-time scoreboard, tier-ranked community chat, and match archive.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1788435876">
+</head>
+<body class="theme-crimson">
+
+  <!-- INKGAMES NAVIGATION BAR -->
+  <header class="ink-nav scrolled" id="ink-navbar">
+    <div class="nav-brand-wrap">
+      <a href="index.html" style="display:flex;align-items:center;gap:0.75rem">
+        <img src="vrgc_logo.jpg" alt="VRGC Logo" class="nav-brand-logo">
+        <span class="nav-brand-text">VRGC</span>
+      </a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+      <span class="nmt-bar" style="background:#ef4444"></span>
+      <span class="nmt-bar" style="background:#ef4444"></span>
+      <span class="nmt-bar" style="background:#ef4444"></span>
+    </button>
+    <nav class="ink-nav-links" id="navLinks">
+      <a href="index.html" class="ink-nl">Home</a>
+      <a href="about.html" class="ink-nl">Studio</a>
+      <a href="events.html" class="ink-nl">Events</a>
+      <a href="live.html" class="ink-nl active">Live</a>
+      <a href="community.html" class="ink-nl">Community</a>
+    </nav>
+    <div class="ink-nav-actions">
+      <a href="events.html" class="btn-login" style="border-color:rgba(239,68,68,0.3)">Events</a>
+      <a href="events.html#register" class="btn-signup" style="background:#ef4444;border-color:#ef4444">Join Club</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ══════════════════════════════════════════════════
+         FULL RED LIVE ARENA HERO (STAGE & CHAT)
+         ══════════════════════════════════════════════════ -->
+    <section class="crimson-arena-hero">
+      <div class="crimson-glow-backlight"></div>
+
+      <div class="crimson-badge-pill">
+        <span class="crimson-dot"></span>
+        VRGC BROADCAST NETWORK &bull; STADIUM DESK ACTIVE
+      </div>
+
+      <h1 class="ink-mega-title" style="margin-bottom: 1.25rem; font-size: clamp(3.8rem, 9.5vw, 8rem);">
+        LIVE <span class="crimson-title-accent">ARENA</span>
+      </h1>
+
+      <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 680px; margin: 0 auto 2.5rem; line-height: 1.6;">
+        Welcome to the central coliseum. High-stakes collegiate grand finals, tactical telemetry, real-time match scoreboard, and rank-tier live chat.
+      </p>
+
+      <div class="live-arena-wrapper">
+        <!-- Functional Stage Switcher Tabs -->
+        <div class="filter-bar" style="margin-bottom: 2rem;">
+          <button class="crimson-filter-pill active" id="btnStage1" onclick="switchLiveStage('stage1', this)">STAGE 01: VALORANT FINALS</button>
+          <button class="crimson-filter-pill" id="btnStage2" onclick="switchLiveStage('stage2', this)">STAGE 02: CS2 BATTLEGROUND</button>
+          <button class="crimson-filter-pill" id="btnStage3" onclick="switchLiveStage('stage3', this)">STAGE 03: CAMPUS BGMI LAN</button>
+        </div>
+
+        <!-- 2-Column Broadcast Grid: Player/Scoreboard + Live Chat -->
+        <div class="live-broadcast-grid">
+          <!-- Left Column: Video + Stadium Scoreboard + Killfeed -->
+          <div class="live-player-col">
+            <!-- 16:9 Stream Box -->
+            <div class="crimson-stream-box" style="aspect-ratio: 16/9; width: 100%;">
+              <iframe id="mainStreamFrame" src="https://player.twitch.tv/?channel=riotgames&parent=localhost" frameborder="0" allowfullscreen="true" scrolling="no" height="100%" width="100%"></iframe>
+            </div>
+
+            <!-- Full Stadium Scoreboard Strip -->
+            <div class="stadium-scoreboard" id="stadiumScoreboard">
+              <!-- Team 1 (Left) -->
+              <div class="sb-team">
+                <img src="vrgc_logo.jpg" alt="Team 1" class="sb-team-logo" id="sbTeam1Logo">
+                <div>
+                  <h4 class="sb-team-name" id="sbTeam1Name">VRGC ALPHA</h4>
+                  <span class="sb-team-tag" id="sbTeam1Tag">#1 SEED &bull; VARSITY</span>
+                </div>
+              </div>
+
+              <!-- Match Center Score & Timer -->
+              <div class="sb-center">
+                <div class="sb-map-label" id="sbMapName">MAP 2: BIND</div>
+                <div class="sb-score-num" id="sbScoreVal">11 : 9</div>
+                <div class="sb-timer-wrap">
+                  <span id="sbMatchTimer">ROUND 21 &bull; 01:24</span>
+                </div>
+              </div>
+
+              <!-- Team 2 (Right) -->
+              <div class="sb-team sb-right">
+                <img src="event_trophy.jpg" alt="Team 2" class="sb-team-logo" id="sbTeam2Logo">
+                <div>
+                  <h4 class="sb-team-name" id="sbTeam2Name">SHADOW ROYALS</h4>
+                  <span class="sb-team-tag" id="sbTeam2Tag" style="color: #60a5fa;">#3 SEED &bull; CONTENDER</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scrolling Kill-Feed Ticker -->
+            <div class="killfeed-strip" id="killFeedStrip">
+              <div class="kf-item"><span class="kf-killer">VRGC Phantom</span> <span class="kf-weapon">[Vandal]</span> <span class="kf-victim">SHD Cypher</span></div>
+              <div class="kf-item"><span class="kf-killer">VRGC Aether</span> <span class="kf-weapon">[Operator]</span> <span class="kf-victim">SHD Jett</span></div>
+              <div class="kf-item"><span class="kf-killer">SHD Viper</span> <span class="kf-weapon">[Snakebite]</span> <span class="kf-victim">VRGC Blade</span></div>
+              <div class="kf-item"><span class="kf-killer">VRGC Rexxar</span> <span class="kf-weapon">[Defuse 0.4s]</span> <span class="kf-victim">ROUND WIN</span></div>
+            </div>
+          </div>
+
+          <!-- Right Column: Rank-Tiered Live Chat Panel -->
+          <div class="live-chat-panel">
+            <div class="chat-head">
+              <span class="chat-head-title">ARENA LIVE CHAT</span>
+              <span class="chat-viewers-count" id="chatViewersBadge">1,420 ONLINE</span>
+            </div>
+
+            <!-- Scrollable Message Body -->
+            <div class="chat-msgs-body" id="chatMsgsBody">
+              <div class="chat-msg-row">
+                <span class="chat-badge badge-vanguard">VANGUARD</span>
+                <span class="chat-sender">Parardha:</span>
+                <span class="chat-content">Welcome to the Grand Finals everyone! Make some noise in chat!</span>
+              </div>
+              <div class="chat-msg-row">
+                <span class="chat-badge badge-varsity">VARSITY</span>
+                <span class="chat-sender">Aether:</span>
+                <span class="chat-content">A-site defense is completely locked down this half!</span>
+              </div>
+              <div class="chat-msg-row">
+                <span class="chat-badge badge-contender">CONTENDER</span>
+                <span class="chat-sender">Krypton:</span>
+                <span class="chat-content">THAT FLICK FROM PHANTOM WAS DISGUSTING 🔥🔥🔥</span>
+              </div>
+              <div class="chat-msg-row">
+                <span class="chat-badge badge-cadet">CADET</span>
+                <span class="chat-sender">Rookie_09:</span>
+                <span class="chat-content">First time watching collegiate finals, the production quality is insane!</span>
+              </div>
+              <div class="chat-msg-row">
+                <span class="chat-badge badge-varsity">VARSITY</span>
+                <span class="chat-sender">Ghost_CS:</span>
+                <span class="chat-content">Economy reset incoming for Shadow Royals if they lose round 21.</span>
+              </div>
+            </div>
+
+            <!-- Chat Input Bar -->
+            <form class="chat-input-bar" onsubmit="handleSendChat(event)">
+              <input type="text" class="chat-input" id="chatInput" placeholder="Send a message as Cadet..." required>
+              <button type="submit" class="chat-send-btn">SEND</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         CALM NEAR-BLACK SURFACE (BELOW THE FOLD)
+         ══════════════════════════════════════════════════ -->
+    <section class="calm-arena-section">
+      <div class="live-arena-wrapper">
+
+        <!-- ══════════════════════════════════════════════
+             1. MINI TOURNAMENT BRACKET VIEWER
+             ══════════════════════════════════════════════ -->
+        <div class="mini-bracket-container">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <div class="ink-sec-tag" style="color: #ef4444;"><span class="tag-sq" style="background:#ef4444"></span> TOURNAMENT ROADMAP</div>
+              <h3 style="font-family: var(--font-display); font-size: 2.8rem; color: #fff; line-height: 1; margin-top: 0.35rem;">
+                LIVE TOURNAMENT BRACKET
+              </h3>
+            </div>
+            <a href="events.html" class="btn-ink-outline" style="padding: 0.65rem 1.4rem; font-size: 0.8rem;">
+              Full Events &amp; Standings &nbsp;&nearr;
+            </a>
+          </div>
+
+          <div class="bracket-rounds-grid">
+            <!-- Round 1: Quarter Finals -->
+            <div class="bracket-round-col">
+              <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--white-dim); text-transform: uppercase;">QUARTER-FINALS (BO3)</span>
+              
+              <div class="bracket-match-node">
+                <div class="bmn-team winner"><span>VRGC Alpha</span> <span class="bmn-score">2</span></div>
+                <div class="bmn-team"><span>Titan Squad</span> <span class="bmn-score" style="color: var(--white-dim);">0</span></div>
+              </div>
+
+              <div class="bracket-match-node">
+                <div class="bmn-team winner"><span>Shadow Royals</span> <span class="bmn-score">2</span></div>
+                <div class="bmn-team"><span>Vortex Gaming</span> <span class="bmn-score" style="color: var(--white-dim);">1</span></div>
+              </div>
+            </div>
+
+            <!-- Round 2: Semi Finals -->
+            <div class="bracket-round-col">
+              <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--white-dim); text-transform: uppercase;">SEMI-FINALS (BO3)</span>
+              
+              <div class="bracket-match-node">
+                <div class="bmn-team winner"><span>VRGC Alpha</span> <span class="bmn-score">2</span></div>
+                <div class="bmn-team"><span>MIT Gaming</span> <span class="bmn-score" style="color: var(--white-dim);">1</span></div>
+              </div>
+            </div>
+
+            <!-- Round 3: Grand Finals (ACTIVE LIVE) -->
+            <div class="bracket-round-col">
+              <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #ef4444; text-transform: uppercase; font-weight: 700;">
+                ● GRAND FINALS (NOW LIVE)
+              </span>
+              
+              <div class="bracket-match-node active-live">
+                <div class="bmn-team winner"><span style="color:#ef4444;">★ VRGC Alpha</span> <span class="bmn-score">11</span></div>
+                <div class="bmn-team"><span style="color:#fff;">Shadow Royals</span> <span class="bmn-score">9</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════
+             2. MATCH ARCHIVE / VOD GRID (6 REPLAYS)
+             ══════════════════════════════════════════════ -->
+        <div style="margin-bottom: 6rem;">
+          <div class="ink-sec-tag"><span class="tag-sq" style="background:#ef4444"></span> ON-DEMAND REPLAYS</div>
+          <h2 class="ipb-title" style="font-size: clamp(2.8rem, 6vw, 4.5rem); margin-bottom: 2.5rem; color: #fff;">
+            MATCH ARCHIVE
+          </h2>
+
+          <div class="vod-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+            <!-- VOD 1 -->
+            <div class="vod-card crimson-card">
+              <div class="vod-thumb">
+                <img src="hero_purple.jpg" alt="VOD 1">
+                <span class="vod-duration-badge">2h 14m</span>
+                <div class="play-btn-overlay">
+                  <div class="play-circle" style="background:#ef4444;"><div class="play-triangle"></div></div>
+                </div>
+              </div>
+              <div class="vod-info">
+                <h3 class="vod-title" style="font-size: 1.5rem; color: #fff;">VALORANT SEMI-FINALS: VRGC VS MIT</h3>
+                <div class="vod-meta">
+                  <span style="color:#ff4d6d;">VALORANT &bull; ASCENT</span>
+                  <span>DEC 02, 2024</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VOD 2 -->
+            <div class="vod-card crimson-card">
+              <div class="vod-thumb">
+                <img src="event_trophy.jpg" alt="VOD 2">
+                <span class="vod-duration-badge">3h 45m</span>
+                <div class="play-btn-overlay">
+                  <div class="play-circle" style="background:#ef4444;"><div class="play-triangle"></div></div>
+                </div>
+              </div>
+              <div class="vod-info">
+                <h3 class="vod-title" style="font-size: 1.5rem; color: #fff;">BGMI ERANGEL DOMINANCE DAY 2</h3>
+                <div class="vod-meta">
+                  <span style="color:#ff4d6d;">BGMI &bull; ERANGEL</span>
+                  <span>NOV 28, 2024</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VOD 3 -->
+            <div class="vod-card crimson-card">
+              <div class="vod-thumb">
+                <img src="vrgc_logo.jpg" alt="VOD 3">
+                <span class="vod-duration-badge">1h 38m</span>
+                <div class="play-btn-overlay">
+                  <div class="play-circle" style="background:#ef4444;"><div class="play-triangle"></div></div>
+                </div>
+              </div>
+              <div class="vod-info">
+                <h3 class="vod-title" style="font-size: 1.5rem; color: #fff;">CS2 UPPER BRACKET OT THRILLER</h3>
+                <div class="vod-meta">
+                  <span style="color:#ff4d6d;">CS2 &bull; ANUBIS</span>
+                  <span>NOV 25, 2024</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VOD 4 -->
+            <div class="vod-card crimson-card">
+              <div class="vod-thumb">
+                <img src="asset_vr_headset.jpg" alt="VOD 4">
+                <span class="vod-duration-badge">1h 12m</span>
+                <div class="play-btn-overlay">
+                  <div class="play-circle" style="background:#ef4444;"><div class="play-triangle"></div></div>
+                </div>
+              </div>
+              <div class="vod-info">
+                <h3 class="vod-title" style="font-size: 1.5rem; color: #fff;">VR GAME JAM 48H FINAL PROTOTYPES</h3>
+                <div class="vod-meta">
+                  <span style="color:#ff4d6d;">VR DEV &bull; QUEST 3</span>
+                  <span>NOV 18, 2024</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VOD 5 -->
+            <div class="vod-card crimson-card">
+              <div class="vod-thumb">
+                <img src="hero_purple.jpg" alt="VOD 5">
+                <span class="vod-duration-badge">42m</span>
+                <div class="play-btn-overlay">
+                  <div class="play-circle" style="background:#ef4444;"><div class="play-triangle"></div></div>
+                </div>
+              </div>
+              <div class="vod-info">
+                <h3 class="vod-title" style="font-size: 1.5rem; color: #fff;">EA FC 25 CAMPUS DERBY GRAND FINALS</h3>
+                <div class="vod-meta">
+                  <span style="color:#ff4d6d;">EA FC 25 &bull; 1v1</span>
+                  <span>NOV 14, 2024</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VOD 6 -->
+            <div class="vod-card crimson-card">
+              <div class="vod-thumb">
+                <img src="event_trophy.jpg" alt="VOD 6">
+                <span class="vod-duration-badge">55m</span>
+                <div class="play-btn-overlay">
+                  <div class="play-circle" style="background:#ef4444;"><div class="play-triangle"></div></div>
+                </div>
+              </div>
+              <div class="vod-info">
+                <h3 class="vod-title" style="font-size: 1.5rem; color: #fff;">FRESHERS AIMLAB CUP FINALS</h3>
+                <div class="vod-meta">
+                  <span style="color:#ff4d6d;">AIMLAB &bull; BOOTCAMP</span>
+                  <span>NOV 08, 2024</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════
+             3. UPCOMING BROADCASTS SCHEDULE (NEXT 4)
+             ══════════════════════════════════════════════ -->
+        <div style="margin-bottom: 6rem;">
+          <div class="ink-sec-tag"><span class="tag-sq" style="background:#ef4444"></span> BROADCAST RUN SHEET</div>
+          <h2 style="font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4rem); color: #fff; line-height: 1; margin-bottom: 2rem;">
+            UPCOMING SCHEDULE
+          </h2>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 1.25rem 2rem; border-radius: 8px; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #ef4444; font-weight: 700;">STAGE 02 &bull; TODAY 17:30 IST</span>
+                <h4 style="font-family: var(--font-display); font-size: 1.6rem; color: #fff; margin-top: 0.2rem;">BGMI SUPER SERIES // FINALS ERANGEL &amp; MIRAMAR</h4>
+                <p style="font-size: 0.85rem; color: var(--white-muted);">Top 25 Collegiate Squads battling for ₹2,00,000 seasonal points.</p>
+              </div>
+              <button class="gta-tab-btn" onclick="alert('Reminder set for BGMI Finals!')">SET REMINDER</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 1.25rem 2rem; border-radius: 8px; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #60a5fa; font-weight: 700;">STAGE 03 &bull; TODAY 20:00 IST</span>
+                <h4 style="font-family: var(--font-display); font-size: 1.6rem; color: #fff; margin-top: 0.2rem;">CS2 INTER-COLLEGIATE CLASH // UPPER BRACKET</h4>
+                <p style="font-size: 0.85rem; color: var(--white-muted);">Double elimination bracket MR12 regulation play.</p>
+              </div>
+              <button class="gta-tab-btn" onclick="alert('Reminder set for CS2 Match!')">SET REMINDER</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 1.25rem 2rem; border-radius: 8px; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #ffd700; font-weight: 700;">STAGE 01 &bull; TOMORROW 18:00 IST</span>
+                <h4 style="font-family: var(--font-display); font-size: 1.6rem; color: #fff; margin-top: 0.2rem;">VR GAME JAM // 48-HOUR FINAL DEMO REVEAL</h4>
+                <p style="font-size: 0.85rem; color: var(--white-muted);">Live spatial hardware testing on Meta Quest 3 with industry guest judges.</p>
+              </div>
+              <button class="gta-tab-btn" onclick="alert('Reminder set for VR Game Jam!')">SET REMINDER</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 1.25rem 2rem; border-radius: 8px; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #c084fc; font-weight: 700;">STAGE 02 &bull; SATURDAY 21:00 IST</span>
+                <h4 style="font-family: var(--font-display); font-size: 1.6rem; color: #fff; margin-top: 0.2rem;">FRIDAY NIGHT FIGHTS &bull; CAMPUS ALL-STARS</h4>
+                <p style="font-size: 0.85rem; color: var(--white-muted);">Community showmatches and VIP grudge matches.</p>
+              </div>
+              <button class="gta-tab-btn" onclick="alert('Reminder set for All-Stars!')">SET REMINDER</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════
+             4. CASTER DESK COMMENTARY TEAM
+             ══════════════════════════════════════════════ -->
+        <div style="margin-bottom: 2rem; text-align: center;">
+          <div class="ink-sec-tag" style="justify-content: center;"><span class="tag-sq" style="background:#ef4444"></span> ON-AIR COMMENTARY</div>
+          <h2 style="font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4rem); color: #fff; line-height: 1; margin-bottom: 3rem;">
+            THE CASTER DESK
+          </h2>
+
+          <div class="circular-team-grid">
+            <div class="circ-member">
+              <div class="circ-avatar-wrap">
+                <div class="circ-ring" style="border-color: rgba(239,68,68,0.4);"></div>
+                <img src="event_trophy.jpg" alt="Caster Aether" class="circ-avatar" style="border-color:#ef4444;">
+              </div>
+              <h3 class="circ-name">AETHER</h3>
+              <span class="circ-role" style="color: #ff4d6d;">Lead Play-by-Play</span>
+              <p class="circ-bio">High-energy tactical FPS shoutcaster. Covered over 150 collegiate games with electric energy.</p>
+            </div>
+
+            <div class="circ-member">
+              <div class="circ-avatar-wrap">
+                <div class="circ-ring" style="border-color: rgba(239,68,68,0.4);"></div>
+                <img src="hero_purple.jpg" alt="Caster Vortex" class="circ-avatar" style="border-color:#ef4444;">
+              </div>
+              <h3 class="circ-name">VORTEX</h3>
+              <span class="circ-role" style="color: #ff4d6d;">Color Analyst</span>
+              <p class="circ-bio">Ex-radiant collegiate player breaking down utility timings, eco rounds, and micro-positioning.</p>
+            </div>
+
+            <div class="circ-member">
+              <div class="circ-avatar-wrap">
+                <div class="circ-ring" style="border-color: rgba(239,68,68,0.4);"></div>
+                <img src="vrgc_logo.jpg" alt="Observer Ghost" class="circ-avatar" style="border-color:#ef4444;">
+              </div>
+              <h3 class="circ-name">GHOST</h3>
+              <span class="circ-role" style="color: #ff4d6d;">Head Observer</span>
+              <p class="circ-bio">Directing in-game cinematic free-cams, instant slow-motion replays, and catching every entry frag.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- INKGAMES FOOTER -->
+  <footer class="ink-footer" style="background: #040003; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+    <div class="if-top">
+      <div>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
+          <img src="vrgc_logo.jpg" alt="VRGC" style="height:38px;border-radius:4px">
+          <span class="if-brand-title">VRGC</span>
+        </div>
+        <p class="if-brand-desc">
+          Virtual Reality and Gaming Club &mdash; VIT Bhopal University.<br>
+          E-SPORTS &bull; DEVELOPMENT &bull; WORKSHOP &bull; BOOTCAMP
+        </p>
+      </div>
+      <div class="if-links-grid">
+        <div class="if-col">
+          <h4>PAGES</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">Studio &amp; About</a></li>
+            <li><a href="events.html">Tournaments</a></li>
+            <li><a href="live.html">Live Arena</a></li>
+            <li><a href="community.html">Community</a></li>
+          </ul>
+        </div>
+        <div class="if-col">
+          <h4>DOMAINS</h4>
+          <ul>
+            <li><a href="#">Esports Division</a></li>
+            <li><a href="#">VR Development</a></li>
+            <li><a href="#">Workshops</a></li>
+            <li><a href="#">Bootcamps</a></li>
+          </ul>
+        </div>
+        <div class="if-col">
+          <h4>CONNECT</h4>
+          <ul>
+            <li><a href="#">Discord Server</a></li>
+            <li><a href="#">Instagram @vrgcvitbhopal</a></li>
+            <li><a href="#">YouTube Channel</a></li>
+            <li><a href="#">Twitter / X</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="if-bottom" style="border-top-color: rgba(255, 255, 255, 0.08);">
+      <span>&copy; 2025 VIRTUAL REALITY AND GAMING CLUB (VRGC) &mdash; VIT BHOPAL. ALL RIGHTS RESERVED.</span>
+      <span style="color:#ef4444">LIVE BROADCAST NETWORK &bull; ARENA STAGE ACTIVE</span>
+    </div>
+  </footer>
+
+  
+  <script src="script.js?v=1788435876"></script>
+  <script>
+    // Stage Switcher Dataset
+    const STAGE_DATA = {
+      stage1: {
+        streamUrl: "https://player.twitch.tv/?channel=riotgames&parent=localhost",
+        team1Name: "VRGC ALPHA",
+        team1Tag: "#1 SEED • VARSITY",
+        team1Logo: "vrgc_logo.jpg",
+        team2Name: "SHADOW ROYALS",
+        team2Tag: "#3 SEED • CONTENDER",
+        team2Logo: "event_trophy.jpg",
+        mapName: "MAP 2: BIND",
+        scoreVal: "11 : 9",
+        matchTimer: "ROUND 21 • 01:24",
+        viewers: "1,420 ONLINE",
+        killfeed: [
+          { k: "VRGC Phantom", w: "[Vandal]", v: "SHD Cypher" },
+          { k: "VRGC Aether", w: "[Operator]", v: "SHD Jett" },
+          { k: "SHD Viper", w: "[Snakebite]", v: "VRGC Blade" },
+          { k: "VRGC Rexxar", w: "[Defuse 0.4s]", v: "ROUND WIN" }
+        ]
+      },
+      stage2: {
+        streamUrl: "https://player.twitch.tv/?channel=pgl&parent=localhost",
+        team1Name: "TITAN SQUAD",
+        team1Tag: "#2 SEED • CS2 ROSTER",
+        team1Logo: "hero_purple.jpg",
+        team2Name: "REAPER ESPORTS",
+        team2Tag: "#4 SEED • QUALIFIER",
+        team2Logo: "vrgc_logo.jpg",
+        mapName: "MAP 1: INFERNO",
+        scoreVal: "14 : 12",
+        matchTimer: "OVERTIME • 00:45",
+        viewers: "980 ONLINE",
+        killfeed: [
+          { k: "TITAN Ghost", w: "[AWP]", v: "REAPER Apex" },
+          { k: "TITAN Neo", w: "[AK-47 HS]", v: "REAPER Swift" },
+          { k: "REAPER Blade", w: "[Deagle]", v: "TITAN Helix" },
+          { k: "TITAN Ghost", w: "[Bomb Planted]", v: "SITE B" }
+        ]
+      },
+      stage3: {
+        streamUrl: "https://player.twitch.tv/?channel=esl_csgo&parent=localhost",
+        team1Name: "SOUL SURVIVORS",
+        team1Tag: "MATCH 4 • ERANGEL",
+        team1Logo: "event_trophy.jpg",
+        team2Name: "CAMPUS ALL-STARS",
+        team2Tag: "25 SQUADS • 42 ALIVE",
+        team2Logo: "hero_purple.jpg",
+        mapName: "ERANGEL: ZONE 5",
+        scoreVal: "42 ALIVE",
+        matchTimer: "ZONE COLLAPSE 01:10",
+        viewers: "2,150 ONLINE",
+        killfeed: [
+          { k: "SOUL Rexxar", w: "[M416]", v: "GODL Scout" },
+          { k: "SOUL Nomad", w: "[Grenade Knock]", v: "HYDRA Star" },
+          { k: "ALL-STAR Sky", w: "[Kar98k]", v: "SOUL Viper" },
+          { k: "SOUL Rexxar", w: "[Squad Wipe]", v: "WWCD CONTENDER" }
+        ]
+      }
+    };
+
+    function switchLiveStage(stageKey, btn) {
+      document.querySelectorAll('.crimson-filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const data = STAGE_DATA[stageKey];
+      if (!data) return;
+
+      // Update iframe
+      document.getElementById('mainStreamFrame').src = data.streamUrl;
+
+      // Update Scoreboard
+      document.getElementById('sbTeam1Name').textContent = data.team1Name;
+      document.getElementById('sbTeam1Tag').textContent = data.team1Tag;
+      document.getElementById('sbTeam1Logo').src = data.team1Logo;
+
+      document.getElementById('sbTeam2Name').textContent = data.team2Name;
+      document.getElementById('sbTeam2Tag').textContent = data.team2Tag;
+      document.getElementById('sbTeam2Logo').src = data.team2Logo;
+
+      document.getElementById('sbMapName').textContent = data.mapName;
+      document.getElementById('sbScoreVal').textContent = data.scoreVal;
+      document.getElementById('sbMatchTimer').textContent = data.matchTimer;
+      document.getElementById('chatViewersBadge').textContent = data.viewers;
+
+      // Update Killfeed
+      const kfContainer = document.getElementById('killFeedStrip');
+      kfContainer.innerHTML = '';
+      data.killfeed.forEach(kf => {
+        const item = document.createElement('div');
+        item.className = 'kf-item';
+        item.innerHTML = `<span class="kf-killer">${kf.k}</span> <span class="kf-weapon">${kf.w}</span> <span class="kf-victim">${kf.v}</span>`;
+        kfContainer.appendChild(item);
+      });
+    }
+
+    // Live Chat Message Handler
+    function handleSendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const body = document.getElementById('chatMsgsBody');
+      const row = document.createElement('div');
+      row.className = 'chat-msg-row';
+      row.innerHTML = `<span class="chat-badge badge-cadet">CADET</span> <span class="chat-sender">You:</span> <span class="chat-content">${escapeHTML(text)}</span>`;
+      body.appendChild(row);
+      body.scrollTop = body.scrollHeight;
+      input.value = '';
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
