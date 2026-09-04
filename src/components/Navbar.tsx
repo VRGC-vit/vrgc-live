@@ -45,9 +45,11 @@ export function Navbar() {
   const menuItems = [
     { label: 'Home', link: '/' },
     { label: 'Studio', link: '/about' },
-    { label: 'Events', link: '/events' },
     { label: 'Live', link: '/live' },
+    { label: 'Events', link: '/events' },
     { label: 'Community', link: '/community' },
+    { label: 'Tools', link: '/tools' },
+    { label: 'Join Club', link: 'https://forms.gle/xEpZBroHH5ro3Z9q8' },
   ];
 
   const socialItems = [
@@ -74,23 +76,31 @@ export function Navbar() {
             <Link href="/about" className={`ink-nl ${pathname === '/about' ? 'active' : ''}`}>
               Studio
             </Link>
-            <Link href="/events" className={`ink-nl ${pathname === '/events' ? 'active' : ''}`}>
-              Events
-            </Link>
             <Link href="/live" className={`ink-nl ${pathname === '/live' ? 'active' : ''}`}>
               Live
             </Link>
+            <Link href="/events" className={`ink-nl ${pathname === '/events' ? 'active' : ''}`}>
+              Events
+            </Link>
             <Link href="/community" className={`ink-nl ${pathname === '/community' ? 'active' : ''}`}>
               Community
+            </Link>
+            <Link href="/tools" className={`ink-nl ${pathname.startsWith('/tools') ? 'active' : ''}`}>
+              Tools
             </Link>
           </nav>
           <div className="ink-nav-actions">
             <Link href="/events" className="btn-login">
               Events
             </Link>
-            <Link href="/events#register" className="btn-signup">
+            <a
+              href="https://forms.gle/xEpZBroHH5ro3Z9q8"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-signup"
+            >
               Join Club
-            </Link>
+            </a>
           </div>
         </>
       ) : (

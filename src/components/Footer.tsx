@@ -24,6 +24,7 @@ export function Footer() {
               <li><Link href="/events">Tournaments</Link></li>
               <li><Link href="/live">Live Arena</Link></li>
               <li><Link href="/community">Community</Link></li>
+              <li><Link href="/tools">Organizer Tools</Link></li>
             </ul>
           </div>
           <div className="if-col">

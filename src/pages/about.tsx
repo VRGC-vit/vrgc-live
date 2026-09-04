@@ -5,13 +5,13 @@ import { useScrollAnimations } from '@/hooks/useScrollAnimations';
 import { DriftWall } from '@/components/DriftWall';
 import { ScrollFloat } from '@/components/ScrollFloat';
 import {
-  fetchClubData,
   CouncilMember,
   FacultyMember,
   WheelMember,
   facultyMembers as defaultFaculty,
-  defaultCouncilMembers as defaultCouncil,
+  fetchClubData,
 } from '@/services/membersService';
+
 
 type AboutPageProps = {
   initialData: {
@@ -25,15 +25,23 @@ export default function AboutPage({ initialData }: AboutPageProps) {
   useScrollAnimations();
 
   const [council, setCouncil] = useState<CouncilMember[]>(
-    initialData?.council && initialData.council.length > 0 ? initialData.council : defaultCouncil
+    initialData?.council && initialData.council.length > 0 ? initialData.council : []
   );
   const [faculty, setFaculty] = useState<FacultyMember[]>(initialData?.faculty || defaultFaculty);
   const [wheelCategories, setWheelCategories] = useState<Record<string, WheelMember[]>>(
     initialData?.wheelCategories || {}
   );
+  // Only show loading skeleton when SSR produced no council data at all
+  const [isLoading, setIsLoading] = useState<boolean>(
+    !initialData?.council || initialData.council.length === 0
+  );
 
-  // Client-side refresh from /api/members to ensure real-time accuracy
+  // Only client-refetch when ISR didn't produce council data (e.g. first cold build)
   useEffect(() => {
+    if (initialData?.council && initialData.council.length > 0) {
+      setIsLoading(false);
+      return;
+    }
     fetch('/api/members')
       .then((res) => res.json())
       .then((data) => {
@@ -43,8 +51,9 @@ export default function AboutPage({ initialData }: AboutPageProps) {
           if (data.wheelCategories) setWheelCategories(data.wheelCategories);
         }
       })
-      .catch((err) => console.warn('Using server-rendered club data:', err));
-  }, []);
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, [initialData]);
 
   const allVerifiedMembers = useMemo(() => {
     // Only squad members from wheelCategories (excluding executive leadership / council)
@@ -59,27 +68,25 @@ export default function AboutPage({ initialData }: AboutPageProps) {
         team: m.team,
       }));
 
-    // Exclude the 4 council minds and any leadership position
-    const leadershipNames = ['lokesh', 'shivansh', 'haardik', 'parardha'];
+    // Exclude council minds and any executive leadership
+    const councilIds = new Set(council.map((c) => (c.id || c.name || '').toLowerCase().replace(/[^a-z0-9]/g, '')));
 
     const uniqueMap = new Map<string, { id: string; name: string; role: string; photoUrl: string }>();
     all.forEach((m) => {
-      const lowerName = (m.name || '').toLowerCase();
       const lowerRole = (m.position || m.role || '').toLowerCase();
       const lowerTeam = (m.team || '').toLowerCase();
+      const key = (m.id || m.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-      // Skip executive council minds
-      if (leadershipNames.some((l) => lowerName.includes(l))) return;
-      // Skip leadership team or executive / president / coordinator council roles
+      // Skip council minds
+      if (councilIds.has(key)) return;
+      // Skip leadership team or executive / president council roles
       if (
         lowerTeam.includes('leadership') ||
         lowerRole.includes('president') ||
-        lowerRole.includes('executive') ||
-        lowerRole.includes('council')
+        lowerRole.includes('executive')
       )
         return;
 
-      const key = (m.id || m.name).toLowerCase().replace(/[^a-z0-9]/g, '');
       if (!uniqueMap.has(key)) {
         uniqueMap.set(key, m);
       }
@@ -95,7 +102,7 @@ export default function AboutPage({ initialData }: AboutPageProps) {
         role: m.role,
         data: m,
       }));
-  }, [wheelCategories]);
+  }, [wheelCategories, council]);
 
   return (
     <>
@@ -119,21 +126,41 @@ export default function AboutPage({ initialData }: AboutPageProps) {
             <img src="/event_trophy.jpg" alt="Trophy Victory" />
           </div>
 
-          <div className="ink-sec-tag-dark reveal-parent">
-            <span className="text-reveal-tag"><span className="tag-sq"></span> WHO WE ARE &bull; EST. 2017</span>
+          <div className="ink-sec-tag-dark" style={{ justifyContent: 'center' }}>
+            <span className="tag-sq"></span> WHO WE ARE &bull; EST. 2017
           </div>
-          <h1 className="isl-title reveal-parent">
-            <span className="text-reveal-wrap"><span className="text-reveal-line">GAMERS,</span></span>
-            <span className="text-reveal-wrap"><span className="text-reveal-line">DEVELOPERS &amp;</span></span>
-            <span className="text-reveal-wrap"><span className="text-reveal-line">CHAMPIONS.</span></span>
+          <h1
+            className="isl-title text-reveal-sub"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(3.8rem, 9.5vw, 8.5rem)',
+              lineHeight: 0.92,
+              color: '#05000A',
+              textAlign: 'center',
+              margin: '0 auto',
+            }}
+          >
+            <span style={{ display: 'block' }}>GAMERS,</span>
+            <span style={{ display: 'block' }}>DEVELOPERS &amp;</span>
+            <span style={{ display: 'block' }}>CHAMPIONS.</span>
           </h1>
-          <p className="isl-desc text-reveal-sub">
+          <p
+            className="isl-desc text-reveal-sub"
+            style={{
+              maxWidth: '740px',
+              margin: '1.5rem auto 0',
+              textAlign: 'center',
+              fontSize: 'clamp(1rem, 2vw, 1.22rem)',
+              lineHeight: 1.6,
+              color: '#1e293b',
+              animationDelay: '0.2s',
+            }}
+          >
             Premier College Esports and Game Dev and immersive VR and Game Research Studio at VIT Bhopal University. 1000+ active student competitors, tier-1 varsity tournament rosters, game development bootcamps, and dedicated VR hardware laboratories.
           </p>
 
           {/* ══════════════════════════════════════════════════
                CIRCULAR EXECUTIVE COUNCIL: THE MINDS BEHIND THE GAMIVERSE
-               4 PERSONS: LOKESH, SHIVANSH, HAARDIK, PARARDHA
                ══════════════════════════════════════════════════ */}
           <div style={{ marginTop: '5rem', textAlign: 'center', position: 'relative', zIndex: 2, maxWidth: '1280px', marginLeft: 'auto', marginRight: 'auto' }}>
             <div className="ink-sec-tag-dark" style={{ justifyContent: 'center' }}>
@@ -148,36 +175,14 @@ export default function AboutPage({ initialData }: AboutPageProps) {
             </ScrollFloat>
 
             <div className="circular-team-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '2rem' }}>
-              {council.map((lead, idx) => {
-                const ringColors = [
-                  'rgba(124, 58, 237, 0.4)',
-                  'rgba(234, 179, 8, 0.4)',
-                  'rgba(2, 132, 199, 0.4)',
-                  'rgba(16, 185, 129, 0.4)',
-                ];
-                const badgeColors = ['#7c3aed', '#b45309', '#0284c7', '#059669'];
-                const ringColor = ringColors[idx % ringColors.length];
-                const badgeColor = badgeColors[idx % badgeColors.length];
-
-                const localFallback =
-                  lead.name.toLowerCase().includes('lokesh') ? '/leadership/lokesh.jpg' :
-                  lead.name.toLowerCase().includes('shivansh') ? '/leadership/shivansh.jpg' :
-                  lead.name.toLowerCase().includes('haardik') ? '/leadership/haardik.png' :
-                  lead.name.toLowerCase().includes('parardha') ? '/leadership/parardha.jpg' :
-                  '/vrgc_logo.jpg';
-
-                const photoSrc =
-                  lead.photoUrl && !lead.photoUrl.includes('vrgc_logo') && !lead.photoUrl.includes('1784780175183')
-                    ? lead.photoUrl
-                    : localFallback;
-
-                return (
+              {isLoading && council.length === 0 ? (
+                Array.from({ length: 4 }).map((_, idx) => (
                   <div
-                    key={lead.id || lead.name}
-                    className="circ-member-card"
+                    key={`skel-council-${idx}`}
+                    className="skeleton-card"
                     style={{
                       background: '#ffffff',
-                      border: '1px solid rgba(124, 58, 237, 0.2)',
+                      border: '1px solid rgba(124, 58, 237, 0.15)',
                       borderRadius: '16px',
                       padding: '2.2rem 1.8rem',
                       boxShadow: '0 10px 30px rgba(0,0,0,0.04)',
@@ -185,91 +190,173 @@ export default function AboutPage({ initialData }: AboutPageProps) {
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
                     }}
                   >
                     <div
-                      className="circ-avatar-wrap"
+                      className="skeleton-shimmer-light"
                       style={{
-                        position: 'relative',
                         width: '130px',
                         height: '130px',
-                        margin: '0 auto 1.25rem',
+                        borderRadius: '50%',
+                        marginBottom: '1.25rem',
+                        border: '3px solid rgba(124, 58, 237, 0.2)',
+                      }}
+                    />
+                    <div
+                      className="skeleton-shimmer-light"
+                      style={{ width: '130px', height: '22px', borderRadius: '4px', marginBottom: '0.65rem' }}
+                    />
+                    <div
+                      className="skeleton-shimmer-light"
+                      style={{ width: '90px', height: '14px', borderRadius: '4px', marginBottom: '0.75rem' }}
+                    />
+                    <div
+                      className="skeleton-shimmer-light"
+                      style={{ width: '80px', height: '18px', borderRadius: '6px', marginBottom: '1rem' }}
+                    />
+                    <div
+                      className="skeleton-shimmer-light"
+                      style={{ width: '100%', height: '12px', borderRadius: '3px', marginBottom: '0.4rem' }}
+                    />
+                    <div
+                      className="skeleton-shimmer-light"
+                      style={{ width: '85%', height: '12px', borderRadius: '3px' }}
+                    />
+                  </div>
+                ))
+              ) : (
+                council.map((lead, idx) => {
+                  const ringColors = [
+                    'rgba(124, 58, 237, 0.4)',
+                    'rgba(234, 179, 8, 0.4)',
+                    'rgba(2, 132, 199, 0.4)',
+                    'rgba(16, 185, 129, 0.4)',
+                  ];
+                  const badgeColors = ['#7c3aed', '#b45309', '#0284c7', '#059669'];
+                  const ringColor = ringColors[idx % ringColors.length];
+                  const badgeColor = badgeColors[idx % badgeColors.length];
+
+                  const photoSrc = lead.photoUrl || '/vrgc_logo.jpg';
+
+                  return (
+                    <div
+                      key={lead.id || lead.name}
+                      className="circ-member-card"
+                      style={{
+                        background: '#ffffff',
+                        border: '1px solid rgba(124, 58, 237, 0.2)',
+                        borderRadius: '16px',
+                        padding: '2.2rem 1.8rem',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.04)',
+                        textAlign: 'center',
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
-                        justifyContent: 'center',
+                        transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
                       }}
                     >
                       <div
-                        className="circ-ring"
+                        className="circ-avatar-wrap"
                         style={{
-                          position: 'absolute',
-                          inset: '-6px',
-                          borderRadius: '50%',
-                          border: `2px dashed ${ringColor}`,
-                          pointerEvents: 'none',
-                        }}
-                      ></div>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={photoSrc}
-                        alt={lead.name}
-                        className="circ-avatar"
-                        style={{
+                          position: 'relative',
                           width: '130px',
                           height: '130px',
+                          margin: '0 auto 1.25rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                           borderRadius: '50%',
-                          objectFit: 'cover',
-                          border: `3px solid ${badgeColor}`,
-                          background: '#f8fafc',
-                          display: 'block',
                         }}
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          if (target.src !== localFallback && !target.src.endsWith(localFallback)) {
-                            target.src = localFallback;
-                          }
+                      >
+                        <div
+                          className="circ-ring"
+                          style={{
+                            position: 'absolute',
+                            inset: '-6px',
+                            borderRadius: '50%',
+                            border: `2px dashed ${ringColor}`,
+                            pointerEvents: 'none',
+                          }}
+                        ></div>
+                        <div 
+                          className="skeleton-shimmer-light"
+                          style={{
+                            width: '130px',
+                            height: '130px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            border: `3px solid ${badgeColor}`,
+                          }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={photoSrc}
+                            alt={lead.name}
+                            className="circ-avatar"
+                            loading="lazy"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              display: 'block',
+                              opacity: 0,
+                              transition: 'opacity 0.4s ease',
+                              background: '#f1f5f9',
+                            }}
+                            onLoad={(e) => {
+                              (e.target as HTMLElement).style.opacity = '1';
+                              (e.target as HTMLElement).parentElement?.classList.remove('skeleton-shimmer-light');
+                            }}
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              if (target.src !== '/vrgc_logo.jpg' && !target.src.endsWith('/vrgc_logo.jpg')) {
+                                target.src = '/vrgc_logo.jpg';
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <h3
+                        className="circ-name"
+                        style={{
+                          fontFamily: 'var(--font-head)',
+                          fontSize: '1.45rem',
+                          fontWeight: 800,
+                          color: '#0f172a',
+                          marginBottom: '0.35rem',
+                          lineHeight: 1.2,
                         }}
-                      />
+                      >
+                        {lead.name}
+                      </h3>
+                      <span className="circ-role" style={{ color: badgeColor, fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.35rem' }}>
+                        {lead.role}
+                      </span>
+                      <span
+                        className="circ-member-badge"
+                        style={{
+                          background: 'rgba(124, 58, 237, 0.08)',
+                          color: badgeColor,
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.68rem',
+                          fontWeight: 700,
+                          letterSpacing: '0.12em',
+                          padding: '0.25rem 0.65rem',
+                          borderRadius: '6px',
+                          marginTop: '0.25rem',
+                        }}
+                      >
+                        {(lead.team || 'LEADERSHIP').toUpperCase()}
+                      </span>
+                      <p className="circ-bio" style={{ color: '#334155', marginTop: '0.85rem', fontSize: '0.88rem', lineHeight: 1.55 }}>
+                        {lead.bio}
+                      </p>
                     </div>
-                    <h3
-                      className="circ-name"
-                      style={{
-                        fontFamily: 'var(--font-head)',
-                        fontSize: '1.45rem',
-                        fontWeight: 800,
-                        color: '#0f172a',
-                        marginBottom: '0.35rem',
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {lead.name}
-                    </h3>
-                    <span className="circ-role" style={{ color: badgeColor, fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.35rem' }}>
-                      {lead.role}
-                    </span>
-                    <span
-                      className="circ-member-badge"
-                      style={{
-                        background: 'rgba(124, 58, 237, 0.08)',
-                        color: badgeColor,
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.68rem',
-                        fontWeight: 700,
-                        letterSpacing: '0.12em',
-                        padding: '0.25rem 0.65rem',
-                        borderRadius: '6px',
-                        marginTop: '0.25rem',
-                      }}
-                    >
-                      {(lead.team || 'LEADERSHIP').toUpperCase()}
-                    </span>
-                    <p className="circ-bio" style={{ color: '#334155', marginTop: '0.85rem', fontSize: '0.88rem', lineHeight: 1.55 }}>
-                      {lead.bio}
-                    </p>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
 
             {/* ══════════════════════════════════════════════════
@@ -279,9 +366,12 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               <div className="ink-sec-tag-dark" style={{ justifyContent: 'center' }}>
                 <span className="tag-sq"></span> INSTITUTIONAL MENTORSHIP
               </div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', color: '#111111', lineHeight: 1, marginTop: '0.5rem', marginBottom: '2.5rem' }}>
+              <ScrollFloat
+                as="h3"
+                style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', color: '#111111', lineHeight: 1, marginTop: '0.5rem', marginBottom: '2.5rem', textAlign: 'center' }}
+              >
                 FACULTY COORDINATORS
-              </h3>
+              </ScrollFloat>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
                 {faculty.map((fac) => {
@@ -294,6 +384,7 @@ export default function AboutPage({ initialData }: AboutPageProps) {
                   return (
                     <div
                       key={fac.name}
+                      className="faculty-card"
                       style={{
                         background: '#ffffff',
                         border: '1px solid rgba(124, 58, 237, 0.2)',
@@ -434,7 +525,9 @@ export default function AboutPage({ initialData }: AboutPageProps) {
             <div className="dept-card">
               <span className="dept-num">01</span>
               <span className="dept-badge">COMPETITIVE DIVISION</span>
-              <h3 className="dept-title">E-SPORTS</h3>
+              <ScrollFloat as="h3" containerClassName="dept-title">
+                E-SPORTS
+              </ScrollFloat>
               <p className="dept-desc">
                 Fielding varsity rosters in VALORANT, BGMI, FREE FIRE, FIFA and TEKKEN. Regular scrims against premier collegiate squads, dedicated coaching staff, analytics reviews, and inter college LAN tournament invites.
               </p>
@@ -448,7 +541,9 @@ export default function AboutPage({ initialData }: AboutPageProps) {
             <div className="dept-card">
               <span className="dept-num">02</span>
               <span className="dept-badge">INNOVATION LAB</span>
-              <h3 className="dept-title">DEVELOPMENT</h3>
+              <ScrollFloat as="h3" containerClassName="dept-title">
+                DEVELOPMENT
+              </ScrollFloat>
               <p className="dept-desc">
                 Building next-generation virtual environments, spatial audio experiments, and custom Unreal Engine 5 games. Our teams publish games on itch.io and Steam, and build proprietary VR tools.
               </p>
@@ -462,7 +557,9 @@ export default function AboutPage({ initialData }: AboutPageProps) {
             <div className="dept-card">
               <span className="dept-num">03</span>
               <span className="dept-badge">TECHNICAL KNOWLEDGE</span>
-              <h3 className="dept-title">WORKSHOPS</h3>
+              <ScrollFloat as="h3" containerClassName="dept-title">
+                WORKSHOPS
+              </ScrollFloat>
               <p className="dept-desc">
                 Hands-on technical masterclasses covering game engine architecture, 3D asset pipelines in Blender, VR tracking calibration, tournament broadcast operations, and GPU optimization.
               </p>
@@ -476,7 +573,9 @@ export default function AboutPage({ initialData }: AboutPageProps) {
             <div className="dept-card">
               <span className="dept-num">04</span>
               <span className="dept-badge">BROADCAST &amp; MEDIA</span>
-              <h3 className="dept-title">CASTING</h3>
+              <ScrollFloat as="h3" containerClassName="dept-title">
+                CASTING
+              </ScrollFloat>
               <p className="dept-desc">
                 High quality Hinglish Casting with over 10k+ views on youtube streams with 100+ watching hours. Conducted 50+ live streams in youtube.
               </p>
@@ -533,7 +632,12 @@ export default function AboutPage({ initialData }: AboutPageProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const data = await fetchClubData();
+  let data = null;
+  try {
+    data = await fetchClubData();
+  } catch {
+    // Supabase/Firestore unreachable — render page with empty state
+  }
   return {
     props: {
       initialData: data || null,

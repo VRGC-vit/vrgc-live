@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useScrollAnimations } from '@/hooks/useScrollAnimations';
+import { ScrollFloat } from '@/components';
+
 
 type StageData = {
   streamUrl: string;
@@ -20,7 +22,7 @@ type StageData = {
 
 const STAGE_DATA: Record<string, StageData> = {
   stage1: {
-    streamUrl: 'https://player.twitch.tv/?channel=riotgames&parent=localhost',
+    streamUrl: 'https://player.twitch.tv/?channel=riotgames&parent=localhost&parent=vrgcvitb.in',
     team1Name: 'VRGC ALPHA',
     team1Tag: '#1 SEED • VARSITY',
     team1Logo: '/vrgc_logo.jpg',
@@ -39,7 +41,7 @@ const STAGE_DATA: Record<string, StageData> = {
     ],
   },
   stage2: {
-    streamUrl: 'https://player.twitch.tv/?channel=pgl&parent=localhost',
+    streamUrl: 'https://player.twitch.tv/?channel=pgl&parent=localhost&parent=vrgcvitb.in',
     team1Name: 'TITAN SQUAD',
     team1Tag: '#2 SEED • CS2 ROSTER',
     team1Logo: '/hero_purple.jpg',
@@ -58,7 +60,7 @@ const STAGE_DATA: Record<string, StageData> = {
     ],
   },
   stage3: {
-    streamUrl: 'https://player.twitch.tv/?channel=esl_csgo&parent=localhost',
+    streamUrl: 'https://player.twitch.tv/?channel=esl_csgo&parent=localhost&parent=vrgcvitb.in',
     team1Name: 'SOUL SURVIVORS',
     team1Tag: 'MATCH 4 • ERANGEL',
     team1Logo: '/event_trophy.jpg',
@@ -338,7 +340,8 @@ export default function LivePage() {
                     <span className="tag-sq" style={{ background: '#ef4444' }}></span> TOURNAMENT
                     ROADMAP
                   </div>
-                  <h3
+                  <ScrollFloat
+                    as="h3"
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontSize: '2.8rem',
@@ -348,7 +351,7 @@ export default function LivePage() {
                     }}
                   >
                     LIVE TOURNAMENT BRACKET
-                  </h3>
+                  </ScrollFloat>
                 </div>
                 <Link
                   href="/events"
@@ -457,16 +460,18 @@ export default function LivePage() {
               <div className="ink-sec-tag">
                 <span className="tag-sq" style={{ background: '#ef4444' }}></span> ON-DEMAND REPLAYS
               </div>
-              <h2
-                className="ipb-title"
+              <ScrollFloat
+                as="h2"
+                containerClassName="ipb-title"
                 style={{
+                  fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2.8rem, 6vw, 4.5rem)',
                   marginBottom: '2.5rem',
                   color: '#fff',
                 }}
               >
                 MATCH ARCHIVE
-              </h2>
+              </ScrollFloat>
 
               <div
                 className="vod-grid"
@@ -618,7 +623,8 @@ export default function LivePage() {
                 <span className="tag-sq" style={{ background: '#ef4444' }}></span> BROADCAST RUN
                 SHEET
               </div>
-              <h2
+              <ScrollFloat
+                as="h2"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2.5rem, 6vw, 4rem)',
@@ -628,10 +634,11 @@ export default function LivePage() {
                 }}
               >
                 UPCOMING SCHEDULE
-              </h2>
+              </ScrollFloat>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div
+                  className="schedule-row-card"
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -678,6 +685,7 @@ export default function LivePage() {
                 </div>
 
                 <div
+                  className="schedule-row-card"
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -724,6 +732,7 @@ export default function LivePage() {
                 </div>
 
                 <div
+                  className="schedule-row-card"
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -776,7 +785,8 @@ export default function LivePage() {
               <div className="ink-sec-tag" style={{ justifyContent: 'center' }}>
                 <span className="tag-sq" style={{ background: '#ef4444' }}></span> ON-AIR COMMENTARY
               </div>
-              <h2
+              <ScrollFloat
+                as="h2"
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2.5rem, 6vw, 4rem)',
@@ -786,7 +796,7 @@ export default function LivePage() {
                 }}
               >
                 THE CASTER DESK
-              </h2>
+              </ScrollFloat>
 
               <div
                 className="circular-team-grid"

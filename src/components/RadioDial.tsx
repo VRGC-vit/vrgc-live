@@ -7,15 +7,21 @@ export interface PlaylistTrack {
   genre: string;
   url: string;
   embedUrl: string;
+  coverArt: string;
+  type: 'playlist' | 'video';
+  targetId: string;
 }
 
-const PLAYLISTS: PlaylistTrack[] = [
+export const PLAYLISTS: PlaylistTrack[] = [
   {
     id: 'gta-v',
     title: 'GTA V RADIO',
     genre: 'Los Santos Sound',
     url: 'https://music.youtube.com/playlist?list=PLgbI0QcBNn5isOvlIN0rRK9Y6bSQdheii&si=JaTYLsLBpa4uf5ik',
     embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=PLgbI0QcBNn5isOvlIN0rRK9Y6bSQdheii&enablejsapi=1',
+    coverArt: 'https://i.ytimg.com/vi/3_yZC9pa-ug/hqdefault.jpg',
+    type: 'playlist',
+    targetId: 'PLgbI0QcBNn5isOvlIN0rRK9Y6bSQdheii',
   },
   {
     id: '2016-hits',
@@ -23,6 +29,9 @@ const PLAYLISTS: PlaylistTrack[] = [
     genre: 'Retro Electronic Pop',
     url: 'https://music.youtube.com/playlist?list=PL788cqrhfEcYf1KsGlpRVm2YFlX5PZJuL&si=AUlbcodTD7116uzX',
     embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=PL788cqrhfEcYf1KsGlpRVm2YFlX5PZJuL&enablejsapi=1',
+    coverArt: 'https://i.ytimg.com/vi/u-YGV5xt-jk/hqdefault.jpg',
+    type: 'playlist',
+    targetId: 'PL788cqrhfEcYf1KsGlpRVm2YFlX5PZJuL',
   },
   {
     id: 'gaming-hits',
@@ -30,6 +39,9 @@ const PLAYLISTS: PlaylistTrack[] = [
     genre: 'Collegiate Esports Anthem',
     url: 'https://music.youtube.com/playlist?list=PLD2MrnSI-2rpTd2KLUkW4dBk1emi7paMb&si=jKX8v4lPJRMuStm_',
     embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=PLD2MrnSI-2rpTd2KLUkW4dBk1emi7paMb&enablejsapi=1',
+    coverArt: 'https://i.ytimg.com/vi/A7E-jPMolJ0/hqdefault.jpg',
+    type: 'playlist',
+    targetId: 'PLD2MrnSI-2rpTd2KLUkW4dBk1emi7paMb',
   },
   {
     id: 'asphalt-9',
@@ -37,13 +49,19 @@ const PLAYLISTS: PlaylistTrack[] = [
     genre: 'Hypercar Nitro OST',
     url: 'https://music.youtube.com/watch?v=IF4RpltPk1k&si=B-KdXn51INcih6uk',
     embedUrl: 'https://www.youtube-nocookie.com/embed/IF4RpltPk1k?enablejsapi=1',
+    coverArt: 'https://i.ytimg.com/vi/IF4RpltPk1k/maxresdefault.jpg',
+    type: 'video',
+    targetId: 'IF4RpltPk1k',
   },
   {
     id: 'phonk',
     title: 'PHONK',
     genre: 'Heavy 808 Drift',
-    url: 'https://music.youtube.com/playlist?list=PLGBKsNyGY-afmc5ff3n1HOYGTmZO1xJGw&si=KRNy210g6Hfy9AGt',
-    embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=PLGBKsNyGY-afmc5ff3n1HOYGTmZO1xJGw&enablejsapi=1',
+    url: 'https://music.youtube.com/playlist?list=PL9mEo4EdiFzPjTxoUxx4L3bSpp-GCImeN',
+    embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=PL9mEo4EdiFzPjTxoUxx4L3bSpp-GCImeN&enablejsapi=1',
+    coverArt: 'https://i.ytimg.com/vi/vo_X4XZ2Jqk/hqdefault.jpg',
+    type: 'playlist',
+    targetId: 'PL9mEo4EdiFzPjTxoUxx4L3bSpp-GCImeN',
   },
   {
     id: 'cyberpunk',
@@ -51,6 +69,9 @@ const PLAYLISTS: PlaylistTrack[] = [
     genre: 'Night City Overdrive',
     url: 'https://music.youtube.com/playlist?list=OLAK5uy_kMPdH8PZ2kqc59Y4BJ3ChrCn_U5EKKKbU&si=InrqyD1YfZ3yYr09',
     embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=OLAK5uy_kMPdH8PZ2kqc59Y4BJ3ChrCn_U5EKKKbU&enablejsapi=1',
+    coverArt: 'https://i9.ytimg.com/s_p/OLAK5uy_kMPdH8PZ2kqc59Y4BJ3ChrCn_U5EKKKbU/mqdefault.jpg',
+    type: 'playlist',
+    targetId: 'OLAK5uy_kMPdH8PZ2kqc59Y4BJ3ChrCn_U5EKKKbU',
   },
   {
     id: 'epidemic-pop',
@@ -58,19 +79,66 @@ const PLAYLISTS: PlaylistTrack[] = [
     genre: 'Vibrant Modern Pop',
     url: 'https://music.youtube.com/playlist?list=PLuIQYSWMlyQV8ZQe0yM01I1_sFdYnIk2f&si=RbHRfRtOGbiJqyDc',
     embedUrl: 'https://www.youtube-nocookie.com/embed/videoseries?list=PLuIQYSWMlyQV8ZQe0yM01I1_sFdYnIk2f&enablejsapi=1',
+    coverArt: 'https://i.ytimg.com/vi/vo_X4XZ2Jqk/hqdefault.jpg',
+    type: 'playlist',
+    targetId: 'PLuIQYSWMlyQV8ZQe0yM01I1_sFdYnIk2f',
   },
 ];
 
+const DEFAULT_STATION_TRACKS: Record<string, string> = {
+  'gta-v': 'The Set Up — Favored Nations',
+  '2016-hits': 'Closer — The Chainsmokers ft. Halsey',
+  'gaming-hits': 'Warriors — Imagine Dragons (Esports OST)',
+  'asphalt-9': 'Legendary Nitro OST — High Speed Drift',
+  'phonk': 'Murder In My Mind — Kordhell',
+  'cyberpunk': 'Spoiler — Hyper (Cyberpunk 2077 OST)',
+  'epidemic-pop': 'Faster Car — Loving Caliber',
+};
+
+const FALLBACK_ART = '/vrgc_logo.jpg';
+
+declare global {
+  interface Window {
+    YT?: {
+      Player: any;
+      PlayerState: {
+        UNSTARTED: number;
+        ENDED: number;
+        PLAYING: number;
+        PAUSED: number;
+        BUFFERING: number;
+        CUED: number;
+      };
+    };
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
 export const RadioDial: React.FC = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSongTitle, setCurrentSongTitle] = useState<string>('');
+  const [currentArtist, setCurrentArtist] = useState<string>('');
+  const [isApiReady, setIsApiReady] = useState(false);
 
   const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const shuffleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const apiDebounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const playerRef = useRef<any>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const titleContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isMarquee, setIsMarquee] = useState(false);
 
   const currentTrack = PLAYLISTS[selectedIndex] || PLAYLISTS[0];
+
+  // Artwork to display: hovered station artwork if hovering, otherwise active station
+  const activeArtIndex = hoveredIndex !== null ? hoveredIndex : selectedIndex;
+  const activeArtTrack = PLAYLISTS[activeArtIndex] || currentTrack;
+  const displayedArt = activeArtTrack.coverArt || FALLBACK_ART;
 
   // Synthesize a clean radio dial tick via Web Audio API
   const playTickSound = useCallback(() => {
@@ -85,8 +153,8 @@ export const RadioDial: React.FC = () => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(420, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.025);
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.025);
       gain.gain.setValueAtTime(0.06, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.025);
       osc.connect(gain);
@@ -94,87 +162,345 @@ export const RadioDial: React.FC = () => {
       osc.start();
       osc.stop(ctx.currentTime + 0.03);
     } catch {
-      /* autoplay policy */
+      /* autoplay policy silent ignore */
     }
   }, []);
 
-  // Send YouTube iframe API commands
-  const sendIframeCommand = useCallback((func: string) => {
+  // Update track title and artist from YouTube Player videoData
+  const updateTrackData = useCallback((player: any) => {
     try {
-      if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.postMessage(
-          JSON.stringify({ event: 'command', func, args: '' }),
-          '*'
-        );
+      if (player && typeof player.getVideoData === 'function') {
+        const data = player.getVideoData();
+        if (data && data.title && data.title.trim().length > 0) {
+          setCurrentSongTitle(data.title.trim());
+          if (data.author && data.author.trim().length > 0) {
+            setCurrentArtist(data.author.trim());
+          }
+        }
       }
     } catch {
-      /* cross-origin silenced */
+      /* cross-origin guard */
     }
   }, []);
 
-  // Station changed via OptionWheel dial
+  // Initialize YouTube IFrame API
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const setupPlayer = () => {
+      if (!window.YT || !window.YT.Player) return;
+      if (playerRef.current) return;
+
+      try {
+        playerRef.current = new window.YT.Player('vrgc-radio-yt-player', {
+          height: '1',
+          width: '1',
+          playerVars: {
+            autoplay: 0,
+            controls: 0,
+            disablekb: 1,
+            fs: 0,
+            playsinline: 1,
+            rel: 0,
+            origin: window.location.origin,
+            enablejsapi: 1,
+          },
+          events: {
+            onReady: (event: any) => {
+              setIsApiReady(true);
+              // Cue the initial station so audio is primed
+              const init = PLAYLISTS[0];
+              if (init.type === 'playlist') {
+                event.target.cuePlaylist({
+                  listType: 'playlist',
+                  list: init.targetId,
+                  index: Math.floor(Math.random() * 10),
+                });
+                event.target.setLoop(true);
+                if (shuffleTimerRef.current) clearTimeout(shuffleTimerRef.current);
+                shuffleTimerRef.current = setTimeout(() => {
+                  if (event.target && typeof event.target.setShuffle === 'function') {
+                    event.target.setShuffle(true);
+                  }
+                }, 1200);
+              } else {
+                event.target.cueVideoById(init.targetId);
+              }
+            },
+            onStateChange: (event: any) => {
+              // 1: PLAYING, 2: PAUSED, 3: BUFFERING, 0: ENDED
+              if (event.data === 1) {
+                setIsPlaying(true);
+                updateTrackData(event.target);
+              } else if (event.data === 2) {
+                setIsPlaying(false);
+              } else if (event.data === 3) {
+                // Buffering — fetch title immediately
+                updateTrackData(event.target);
+                setTimeout(() => updateTrackData(event.target), 350);
+              } else if (event.data === 0) {
+                // Video ended, in playlist YouTube moves to next
+                setTimeout(() => updateTrackData(event.target), 400);
+              }
+            },
+            onError: (event: any) => {
+              // Auto skip unplayable/blocked videos in playlist
+              try {
+                event.target.nextVideo();
+              } catch {
+                /* ignore */
+              }
+            },
+          },
+        });
+      } catch (err) {
+        console.warn('VRGC Radio YouTube Player initialization error:', err);
+      }
+    };
+
+    if (window.YT && window.YT.Player) {
+      setupPlayer();
+    } else {
+      // Inject YouTube IFrame API script tag
+      if (!document.getElementById('yt-iframe-api')) {
+        const script = document.createElement('script');
+        script.id = 'yt-iframe-api';
+        script.src = 'https://www.youtube.com/iframe_api';
+        const first = document.getElementsByTagName('script')[0];
+        first?.parentNode?.insertBefore(script, first);
+      }
+      const prevCallback = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        if (prevCallback) prevCallback();
+        setupPlayer();
+      };
+    }
+
+    return () => {
+      // cleanup on unmount
+    };
+  }, [updateTrackData]);
+
+  // Guaranteed visible song title: Live YouTube song title, or curated station track
+  const displayedTitle =
+    currentSongTitle || DEFAULT_STATION_TRACKS[currentTrack.id] || currentTrack.title;
+
+  // Toggle marquee if title is long
+  useEffect(() => {
+    if (displayedTitle.length > 22) {
+      setIsMarquee(true);
+    } else {
+      setIsMarquee(false);
+    }
+  }, [displayedTitle]);
+
+  // Open with smooth panel expansion
+  const openPanel = useCallback(() => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    setIsRendered(true);
+    requestAnimationFrame(() => {
+      setIsOpen(true);
+    });
+  }, []);
+
+  // Close with extended, ultra-smooth 680ms exit transition
+  const closePanel = useCallback(() => {
+    setIsOpen(false);
+    setHoveredIndex(null);
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => {
+      setIsRendered(false);
+    }, 680); // Synchronized with 0.68s CSS animation
+  }, []);
+
+  // Switch station smoothly via YouTube API
   const handleStationChange = (index: number) => {
     setSelectedIndex(index);
+    const track = PLAYLISTS[index];
     playTickSound();
-    // The iframe src will update on re-render
+
+    // Reset title to fallback preview for instant user feedback
+    const fallbackTitle = DEFAULT_STATION_TRACKS[track.id] || track.title;
+    setCurrentSongTitle(fallbackTitle);
+    setCurrentArtist('');
+
+    if (apiDebounceTimerRef.current) clearTimeout(apiDebounceTimerRef.current);
+    
+    apiDebounceTimerRef.current = setTimeout(() => {
+      if (playerRef.current && isApiReady) {
+        try {
+          if (track.type === 'playlist') {
+            if (isPlaying) {
+              playerRef.current.stopVideo(); // Purge old playlist queue
+              playerRef.current.loadPlaylist({
+                listType: 'playlist',
+                list: track.targetId,
+                index: Math.floor(Math.random() * 10),
+              });
+            } else {
+              playerRef.current.cuePlaylist({
+                listType: 'playlist',
+                list: track.targetId,
+                index: Math.floor(Math.random() * 10),
+              });
+            }
+            
+            playerRef.current.setLoop(true);
+            if (shuffleTimerRef.current) clearTimeout(shuffleTimerRef.current);
+            
+            shuffleTimerRef.current = setTimeout(() => {
+              if (playerRef.current && typeof playerRef.current.setShuffle === 'function') {
+                playerRef.current.setShuffle(true);
+              }
+            }, 1200);
+          } else {
+            if (isPlaying) {
+              playerRef.current.loadVideoById(track.targetId);
+              playerRef.current.playVideo();
+            } else {
+              playerRef.current.cueVideoById(track.targetId);
+            }
+          }
+        } catch (err) {
+          console.warn('Error loading station playlist:', err);
+        }
+      }
+    }, 450); // Robust debounce so wheel spins don't overload API
   };
 
+  // Toggle Play / Pause smoothly
   const togglePlay = () => {
     const next = !isPlaying;
     setIsPlaying(next);
-    sendIframeCommand(next ? 'playVideo' : 'pauseVideo');
+
+    if (playerRef.current && isApiReady) {
+      try {
+        if (next) {
+          const track = PLAYLISTS[selectedIndex];
+          // If player is unstarted or ended, load current station with shuffle
+          if (typeof playerRef.current.getPlayerState === 'function') {
+            const state = playerRef.current.getPlayerState();
+            if (state === -1 || state === 5 || state === 0) {
+              if (track.type === 'playlist') {
+                playerRef.current.loadPlaylist({
+                  listType: 'playlist',
+                  list: track.targetId,
+                  index: Math.floor(Math.random() * 10),
+                });
+                playerRef.current.setLoop(true);
+                if (shuffleTimerRef.current) clearTimeout(shuffleTimerRef.current);
+                shuffleTimerRef.current = setTimeout(() => {
+                  if (playerRef.current && typeof playerRef.current.setShuffle === 'function') {
+                    playerRef.current.setShuffle(true);
+                  }
+                }, 1200);
+              } else {
+                playerRef.current.loadVideoById(track.targetId);
+              }
+            }
+          }
+          playerRef.current.playVideo();
+        } else {
+          playerRef.current.pauseVideo();
+        }
+      } catch (err) {
+        console.warn('Error toggling play:', err);
+      }
+    }
   };
 
-  // Forward/Rewind navigate WITHIN the current playlist (next/prev song)
+  // Skip to next song in playlist
   const handleForwardSong = () => {
     playTickSound();
-    sendIframeCommand('nextVideo');
+    if (playerRef.current && isApiReady) {
+      try {
+        playerRef.current.nextVideo();
+        setTimeout(() => updateTrackData(playerRef.current), 400);
+      } catch {
+        /* ignore */
+      }
+    }
   };
 
+  // Skip to previous song in playlist
   const handleRewindSong = () => {
     playTickSound();
-    sendIframeCommand('previousVideo');
+    if (playerRef.current && isApiReady) {
+      try {
+        playerRef.current.previousVideo();
+        setTimeout(() => updateTrackData(playerRef.current), 400);
+      } catch {
+        /* ignore */
+      }
+    }
   };
 
+  // Mouse hover expansion — strictly enabled only on pointer: fine devices
   const handleMouseEnter = () => {
-    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-    setIsExpanded(true);
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+      openPanel();
+    }
   };
 
   const handleMouseLeave = () => {
-    hoverTimerRef.current = setTimeout(() => setIsExpanded(false), 500);
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = setTimeout(() => {
+        closePanel();
+      }, 450);
+    }
+  };
+
+  // 1-Tap handler for mobile & desktop
+  const handleTabClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
+    if (isOpen) {
+      closePanel();
+    } else {
+      openPanel();
+    }
   };
 
   useEffect(() => {
     return () => {
       if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      if (shuffleTimerRef.current) clearTimeout(shuffleTimerRef.current);
+      if (apiDebounceTimerRef.current) clearTimeout(apiDebounceTimerRef.current);
       if (audioCtxRef.current) audioCtxRef.current.close().catch(() => {});
     };
   }, []);
 
   return (
     <aside
-      className="radio-dial-container"
+      className={`radio-dial-container ${isOpen ? 'is-open' : 'is-closed'}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       aria-label="VRGC Radio Player"
     >
-      {/* Hidden YouTube Iframe — plays the currently selected playlist */}
-      <iframe
-        ref={iframeRef}
-        key={currentTrack.id}
-        src={`${currentTrack.embedUrl}${isPlaying ? '&autoplay=1' : ''}`}
-        title="VRGC Radio Stream"
-        style={{ display: 'none', width: 0, height: 0, border: 'none' }}
-        allow="autoplay; encrypted-media"
+      {/* Persistent YouTube IFrame API Target: Keep in DOM for continuous background streaming */}
+      <div
+        id="vrgc-radio-yt-player"
+        style={{
+          position: 'fixed',
+          top: -9999,
+          left: -9999,
+          width: 1,
+          height: 1,
+          opacity: 0.001,
+          pointerEvents: 'none',
+        }}
+        aria-hidden="true"
       />
 
-      {/* ── Collapsed Tab: Enhanced Floating Pill ── */}
+      {/* ── Collapsed Docked Tab: Edge Floating Pill (1-tap open) ── */}
       <button
         type="button"
-        className="radio-dial-tab"
-        onClick={() => setIsExpanded(prev => !prev)}
-        aria-expanded={isExpanded}
+        className={`radio-dial-tab ${isOpen ? 'tab-hidden' : ''}`}
+        onClick={handleTabClick}
+        aria-expanded={isOpen}
         title="Open VRGC Radio"
       >
         <span className="radio-tab-icon">&#128251;</span>
@@ -188,9 +514,22 @@ export const RadioDial: React.FC = () => {
         <span className="radio-tab-now">{isPlaying ? '▶ ON' : '— OFF'}</span>
       </button>
 
-      {/* ── Expanded: Circular Transparent Black Deck ── */}
-      {isExpanded && (
-        <div className="radio-dial-deck">
+      {/* ── Expanded Deck: Screen Edge Docked with Black Gradient & Cool Animations ── */}
+      {isRendered && (
+        <div className={`radio-dial-deck ${isOpen ? 'deck-active' : 'deck-closing'}`}>
+          {/* Edge Black Gradient Fade-Out Background */}
+          <div className="radio-deck-bg-scrim"></div>
+
+          {/* Bubbling Album Art Behind OptionWheel */}
+          <div
+            className={`radio-deck-album-art ${hoveredIndex !== null ? 'is-hovering' : 'is-idle'}`}
+            style={{
+              backgroundImage: `url(${displayedArt})`,
+            }}
+          >
+            <div className="radio-deck-album-overlay"></div>
+          </div>
+
           <div className="radio-deck-ring"></div>
           <div className="radio-deck-inner-ring"></div>
 
@@ -200,14 +539,15 @@ export const RadioDial: React.FC = () => {
             <button
               type="button"
               className="radio-deck-close"
-              onClick={() => setIsExpanded(false)}
+              onClick={closePanel}
               title="Close"
+              aria-label="Close Radio"
             >
               &times;
             </button>
           </div>
 
-          {/* Center: OptionWheel Dial with Enlarged Text */}
+          {/* Center: OptionWheel Dial with Album Art Hover & Staggered Items */}
           <div className="radio-deck-wheel-zone">
             <div className="radio-deck-reticle"></div>
             <div className="radio-deck-reticle-dot"></div>
@@ -215,39 +555,66 @@ export const RadioDial: React.FC = () => {
               <OptionWheel
                 items={PLAYLISTS.map(p => p.title)}
                 defaultSelected={selectedIndex}
-                side="left"
-                fontSize={1.55}
-                spacing={1.65}
-                curve={1.1}
+                side="right"
+                fontSize={1.45}
+                spacing={1.6}
+                curve={1.15}
                 tilt={7}
-                blur={1.5}
-                fade={0.3}
-                textColor="rgba(255, 255, 255, 0.35)"
-                activeColor="#ffffff"
-                inset={55}
+                blur={1.6}
+                fade={0.28}
+                textColor="#8a8a95"
+                activeColor="#C084FC"
+                inset={50}
                 loop={true}
                 draggable={true}
-                smoothing={140}
+                smoothing={150}
                 onChange={handleStationChange}
+                onItemHover={idx => setHoveredIndex(idx)}
               />
             </div>
           </div>
 
-          {/* Bottom: Station Info & Aesthetic Controls */}
+          {/* Bottom: Song Title, Station Info & Controls */}
           <div className="radio-deck-bottom">
             <div className="radio-deck-meta">
-              <div className="radio-deck-name">{currentTrack.title}</div>
-              <div className="radio-deck-genre">{currentTrack.genre}</div>
+              {/* Live Status Tag */}
+              <div className="radio-deck-status-tag">
+                <span className={`radio-status-dot ${!isPlaying ? 'paused' : ''}`}></span>
+                <span>{isPlaying ? 'ON AIR' : 'PAUSED'}</span>
+                <span className="radio-status-sep">&bull;</span>
+                <span className="radio-station-badge">{currentTrack.title}</span>
+              </div>
+
+              {/* Prominent Song Title with Marquee */}
+              <div className="radio-deck-name-wrap" ref={titleContainerRef}>
+                <div className={`radio-deck-name ${isMarquee ? 'is-marquee' : ''}`}>
+                  {isMarquee ? (
+                    <>
+                      <span>{displayedTitle}</span>
+                      <span className="radio-marquee-spacer">&bull;</span>
+                      <span>{displayedTitle}</span>
+                      <span className="radio-marquee-spacer">&bull;</span>
+                    </>
+                  ) : (
+                    displayedTitle
+                  )}
+                </div>
+              </div>
+
+              {/* Artist and Genre Subtitle */}
+              <div className="radio-deck-genre">
+                {currentArtist ? `${currentArtist} • ${currentTrack.genre}` : currentTrack.genre}
+              </div>
             </div>
 
             <div className="radio-deck-controls">
-              {/* Rewind: Goes to previous SONG within the playlist */}
+              {/* Previous song in playlist */}
               <button
                 type="button"
                 className="radio-ctrl-step"
                 onClick={handleRewindSong}
-                title="Previous Song"
-                aria-label="Previous Song"
+                title="Previous Track"
+                aria-label="Previous Track"
               >
                 ⏮
               </button>
@@ -263,18 +630,18 @@ export const RadioDial: React.FC = () => {
                 {isPlaying ? '❚❚' : '▶'}
               </button>
 
-              {/* Forward: Goes to next SONG within the playlist */}
+              {/* Next song in playlist */}
               <button
                 type="button"
                 className="radio-ctrl-step"
                 onClick={handleForwardSong}
-                title="Next Song"
-                aria-label="Next Song"
+                title="Next Track"
+                aria-label="Next Track"
               >
                 ⏭
               </button>
 
-              {/* Open in YouTube Music */}
+              {/* YouTube Music direct link */}
               <a
                 href={currentTrack.url}
                 target="_blank"
@@ -294,3 +661,5 @@ export const RadioDial: React.FC = () => {
 };
 
 export default RadioDial;
+
+

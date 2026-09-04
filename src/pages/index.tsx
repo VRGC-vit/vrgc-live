@@ -210,7 +210,9 @@ export default function HomePage() {
               </div>
               <div>
                 <span className="pillar-tag">&#9632; FLAGSHIP EVENT</span>
-                <h3 className="pillar-title">GAMER&apos;S ASYLUM</h3>
+                <ScrollFloat as="h3" containerClassName="pillar-title">
+                  GAMER&apos;S ASYLUM
+                </ScrollFloat>
                 <p className="pillar-desc">
                   Asylum is the flagship event of our club for college students, conducting game tournaments like Free Fire, BGMI, Valorant, FIFA, and many more.
                 </p>
@@ -229,7 +231,9 @@ export default function HomePage() {
               </div>
               <div>
                 <span className="pillar-tag">&#9632; GAME DEV WORKSHOP</span>
-                <h3 className="pillar-title">XP EXCHANGE</h3>
+                <ScrollFloat as="h3" containerClassName="pillar-title">
+                  XP EXCHANGE
+                </ScrollFloat>
                 <p className="pillar-desc">
                   XP Exchange is our Game Dev workshop for the club. Introducing game development, and promoting gaming within the students.
                 </p>
@@ -248,7 +252,9 @@ export default function HomePage() {
               </div>
               <div>
                 <span className="pillar-tag">&#9632; GAME JAM &amp; PITCH</span>
-                <h3 className="pillar-title">GAMIECON</h3>
+                <ScrollFloat as="h3" containerClassName="pillar-title">
+                  GAMIECON
+                </ScrollFloat>
                 <p className="pillar-desc">
                   GAMICON is a game pitching event, game jam and pitch your games created within a short time.
                 </p>
@@ -283,11 +289,13 @@ export default function HomePage() {
         <div className="ink-sec-tag" style={{ justifyContent: 'center' }}>
           <span className="tag-sq"></span> ABOUT THE CLUB &bull; EST. 2017
         </div>
-        <h2 className="iss-title">
-          GAMERS,<br />
-          DEVELOPERS &amp;<br />
-          CHAMPIONS.
-        </h2>
+        <ScrollFloat
+          as="h2"
+          containerClassName="iss-title"
+          style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 7.5vw, 5.5rem)', color: '#fff', textAlign: 'center', lineHeight: 0.95, margin: '0 auto 1.5rem', maxWidth: '800px' }}
+        >
+          GAMERS, DEVELOPERS &amp; CHAMPIONS.
+        </ScrollFloat>
         <p className="iss-desc">
           Founded in 2017 at VIT Bhopal University, the <strong>Virtual Reality &amp; Gaming Club (VRGC)</strong> has expanded into an institutional pioneer with over 1000+ active members.
           Operating under four core pillars &mdash; <em>Esports, Development, Workshops, and Bootcamps</em> &mdash; our mission is to cultivate collegiate championship varsity teams while driving frontier student research in spatial computing, Unity/Unreal game development, and live tournament broadcasting.

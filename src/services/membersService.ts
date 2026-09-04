@@ -41,7 +41,11 @@ export type WheelMember = {
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "";
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Guard: only create the client if the URL is present.
+// When Supabase is blocked/unconfigured, fetchClubData returns empty data gracefully.
+export const supabase = supabaseUrl && supabaseKey
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
 
 // Fallback faculty data
 export const facultyMembers: FacultyMember[] = [
@@ -61,64 +65,58 @@ export const facultyMembers: FacultyMember[] = [
   },
 ];
 
-// Default Council data from id_cards table (team = 'Leadership')
-export const defaultCouncilMembers: CouncilMember[] = [
-  {
-    id: "4fc9bf15-38de-423e-b6dc-03cd10e1f73c",
-    name: "Lokesh Sharma",
-    role: "Co-President",
-    tier: "EXECUTIVE COUNCIL",
-    team: "Leadership",
-    photoUrl: "/leadership/lokesh.jpg",
-    email: "lokesh.23bcg10015@vitbhopal.ac.in",
-    bio: "Co-President directing club operations, university alignment, and collegiate championship expansion.",
-  },
-  {
-    id: "ca90bad5-de9b-4ccd-837b-09b5ad39a015",
-    name: "Shivansh Sharma",
-    role: "Co-President",
-    tier: "EXECUTIVE COUNCIL",
-    team: "Leadership",
-    photoUrl: "/leadership/shivansh.jpg",
-    email: "shivansh.23bce11158@vitbhopal.ac.in",
-    bio: "Co-President spearheading varsity tournament operations, live broadcast production, and partner circuits.",
-  },
-  {
-    id: "b2347e87-a099-4fe9-8344-e2af1272d0b8",
-    name: "Haardik Pahlajani",
-    role: "Student Coordinator",
-    tier: "EXECUTIVE COUNCIL",
-    team: "Leadership",
-    photoUrl: "/leadership/haardik.png",
-    email: "haardik.24bcg10051@vitbhopal.ac.in",
-    bio: "Student Coordinator managing internal club workflows, cross-department initiatives, and tech stacks.",
-  },
-  {
-    id: "f5eae1e7-5fd7-4b09-b223-ba06122c055a",
-    name: "Parardha Dhar",
-    role: "Student Coordinator",
-    tier: "EXECUTIVE COUNCIL",
-    team: "Leadership",
-    photoUrl: "/leadership/parardha.jpg",
-    email: "parardha.24bcg10003@vitbhopal.ac.in",
-    bio: "Student Coordinator and visionary founder expanding student gaming initiatives and lab research.",
-  },
-];
+// Default Council data (dynamically loaded from id_cards table where team = 'Leadership')
+export const defaultCouncilMembers: CouncilMember[] = [];
+
+/** Races a promise-like against a timeout. Returns null if the timeout fires first. */
+function withTimeout<T>(promise: PromiseLike<T>, ms = 5000): Promise<T | null> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
+  ]);
+}
 
 export async function fetchClubData() {
   try {
-    // 1. Fetch Firestore members (if available)
-    let rawMembers: any[] = [];
-    try {
-      const membersSnap = await getDocs(collection(db, "members"));
-      rawMembers = membersSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
-    } catch {
-      // Firestore fallback
-    }
+    // 1. Parallelise all three async data sources with a 5s timeout each
+    // Note: Supabase builder is a PromiseLike, not a real Promise — call .then() to materialise
+    // If supabase client is null (URL missing/blocked), pass pre-resolved null so we skip gracefully
+    const [membersResult, storageResult, idCardsResult] = await Promise.allSettled([
+      withTimeout(getDocs(collection(db, "members")).catch(() => null), 5000),
+      supabase
+        ? withTimeout(
+            supabase.storage.from("id-cards").list("id-photos", { limit: 500 }).then((r) => r),
+            5000
+          )
+        : Promise.resolve(null),
+      supabase
+        ? withTimeout(
+            supabase
+              .from("id_cards")
+              .select("id, registrationNumber, name, email, team, position, role, photoUrl, description, bio")
+              .then((r) => r),
+            5000
+          )
+        : Promise.resolve(null),
+    ]);
 
-    // 2. Fetch live files from Supabase 'id-photos' bucket
-    const { data: files } = await supabase.storage.from("id-cards").list("id-photos", { limit: 500 });
-    const validFiles = (files || [])
+    // null means timed out; treat the same as a failed promise
+    const rawMembers: any[] =
+      membersResult.status === "fulfilled" && membersResult.value
+        ? (membersResult.value as any).docs?.map((d: any) => ({ id: d.id, ...d.data() })) ?? []
+        : [];
+
+    const storageData: Array<{ name: string }> =
+      storageResult.status === "fulfilled" && storageResult.value
+        ? ((storageResult.value as any).data as Array<{ name: string }>) ?? []
+        : [];
+
+    const idCardsData: Array<Record<string, string>> =
+      idCardsResult.status === "fulfilled" && idCardsResult.value
+        ? ((idCardsResult.value as any).data as Array<Record<string, string>>) ?? []
+        : [];
+
+    const validFiles: Array<{ name: string }> = storageData
       .filter((f) => f.name && f.name !== ".emptyFolderPlaceholder")
       .sort((a, b) => {
         const timeA = Number((a.name.match(/_(\d+)\./) || [0, 0])[1]) || 0;
@@ -126,11 +124,8 @@ export async function fetchClubData() {
         return timeB - timeA;
       });
 
-    // id_cards table query
-    const { data: idCardsData } = await supabase
-      .from("id_cards")
-      .select("*");
-    const idCards = idCardsData || [];
+    const idCards: Array<Record<string, string>> = idCardsData;
+
 
     const getPhotoUrl = (regNo?: string, name?: string, email?: string): string => {
       const cleanReg = (regNo || "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -180,56 +175,79 @@ export async function fetchClubData() {
       return "/vrgc_logo.jpg";
     };
 
-    // 3. Extract Leadership members directly from id_cards table (team = 'Leadership')
-    const leadershipCards = idCards.filter(
-      (c) => (c.team || "").toLowerCase().includes("leadership")
-    );
+    // 3. Extract Leadership members directly from id_cards table and Firestore (team = 'Leadership')
+    const combinedLeads: CouncilMember[] = [];
 
-    const mindsOrder = ["lokesh", "shivansh", "haardik", "parardha"];
-    const councilMembers: CouncilMember[] = [];
+    const addLeadCandidate = (c: any) => {
+      if (!c) return;
+      const cleanReg = (c.registrationNumber || c.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+      const cleanName = (c.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
-    mindsOrder.forEach((target) => {
-      const found =
-        leadershipCards.find((m) => (m.name || "").toLowerCase().includes(target)) ||
-        idCards.find((m) => (m.name || "").toLowerCase().includes(target)) ||
-        rawMembers.find((m) => (m.name || "").toLowerCase().includes(target)) ||
-        defaultCouncilMembers.find((m) => (m.name || "").toLowerCase().includes(target));
+      const existing = combinedLeads.find((item) => {
+        const itemReg = (item.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const itemName = (item.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        return (cleanReg && itemReg && cleanReg === itemReg) || (cleanName && itemName && cleanName === itemName);
+      });
 
-      if (found) {
-        const localMap: Record<string, string> = {
-          lokesh: "/leadership/lokesh.jpg",
-          shivansh: "/leadership/shivansh.jpg",
-          haardik: "/leadership/haardik.png",
-          parardha: "/leadership/parardha.jpg",
-        };
-
-        const photo =
-          localMap[target] ||
-          found.photoUrl ||
-          getPhotoUrl(found.registrationNumber || found.id, found.name, found.email);
-
-        councilMembers.push({
-          id: found.id || found.registrationNumber,
-          name: found.name || target.toUpperCase(),
-          role: found.position || found.role || "Executive Council",
-          tier: "EXECUTIVE COUNCIL",
-          team: found.team || "Leadership",
-          photoUrl: photo,
-          email: found.email || "",
-          bio:
-            found.bio ||
-            (target === "lokesh"
-              ? "Co-President directing club operations, university alignment, and collegiate championship expansion."
-              : target === "shivansh"
-              ? "Co-President spearheading varsity tournament operations, live broadcast production, and partner circuits."
-              : target === "haardik"
-              ? "Student Coordinator managing internal club workflows, cross-department initiatives, and tech stacks."
-              : "Student Coordinator and visionary founder expanding student gaming initiatives and lab research."),
-        });
+      if (existing) {
+        if (!existing.bio && (c.description || c.bio)) {
+          existing.bio = c.description || c.bio;
+        }
+        const live = getPhotoUrl(c.registrationNumber || c.id, c.name, c.email);
+        if (live && !live.includes("vrgc_logo")) {
+          existing.photoUrl = live;
+        } else if ((!existing.photoUrl || existing.photoUrl.includes("vrgc_logo")) && c.photoUrl) {
+          existing.photoUrl = c.photoUrl;
+        }
+        if (!existing.role && (c.position || c.role)) {
+          existing.role = c.position || c.role;
+        }
+        return;
       }
+
+      const livePhoto = getPhotoUrl(c.registrationNumber || c.id, c.name, c.email);
+      const photo = livePhoto && !livePhoto.includes("vrgc_logo") ? livePhoto : (c.photoUrl || "/vrgc_logo.jpg");
+      combinedLeads.push({
+        id: c.id || c.registrationNumber,
+        name: c.name || "Council Member",
+        role: c.position || c.role || "Executive Council",
+        tier: "EXECUTIVE COUNCIL",
+        team: c.team || "Leadership",
+        photoUrl: photo,
+        email: c.email || "",
+        bio: c.description || c.bio || "",
+      });
+    };
+
+    // Filter id_cards with Leadership team or role
+    idCards
+      .filter((c) => 
+        (c.team || "").toLowerCase().includes("leadership") || 
+        /(president|executive|leadership|coordinator)/i.test(c.position || c.role || "")
+      )
+      .forEach(addLeadCandidate);
+
+    // Filter rawMembers with Leadership team or role
+    rawMembers
+      .filter((m) => 
+        (m.team || "").toLowerCase().includes("leadership") || 
+        /(president|executive|leadership|coordinator)/i.test(m.position || m.role || "")
+      )
+      .forEach(addLeadCandidate);
+
+    // Sort leadership: Presidents first, then Student Coordinators / Leads, then others
+    combinedLeads.sort((a, b) => {
+      const getScore = (role: string) => {
+        const r = (role || "").toLowerCase();
+        if (r.includes("president")) return 10;
+        if (r.includes("coordinator")) return 5;
+        if (r.includes("lead")) return 3;
+        return 1;
+      };
+      return getScore(b.role) - getScore(a.role);
     });
 
-    const finalCouncil = councilMembers.length === 4 ? councilMembers : defaultCouncilMembers;
+    const finalCouncil: CouncilMember[] = combinedLeads;
 
     // 4. Group remaining teams for the Tactical Weapon Wheel
     // Normalized categories: Education, Design, Social Media, Esports (PC), Esports (Mobile), PR, Technical

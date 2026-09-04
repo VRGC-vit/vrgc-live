@@ -8,3 +8,4 @@ export { ScrollVelocity } from './ScrollVelocity';
 export { OptionWheel } from './OptionWheel';
 export { RadioDial } from './RadioDial';
 export { StaggeredMenu } from './StaggeredMenu';
+export { PageTransitionLoader } from './PageTransitionLoader';

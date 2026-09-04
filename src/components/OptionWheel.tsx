@@ -4,6 +4,7 @@ export interface OptionWheelProps {
   items?: string[];
   defaultSelected?: number;
   onChange?: (index: number, item: string) => void;
+  onItemHover?: (index: number | null, item?: string) => void;
   textColor?: string;
   activeColor?: string;
   side?: 'left' | 'right';
@@ -43,7 +44,8 @@ export const OptionWheel: React.FC<OptionWheelProps> = ({
   items = DEFAULT_ITEMS,
   defaultSelected = 3,
   onChange,
-  textColor = '#a6a6a6',
+  onItemHover,
+  textColor = '#8a8a95',
   activeColor = '#ffffff',
   side = 'left',
   fontSize = 3,
@@ -344,6 +346,7 @@ export const OptionWheel: React.FC<OptionWheelProps> = ({
       onPointerUp={handlePointerEnd}
       onPointerCancel={handlePointerEnd}
       onKeyDown={handleKeyDown}
+      onMouseLeave={() => onItemHover?.(null)}
     >
       {items.map((label, index) => (
         <div
@@ -355,6 +358,7 @@ export const OptionWheel: React.FC<OptionWheelProps> = ({
           aria-selected={selectedIndex === index}
           className={`option-wheel__item${selectedIndex === index ? ' option-wheel__item--selected' : ''}`}
           onClick={() => handleItemClick(index)}
+          onMouseEnter={() => onItemHover?.(index, label)}
         >
           {label}
         </div>

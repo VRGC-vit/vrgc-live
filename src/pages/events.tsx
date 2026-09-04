@@ -90,6 +90,7 @@ export default function EventsPage() {
         {/* NO EVENTS ACTIVE SECTION */}
         <section className="ink-sec-layout" style={{ paddingTop: '4rem', paddingBottom: '7rem' }}>
           <div
+            className="events-standby-card"
             style={{
               maxWidth: '720px',
               margin: '0 auto',

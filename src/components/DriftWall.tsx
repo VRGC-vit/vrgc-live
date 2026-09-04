@@ -83,6 +83,7 @@ export const DriftWall: React.FC<DriftWallProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const planeRef = useRef<HTMLDivElement | null>(null);
+  const colRefs = useRef<(HTMLDivElement | null)[]>([]);
   const trackRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rafRef = useRef<number | null>(null);
 
@@ -104,6 +105,11 @@ export const DriftWall: React.FC<DriftWallProps> = ({
   const lastPointerPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const lastPointerTimeRef = useRef<number>(0);
 
+  // Mobile detection ref (updated in useEffect)
+  const isMobileRef = useRef<boolean>(false);
+  // Frame counter for optional throttling
+  const frameCountRef = useRef<number>(0);
+
   const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({
     width: 1400,
     height: 750,
@@ -113,6 +119,7 @@ export const DriftWall: React.FC<DriftWallProps> = ({
   const [reduced, setReduced] = useState<boolean>(false);
 
   useEffect(() => {
+    isMobileRef.current = /Mobi|Android/i.test(navigator.userAgent);
     setReduced(prefersReducedMotion());
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
@@ -125,11 +132,15 @@ export const DriftWall: React.FC<DriftWallProps> = ({
     return items;
   }, [items]);
 
-  // Dynamically calculate columns so the entire canvas width is always 100% full
   const dynamicColumns = useMemo(() => {
     const minColsForWidth = Math.ceil(containerSize.width / (tileWidth + gap)) + 2;
-    return Math.max(columns, minColsForWidth, 6);
-  }, [columns, containerSize.width, tileWidth, gap]);
+    const baseCols = Math.max(columns, minColsForWidth, 6);
+    if (isMobileRef.current) {
+      // Limit to at most 4 columns on mobile for performance
+      return Math.min(baseCols, 4);
+    }
+    return baseCols;
+  }, [columns, containerSize.width, tileWidth, gap, isMobileRef]);
 
   const columnItems = useMemo(() => {
     const cols: DriftWallItem[][] = Array.from({ length: dynamicColumns }, () => []);
@@ -174,29 +185,31 @@ export const DriftWall: React.FC<DriftWallProps> = ({
   }, [columnMeta, columnItems]);
 
   const applyPlaneTransform = useCallback(
-    (px: number, py: number, panX: number) => {
+    (px: number, py: number) => {
       const plane = planeRef.current;
       if (!plane) return;
-      plane.style.transform = `translate3d(calc(-50% + ${panX.toFixed(1)}px), -50%, ${-depth}px) scale(1.24) rotateX(${(
-        tilt + py
-      ).toFixed(2)}deg) rotateY(${(turn + px).toFixed(2)}deg) rotateZ(${roll}deg)`;
+      const t = isMobileRef.current ? 0.8 : 1.24;
+      plane.style.transform = `translate3d(-50%, -50%, ${-depth}px) scale(${t}) rotateX(${isMobileRef.current ? 0 : (tilt + py).toFixed(2)}deg) rotateY(${isMobileRef.current ? 0 : (turn + px).toFixed(2)}deg) rotateZ(${roll}deg)`;
     },
     [tilt, turn, roll, depth]
   );
 
   useEffect(() => {
     const animate = (ts: number) => {
+      rafRef.current = requestAnimationFrame(animate);
+      if (document.hidden) return;
       if (lastTsRef.current === null) lastTsRef.current = ts;
+      
       const dt = Math.min(0.05, Math.max(0.001, (ts - lastTsRef.current) / 1000));
+      frameCountRef.current++;
+      if (frameCountRef.current % 2 !== 0 && !isMobileRef.current) return;
       lastTsRef.current = ts;
 
-      // Consume user drag delta in RAF
       if (isDraggingRef.current) {
         const dx = dragDeltaRef.current.x;
         const dy = dragDeltaRef.current.y;
         dragDeltaRef.current = { x: 0, y: 0 };
 
-        // Apply direct vertical movement to columns
         if (Math.abs(dy) > 0.01) {
           for (let c = 0; c < offsetsRef.current.length; c++) {
             const meta = columnMeta[c];
@@ -207,12 +220,10 @@ export const DriftWall: React.FC<DriftWallProps> = ({
           }
         }
 
-        // Apply horizontal panning
         if (Math.abs(dx) > 0.01) {
-          panOffsetRef.current.x = Math.max(-500, Math.min(500, panOffsetRef.current.x + dx * 0.85));
+          panOffsetRef.current.x += dx * 0.85;
         }
       } else {
-        // Momentum flick inertia on release
         if (Math.abs(dragInertiaRef.current.y) > 0.5) {
           const decay = Math.exp(-dt / 0.38);
           dragInertiaRef.current.y *= decay;
@@ -225,13 +236,13 @@ export const DriftWall: React.FC<DriftWallProps> = ({
           }
         }
 
-        // Horizontal pan elastic snapback
-        if (Math.abs(panOffsetRef.current.x) > 0.5) {
-          panOffsetRef.current.x *= Math.exp(-dt / 0.55);
+        if (Math.abs(dragInertiaRef.current.x) > 0.5) {
+          const decay = Math.exp(-dt / 0.38);
+          dragInertiaRef.current.x *= decay;
+          panOffsetRef.current.x += dragInertiaRef.current.x * dt;
         }
       }
 
-      // Parallax mouse tilt
       const maxTilt = parallax * 8;
       const targetX = pointerRef.current.x * maxTilt;
       const targetY = -pointerRef.current.y * maxTilt;
@@ -239,9 +250,8 @@ export const DriftWall: React.FC<DriftWallProps> = ({
       pointerDampedRef.current.x += (targetX - pointerDampedRef.current.x) * damp;
       pointerDampedRef.current.y += (targetY - pointerDampedRef.current.y) * damp;
 
-      applyPlaneTransform(pointerDampedRef.current.x, pointerDampedRef.current.y, panOffsetRef.current.x);
+      applyPlaneTransform(pointerDampedRef.current.x, pointerDampedRef.current.y);
 
-      // Normal auto-drift when not actively dragging
       if (!reduced && !isDraggingRef.current) {
         for (let c = 0; c < trackRefs.current.length; c++) {
           const meta = columnMeta[c];
@@ -255,18 +265,24 @@ export const DriftWall: React.FC<DriftWallProps> = ({
           let next = (offsetsRef.current[c] ?? 0) + velocitiesRef.current[c] * dt;
           next = ((next % meta.copyHeight) + meta.copyHeight) % meta.copyHeight;
           offsetsRef.current[c] = next;
-
-          const el = trackRefs.current[c];
-          if (el) el.style.transform = `translate3d(0, ${-next.toFixed(1)}px, 0)`;
-        }
-      } else if (isDraggingRef.current) {
-        for (let c = 0; c < trackRefs.current.length; c++) {
-          const el = trackRefs.current[c];
-          if (el) el.style.transform = `translate3d(0, ${-(offsetsRef.current[c] ?? 0).toFixed(1)}px, 0)`;
         }
       }
 
-      rafRef.current = requestAnimationFrame(animate);
+      const colWidth = tileWidth + gap;
+      const totalWidth = dynamicColumns * colWidth;
+
+      for (let c = 0; c < dynamicColumns; c++) {
+        const el = trackRefs.current[c];
+        if (el) el.style.transform = `translate3d(0, ${-(offsetsRef.current[c] ?? 0).toFixed(1)}px, 0)`;
+
+        const colEl = colRefs.current[c];
+        if (colEl) {
+          const targetX = c * colWidth + panOffsetRef.current.x;
+          const wrappedX = ((targetX % totalWidth) + totalWidth) % totalWidth;
+          const translateX = wrappedX - c * colWidth;
+          colEl.style.transform = `translate3d(${translateX.toFixed(1)}px, 0, 0)`;
+        }
+      }
     };
 
     rafRef.current = requestAnimationFrame(animate);
@@ -275,7 +291,7 @@ export const DriftWall: React.FC<DriftWallProps> = ({
       rafRef.current = null;
       lastTsRef.current = null;
     };
-  }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, applyPlaneTransform]);
+  }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, applyPlaneTransform, dynamicColumns, tileWidth, gap]);
 
   const activate = useCallback(
     (id: string, index: number, item?: DriftWallItem) => {
@@ -296,7 +312,6 @@ export const DriftWall: React.FC<DriftWallProps> = ({
     setActiveId(null);
   }, []);
 
-  // HOLD AND DRAG (Optimized RAF decoupled handlers)
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0 && e.pointerType === 'mouse') return;
     setIsDragging(true);
@@ -329,11 +344,9 @@ export const DriftWall: React.FC<DriftWallProps> = ({
           hasDraggedRef.current = true;
         }
 
-        // Accumulate delta for RAF to consume smoothly
         dragDeltaRef.current.x += dx;
         dragDeltaRef.current.y += dy;
 
-        // Instant velocity calculation for flick release
         dragInertiaRef.current = {
           x: dx / dt,
           y: dy / dt,
@@ -341,15 +354,13 @@ export const DriftWall: React.FC<DriftWallProps> = ({
         return;
       }
 
-      // Parallax mouse position
-      if (parallax > 0 && !reduced) {
+      if (parallax > 0 && !reduced && !isMobileRef.current) {
         pointerRef.current = {
           x: (e.clientX - rect.left) / rect.width - 0.5,
           y: (e.clientY - rect.top) / rect.height - 0.5,
         };
       }
 
-      // Check hovered tile
       const hit = document.elementFromPoint(e.clientX, e.clientY);
       const tile = hit && (hit as HTMLElement).closest ? ((hit as HTMLElement).closest('[data-tile-id]') as HTMLElement) : null;
       if (!tile) return;
@@ -387,6 +398,22 @@ export const DriftWall: React.FC<DriftWallProps> = ({
     release();
   }, [release]);
 
+  // Native wheel listener to properly prevent default page scroll
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onNativeWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      dragInertiaRef.current.y -= e.deltaY * 0.5;
+      dragDeltaRef.current.y -= e.deltaY * 0.5;
+      
+      dragInertiaRef.current.x -= e.deltaX * 0.5;
+      dragDeltaRef.current.x -= e.deltaX * 0.5;
+    };
+    el.addEventListener('wheel', onNativeWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onNativeWheel);
+  }, []);
+
   const cssVars = useMemo(
     () =>
       ({
@@ -407,6 +434,10 @@ export const DriftWall: React.FC<DriftWallProps> = ({
   const renderTile = (item: DriftWallItem, id: string, colIndex: number, itemIndex: number) => {
     const inner = (
       <span className="drift-wall__inner">
+        <span 
+          className="skeleton-shimmer-light" 
+          style={{ position: 'absolute', inset: 0, zIndex: 0, borderRadius: 'inherit' }} 
+        />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={item.image}
@@ -414,14 +445,18 @@ export const DriftWall: React.FC<DriftWallProps> = ({
           loading="lazy"
           decoding="async"
           draggable={false}
+          style={{ opacity: 0, transition: 'opacity 0.4s ease', position: 'relative', zIndex: 1 }}
+          onLoad={(e) => {
+            const target = e.target as HTMLElement;
+            target.style.opacity = '1';
+          }}
           onError={(e) => {
-            // If image fails, hide or fallback gracefully
             (e.target as HTMLElement).style.opacity = '0';
           }}
         />
-        <span className="drift-wall__overlay" aria-hidden="true" />
+        <span className="drift-wall__overlay" aria-hidden="true" style={{ zIndex: 2 }} />
         {item.title && (
-          <div className="drift-wall__tile-info">
+          <div className="drift-wall__tile-info" style={{ zIndex: 3 }}>
             <div className="drift-wall__tile-name">{item.title}</div>
             {item.role && <div className="drift-wall__tile-role">{item.role}</div>}
           </div>
@@ -481,13 +516,13 @@ export const DriftWall: React.FC<DriftWallProps> = ({
       role="group"
       aria-label="Drifting wall of tiles"
     >
-      <div ref={planeRef} className="drift-wall__plane">
+      <div ref={planeRef} className="drift-wall__plane" style={{ willChange: 'transform' }}>
         {columnItems.map((col, c) => {
           const meta = columnMeta[c];
           const copies = Array.from({ length: meta.copies });
           return (
-            <div className="drift-wall__col" key={`col-${c}`}>
-              <div className="drift-wall__track" ref={(el) => { trackRefs.current[c] = el; }}>
+            <div className="drift-wall__col" key={`col-${c}`} ref={(el) => { colRefs.current[c] = el; }} style={{ willChange: 'transform' }}>
+              <div className="drift-wall__track" ref={(el) => { trackRefs.current[c] = el; }} style={{ willChange: 'transform' }}>
                 {copies.map((_, copyIndex) =>
                   col.map((item, itemIndex) =>
                     renderTile(item, `${c}-${copyIndex}-${itemIndex}`, c, itemIndex)

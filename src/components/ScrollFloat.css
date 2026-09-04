@@ -1,14 +1,16 @@
 .scroll-float {
-  overflow: hidden;
+  display: block;
 }
 
 .scroll-float-text {
-  display: inline-block;
-  font-weight: 900;
-  text-align: center;
-  line-height: 1.15;
+  display: inline;
+  font-weight: inherit;
+  text-align: inherit;
+  line-height: inherit;
 }
 
 .scroll-float .char {
   display: inline-block;
+  white-space: pre-wrap;
 }
+

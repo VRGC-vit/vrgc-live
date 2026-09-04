@@ -94,6 +94,7 @@ export default function CommunityPage() {
           </p>
 
           <div
+            className="community-status-card"
             style={{
               background: 'rgba(15, 3, 30, 0.8)',
               border: '1px solid rgba(168, 85, 247, 0.25)',

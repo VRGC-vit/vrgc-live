@@ -7,8 +7,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!data) {
       return res.status(500).json({ error: "Failed to retrieve members from Firestore" });
     }
-    // Cache for 60s
-    res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=120");
+    // Cache for 5 minutes; serve stale for 10 minutes while revalidating
+    res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
     return res.status(200).json(data);
   } catch (error: any) {
     return res.status(500).json({ error: error.message || "Internal server error" });

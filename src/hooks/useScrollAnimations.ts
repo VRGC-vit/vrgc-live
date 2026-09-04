@@ -1,122 +1,171 @@
 import { useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function useScrollAnimations() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
 
-    // 1. Reveal Observer
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            const delay = parseFloat(el.dataset.delay || '0');
-            setTimeout(() => {
-              el.classList.add('is-visible');
-              if (
-                el.classList.contains('reveal-parent') ||
-                el.classList.contains('ink-hero-content')
-              ) {
-                el.classList.add('is-revealed');
-              }
-            }, delay * 1000);
-            revealObserver.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.07, rootMargin: '0px 0px -50px 0px' }
-    );
-
-    const selectors = [
-      '.citadel-stats-bar',
-      '.community-live-ticker-wrap',
-      '#discord-preview',
-      '#life-gallery',
-      '#spotlights',
-      '#membership-tiers',
-      '#weekly-calendar',
-      '.reg-section-wrap',
-      '.gta-wheel-section',
-      '.trust-signals-bar',
-      '.ink-studio-light > div',
-      '.calm-arena-section',
-      '.reveal-parent',
-      '.ink-hero-content',
-      '.ink-split-feature',
-      '.pillar-cards-grid',
-      '.ink-studio-section',
-    ];
-
-    if (!reduced) {
-      selectors.forEach((sel) => {
-        document.querySelectorAll(sel).forEach((el) => {
-          if (
-            !el.classList.contains('will-reveal') &&
-            !el.classList.contains('reveal-parent') &&
-            !el.classList.contains('ink-hero-content')
-          ) {
-            el.classList.add('will-reveal');
-          }
-          revealObserver.observe(el);
-        });
-      });
-
-      const gridSelectors = [
-        '.tourney-grid > .tourney-card',
-        '.discord-features-grid > .df-card',
-        '.campus-gallery-grid > .cg-card',
-        '.membership-tiers-grid > .tier-card',
-        '.circular-team-grid > .circ-member-card',
-        '.spotlight-grid > .spotlight-card',
-        '.dept-grid > div',
+    const ctx = gsap.context(() => {
+      // 1. Grid & Grouped Cards Stagger Scroll Animation
+      const cardGridGroups = [
         '.pillar-cards-grid > .pillar-card',
+        '.dept-grid > .dept-card',
+        '.circular-team-grid > .circ-member-card',
+        '.lab-specs-grid > .lab-spec-box',
+        '.vod-grid > .vod-card',
+        '.bracket-rounds-grid .bracket-match-node',
+        '.trust-signals-bar > .trust-item',
       ];
 
-      gridSelectors.forEach((sel) => {
-        document.querySelectorAll(sel).forEach((el, i) => {
-          const htmlEl = el as HTMLElement;
-          if (!htmlEl.classList.contains('will-reveal')) {
-            htmlEl.classList.add('will-reveal');
-          }
-          const d = (i * 0.08).toFixed(2);
-          htmlEl.dataset.delay = d;
-          htmlEl.style.transitionDelay = `${d}s`;
-          revealObserver.observe(htmlEl);
+      cardGridGroups.forEach((selector) => {
+        const elements = gsap.utils.toArray<HTMLElement>(selector);
+        if (elements.length > 0) {
+          gsap.fromTo(
+            elements,
+            {
+              opacity: 0,
+              y: 45,
+              scale: 0.96,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.75,
+              ease: 'power3.out',
+              stagger: 0.08,
+              scrollTrigger: {
+                trigger: elements[0].parentElement || elements[0],
+                start: 'top 88%',
+                toggleActions: 'play none none none',
+              },
+            }
+          );
+        }
+      });
+
+      // 2. Individual Standalone Cards & Rows
+      const individualCardSelectors = [
+        '.faculty-card',
+        '.schedule-row-card',
+        '.events-standby-card',
+        '.community-status-card',
+        '.crimson-stream-box',
+        '.stadium-scoreboard',
+        '.live-chat-panel',
+      ];
+
+      individualCardSelectors.forEach((selector) => {
+        const elements = gsap.utils.toArray<HTMLElement>(selector);
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            {
+              opacity: 0,
+              y: 35,
+              scale: 0.97,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.7,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 90%',
+                toggleActions: 'play none none none',
+              },
+            }
+          );
         });
       });
-    }
 
-    // 2. Parallax and Floating Cards
-    let scrollY = window.scrollY;
+      // 3. Pictures & Feature Media Zoom & Unblur Reveal
+      const mediaSelectors = [
+        '.isf-card-media',
+        '.pillar-asset-wrap',
+        '.vod-thumb',
+      ];
+
+      mediaSelectors.forEach((selector) => {
+        const elements = gsap.utils.toArray<HTMLElement>(selector);
+        elements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            {
+              opacity: 0,
+              scale: 0.92,
+              filter: 'blur(4px)',
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              filter: 'blur(0px)',
+              duration: 0.85,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 92%',
+                toggleActions: 'play none none none',
+              },
+            }
+          );
+        });
+      });
+
+      // 4. Floating 3D Pictures Drifting Parallax on Scroll
+      const floatingPictures = gsap.utils.toArray<HTMLElement>(
+        '.ipb-floating-card, .iss-floating-photo, .polaroid-float'
+      );
+
+      floatingPictures.forEach((pic, idx) => {
+        const speed = ((idx % 3) + 1) * 40;
+        const rotateOffset = (idx % 2 === 0 ? 1 : -1) * 6;
+        gsap.to(pic, {
+          y: -speed,
+          rotation: `+=${rotateOffset}`,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: pic.parentElement || pic,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.2,
+          },
+        });
+      });
+    });
+
+    // 5. Interactive Mouse Parallax for Floating Elements
     let mouseX = 0;
     let mouseY = 0;
     let rafId: number;
-
-    const onScroll = () => {
-      scrollY = window.scrollY;
-    };
 
     const onMouseMove = (e: MouseEvent) => {
       mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
-    const floatingCards = Array.from(
+    const floatingElements = Array.from(
       document.querySelectorAll<HTMLElement>('.ipb-floating-card, .iss-floating-photo, .polaroid-float')
     );
 
     const tick = () => {
-      if (!reduced && floatingCards.length > 0) {
-        floatingCards.forEach((card, idx) => {
-          const speed = (idx + 1) * 0.05;
-          const factorX = (idx % 2 === 0 ? 1 : -1) * 15 * speed;
-          const factorY = (idx % 3 === 0 ? 1 : -1) * 18 * speed;
-          card.style.transform = `translate3d(${mouseX * factorX}px, ${mouseY * factorY + scrollY * 0.02 * (idx + 1)}px, 0)`;
+      if (floatingElements.length > 0) {
+        floatingElements.forEach((card, idx) => {
+          const factorX = (idx % 2 === 0 ? 1 : -1) * 10;
+          const factorY = (idx % 3 === 0 ? 1 : -1) * 12;
+          card.style.transform = `translate3d(${mouseX * factorX}px, ${mouseY * factorY}px, 0)`;
         });
       }
       rafId = requestAnimationFrame(tick);
@@ -125,10 +174,10 @@ export function useScrollAnimations() {
     rafId = requestAnimationFrame(tick);
 
     return () => {
-      revealObserver.disconnect();
-      window.removeEventListener('scroll', onScroll);
+      ctx.revert();
       window.removeEventListener('mousemove', onMouseMove);
       cancelAnimationFrame(rafId);
     };
   }, []);
 }
+

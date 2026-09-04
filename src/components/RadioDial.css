@@ -1,5 +1,5 @@
 /* ═════════════════════════════════════════════════════════
-   CIRCULAR TRANSPARENT BLACK RADIO DIAL — MINIMALISTIC
+   VRGC RADIO DIAL WIDGET — DOCKED RIGHT-EDGE BLACK GRADIENT
    ═════════════════════════════════════════════════════════ */
 
 .radio-dial-container {
@@ -15,7 +15,7 @@
 }
 
 /* ═══════════════════════════════════════
-   COLLAPSED TAB — Enhanced Floating Pill
+   COLLAPSED TAB — Edge-Docked Floating Pill
    ═══════════════════════════════════════ */
 .radio-dial-tab {
   display: flex;
@@ -24,26 +24,35 @@
   justify-content: center;
   gap: 0.65rem;
   padding: 1.2rem 0.65rem;
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(8, 0, 16, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-right: none;
-  border-radius: 22px 0 0 22px;
+  border-radius: 20px 0 0 20px;
   cursor: pointer;
-  box-shadow: -6px 0 30px rgba(0, 0, 0, 0.5);
+  box-shadow: -6px 0 30px rgba(0, 0, 0, 0.65);
   color: #fff;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.18, 1, 0.32, 1) 0.15s, opacity 0.4s ease 0.15s, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   user-select: none;
-  min-width: 42px;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 44px;
+}
+
+.radio-dial-tab.tab-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(45px);
+  transition: transform 0.35s ease, opacity 0.3s ease;
 }
 
 .radio-dial-tab:hover {
-  background: rgba(0, 0, 0, 0.88);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(168, 85, 247, 0.15);
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  background: rgba(8, 0, 16, 0.95);
+  border-color: rgba(192, 132, 252, 0.25);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(168, 85, 247, 0.2);
+  padding-left: 0.8rem;
 }
 
 .radio-tab-icon {
@@ -105,146 +114,313 @@
   color: #fff;
 }
 
-/* Now playing info in collapsed tab */
 .radio-tab-now {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   font-family: var(--font-mono, monospace);
   font-size: 0.58rem;
   letter-spacing: 0.12em;
-  color: rgba(168, 85, 247, 0.7);
+  color: #c084fc;
   margin-top: 0.15rem;
 }
 
 /* ═══════════════════════════════════════
-   EXPANDED DECK — Transparent Black Circular
+   EXPANDED DECK — Screen-Edge Docked with Pure Black Gradient
+   (No red/pink tint anywhere)
    ═══════════════════════════════════════ */
 .radio-dial-deck {
-  width: 420px;
-  height: 420px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.88) 70%, rgba(0, 0, 0, 0.92) 100%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.8),
-    0 0 1px rgba(255, 255, 255, 0.15),
-    inset 0 0 40px rgba(0, 0, 0, 0.4);
+  width: 440px;
+  height: 480px;
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  margin-right: 0.75rem;
+  margin-right: 0;
   overflow: hidden;
-  animation: dialFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 28px 0 0 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: none;
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9), -2px 0 10px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-@keyframes dialFadeIn {
+/* Pure black gradient fade-out background */
+.radio-deck-bg-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent, rgba(8, 0, 16, 0.75) 25%, rgba(0, 0, 0, 0.92) 55%, #000 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Bubbling Album Art Behind OptionWheel ── */
+.radio-deck-album-art {
+  position: absolute;
+  top: 15%;
+  right: -20px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(14px) brightness(0.7);
+  pointer-events: none;
+  z-index: 2;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+}
+
+.radio-deck-album-art.is-idle {
+  opacity: 0.45;
+  transform: scale(0.92);
+}
+
+.radio-deck-album-art.is-hovering {
+  opacity: 0.85;
+  transform: scale(1.05);
+  filter: blur(8px) brightness(0.9);
+}
+
+.radio-deck-album-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%);
+}
+
+/* Decorative subtle curved guides */
+.radio-deck-ring {
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.radio-deck-inner-ring {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Open / Close Smooth Animations ── */
+.radio-dial-deck.deck-active {
+  animation: panelUnfurl 0.3s cubic-bezier(0.25, 1, 0.4, 1) forwards;
+}
+
+.radio-dial-deck.deck-closing {
+  animation: panelCollapse 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes panelUnfurl {
+  0% {
+    opacity: 0;
+    transform: translateX(60px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes panelCollapse {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0px);
+  }
+  30% {
+    opacity: 0.8;
+    transform: translateX(20px) scale(0.98);
+  }
+  65% {
+    opacity: 0.3;
+    transform: translateX(70px) scale(0.94);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(120px) scale(0.88);
+    filter: blur(8px);
+  }
+}
+
+/* OptionWheel items entrance animation when panel opens */
+.deck-active .option-wheel__item {
+  animation: itemCurlIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.deck-closing .option-wheel__item {
+  animation: itemCurlOut 0.48s cubic-bezier(0.25, 1, 0.35, 1) forwards;
+}
+
+.deck-active .option-wheel__item:nth-child(1) { animation-delay: 0.04s; }
+.deck-active .option-wheel__item:nth-child(2) { animation-delay: 0.08s; }
+.deck-active .option-wheel__item:nth-child(3) { animation-delay: 0.12s; }
+.deck-active .option-wheel__item:nth-child(4) { animation-delay: 0.16s; }
+.deck-active .option-wheel__item:nth-child(5) { animation-delay: 0.20s; }
+.deck-active .option-wheel__item:nth-child(6) { animation-delay: 0.24s; }
+.deck-active .option-wheel__item:nth-child(7) { animation-delay: 0.28s; }
+
+.deck-closing .option-wheel__item:nth-child(1) { animation-delay: 0.20s; }
+.deck-closing .option-wheel__item:nth-child(2) { animation-delay: 0.16s; }
+.deck-closing .option-wheel__item:nth-child(3) { animation-delay: 0.12s; }
+.deck-closing .option-wheel__item:nth-child(4) { animation-delay: 0.08s; }
+.deck-closing .option-wheel__item:nth-child(5) { animation-delay: 0.05s; }
+.deck-closing .option-wheel__item:nth-child(6) { animation-delay: 0.02s; }
+.deck-closing .option-wheel__item:nth-child(7) { animation-delay: 0.00s; }
+
+@keyframes itemCurlIn {
   from {
     opacity: 0;
-    transform: scale(0.88) translateX(40px);
+    transform: translateX(40px) scale(0.85);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateX(0);
   }
 }
 
-/* Dashed perimeter ring */
-.radio-deck-ring {
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.08);
-  pointer-events: none;
+@keyframes itemCurlOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0px);
+  }
+  40% {
+    opacity: 0.8;
+    transform: translateX(15px) scale(0.96);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(65px) scale(0.82);
+    filter: blur(6px);
+  }
 }
 
-/* Inner faint glowing ring */
-.radio-deck-inner-ring {
-  position: absolute;
-  inset: 24px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  pointer-events: none;
+/* ── Closing Sub-element Transitions ── */
+.deck-closing .radio-deck-bottom {
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.4s ease;
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.deck-closing .radio-deck-top {
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.35s ease;
+  transform: translateY(-15px);
+  opacity: 0;
+}
+
+.deck-closing .radio-deck-album-art {
+  transition: transform 0.55s ease, opacity 0.5s ease;
+  transform: scale(0.75) translateX(30px);
+  opacity: 0;
+}
+
+.deck-closing .radio-deck-reticle,
+.deck-closing .radio-deck-reticle-dot {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .radio-dial-deck.deck-active,
+  .radio-dial-deck.deck-closing {
+    animation: none;
+    transition: opacity 0.25s ease;
+  }
+  .deck-active .option-wheel__item {
+    animation: none;
+  }
 }
 
 /* ── Top Header: Badge + Close ── */
 .radio-deck-top {
   position: absolute;
-  top: 30px;
-  left: 0;
-  right: 0;
+  top: 24px;
+  left: 32px;
+  right: 28px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+  justify-content: space-between;
   z-index: 10;
 }
 
 .radio-deck-badge {
   font-family: var(--font-mono, monospace);
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
 }
 
 .radio-deck-close {
-  position: absolute;
-  top: 0;
-  right: 60px;
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.6);
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: 1rem;
   cursor: pointer;
   line-height: 1;
   transition: all 0.2s ease;
 }
 
 .radio-deck-close:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
   color: #fff;
 }
 
-/* ── Center: OptionWheel fills the center ── */
+/* ── Center: OptionWheel fills center docked right ── */
 .radio-deck-wheel-zone {
   width: 100%;
-  height: 220px;
+  height: 260px;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   z-index: 5;
+  margin-top: 15px;
 }
 
 .radio-deck-wheel-container {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
 }
 
 /* Centered selection reticle line */
 .radio-deck-reticle {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
+  right: 0;
+  width: 65%;
   height: 1px;
-  background: linear-gradient(to right, transparent 0%, rgba(168, 85, 247, 0.3) 20%, rgba(168, 85, 247, 0.5) 50%, rgba(168, 85, 247, 0.3) 80%, transparent 100%);
+  background: linear-gradient(to left, rgba(192, 132, 252, 0.6) 0%, rgba(168, 85, 247, 0.2) 60%, transparent 100%);
   pointer-events: none;
   z-index: 8;
 }
@@ -253,75 +429,170 @@
 .radio-deck-reticle-dot {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 6px;
-  height: 6px;
+  right: 42px;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #c084fc;
-  box-shadow: 0 0 10px rgba(192, 132, 252, 0.8), 0 0 25px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.9), 0 0 25px rgba(168, 85, 247, 0.5);
   pointer-events: none;
   z-index: 9;
 }
 
-/* ── Bottom: Station Meta + Controls ── */
+/* ── Bottom: Station Meta + Controls (No overlap with drag area) ── */
 .radio-deck-bottom {
   position: absolute;
-  bottom: 30px;
-  left: 0;
-  right: 0;
+  bottom: 24px;
+  left: 28px;
+  right: 28px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: space-between;
+  gap: 1rem;
   z-index: 10;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1rem;
 }
 
 .radio-deck-meta {
-  text-align: center;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  padding-right: 0.5rem;
+}
+
+.radio-deck-status-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #c084fc;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.radio-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e, 0 0 20px rgba(34, 197, 94, 0.5);
+  animation: livePulse 1.8s infinite ease-in-out;
+}
+
+.radio-status-dot.paused {
+  background: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+  animation: none;
+}
+
+@keyframes livePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.65;
+  }
+}
+
+.radio-station-badge {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.radio-status-sep {
+  opacity: 0.4;
+}
+
+.radio-deck-name-wrap {
+  width: 100%;
+  max-width: 250px;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  padding-bottom: 0.15rem;
+  display: flex;
+  align-items: center;
 }
 
 .radio-deck-name {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.06em;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  display: inline-block;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.radio-deck-name.is-marquee {
+  display: inline-flex;
+  animation: radioMarquee 15s linear infinite;
+}
+
+.radio-marquee-spacer {
+  margin: 0 0.75rem;
+  opacity: 0.45;
+  color: #c084fc;
+}
+
+@keyframes radioMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .radio-deck-genre {
   font-family: var(--font-mono, monospace);
-  font-size: 0.58rem;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #c4b5fd;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  margin-top: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
 }
 
-/* Aesthetic Control Buttons Row */
+/* Control Buttons Row */
 .radio-deck-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
+  gap: 0.6rem;
+  flex-shrink: 0;
 }
 
 .radio-ctrl-step {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   width: 32px;
   height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .radio-ctrl-step:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
   color: #fff;
   transform: scale(1.08);
 }
@@ -330,67 +601,70 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background: rgba(192, 132, 252, 0.15);
+  border: 1.5px solid rgba(192, 132, 252, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .radio-ctrl-play:hover {
-  background: rgba(168, 85, 247, 0.3);
-  border-color: rgba(168, 85, 247, 0.6);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+  background: rgba(192, 132, 252, 0.35);
+  border-color: rgba(192, 132, 252, 0.8);
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
   transform: scale(1.08);
 }
 
 .radio-ctrl-play.is-playing {
-  background: rgba(168, 85, 247, 0.25);
-  border-color: rgba(168, 85, 247, 0.5);
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
+  background: rgba(123, 47, 255, 0.3);
+  border-color: #c084fc;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.35);
 }
 
 .radio-ctrl-ytm {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  height: 26px;
-  padding: 0 0.6rem;
-  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 28px;
+  padding: 0 0.65rem;
+  border-radius: 14px;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.65);
   font-family: var(--font-mono, monospace);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .radio-ctrl-ytm:hover {
-  background: rgba(255, 0, 0, 0.15);
-  border-color: rgba(255, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
   color: #fff;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .radio-dial-deck {
-    width: 310px;
-    height: 310px;
-    margin-right: 0.25rem;
+    width: 320px;
+    height: 440px;
   }
   .radio-deck-wheel-zone {
-    height: 160px;
+    height: 200px;
   }
   .radio-deck-top {
-    top: 15px;
+    top: 16px;
+    left: 18px;
+    right: 18px;
   }
   .radio-deck-bottom {
-    bottom: 15px;
+    bottom: 16px;
+    left: 18px;
+    right: 18px;
   }
   .radio-dial-tab {
     padding: 1rem 0.5rem;

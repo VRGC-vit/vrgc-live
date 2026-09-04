@@ -16,7 +16,7 @@ export interface ScrollFloatProps {
   scrollStart?: string;
   scrollEnd?: string;
   stagger?: number;
-  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'div' | 'span';
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'div' | 'span';
   style?: React.CSSProperties;
 }
 
@@ -36,12 +36,19 @@ export const ScrollFloat: React.FC<ScrollFloatProps> = ({
   const containerRef = useRef<HTMLElement | null>(null);
 
   const splitText = useMemo(() => {
-    const text = typeof children === 'string' ? children : '';
-    if (!text) return children;
-    return text.split('').map((char, index) => (
-      <span className="char" key={index}>
-        {char === ' ' ? '\u00A0' : char}
-      </span>
+    if (typeof children !== 'string') return children;
+    const words = children.split(' ');
+    return words.map((word, wordIndex) => (
+      <React.Fragment key={wordIndex}>
+        <span style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+          {word.split('').map((char, charIndex) => (
+            <span className="char" key={charIndex}>
+              {char}
+            </span>
+          ))}
+        </span>
+        {wordIndex < words.length - 1 ? ' ' : ''}
+      </React.Fragment>
     ));
   }, [children]);
 
