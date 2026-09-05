@@ -30,7 +30,7 @@ export function Footer() {
           <div className="if-col">
             <h4>CONNECT</h4>
             <ul>
-              <li><a href="https://discord.gg/QWAtNrfZ7" target="_blank" rel="noreferrer">Discord Server</a></li>
+              <li><a href="https://discord.gg/BjB2Xyr9tP" target="_blank" rel="noreferrer">Discord Server</a></li>
               <li><a href="https://instagram.com/vrgc.vitb" target="_blank" rel="noreferrer">Instagram @vrgcvitbhopal</a></li>
               <li><a href="https://youtube.com/@vrgcvitb" target="_blank" rel="noreferrer">YouTube Channel</a></li>
             </ul>
