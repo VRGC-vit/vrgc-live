@@ -5,6 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta name="google-site-verification" content="S407UCrPfoGx3m4cy_Iyg4ZNstgTT96G59PfXdO1FSk" />
+        <meta name="msvalidate.01" content="C7FC15B156B92E03DFFCAF18AE24CA89" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
