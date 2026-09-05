@@ -41,7 +41,7 @@ export default function HomePage() {
           </h1>
 
           <p className="ink-hero-sub text-reveal-sub">
-            Premier College Esports and Game Dev and immersive VR and Game Research Studio at VIT Bhopal University. 1000+ active student competitors, tier-1 varsity tournament rosters, game development bootcamps, and dedicated VR hardware laboratories.
+            Welcome to the official <strong>Virtual Reality &amp; Gaming Club (VRGC)</strong> at VIT Bhopal University. Established in 2017, VRGC unites over 1000+ passionate collegiate gamers, competitive esports athletes, Unity and Unreal engine game developers, and immersive VR researchers. We run collegiate tournaments, interactive game development workshops, intensive bootcamp training, and spatial computing labs designed to turn passion into championship careers.
           </p>
 
           <div className="ink-hero-actions text-reveal-sub" style={{ transitionDelay: '0.48s' }}>
@@ -49,7 +49,7 @@ export default function HomePage() {
               Explore Tournaments &nbsp;&nearr;
             </Link>
             <Link href="/about" className="btn-ink-outline">
-              Discover Studio
+              Discover Studio &amp; Labs
             </Link>
           </div>
         </div>
@@ -102,12 +102,14 @@ export default function HomePage() {
             >
               DEFINING THE NEXT GENERATION OF ESPORTS &amp; VR
             </ScrollFloat>
-            <p style={{ color: 'var(--white-muted)', fontSize: '1.05rem', lineHeight: 1.75, marginBottom: '2.5rem' }}>
-              We merge high-octane collegiate tournaments, hands-on virtual reality hardware research, and game
-              development bootcamps into an institutional benchmark for university gaming in India.
+            <p style={{ color: 'var(--white-muted)', fontSize: '1.05rem', lineHeight: 1.75, marginBottom: '1.5rem' }}>
+              We merge high-octane collegiate esports tournaments, hands-on virtual reality hardware research, and game development workshops into an institutional benchmark for university gaming in India. Through our dedicated VR Research Lab, members gain practical exposure to Oculus Quest spatial development, multiplayer network architectures, and esports production.
+            </p>
+            <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.95rem', lineHeight: 1.65, marginBottom: '2.5rem' }}>
+              Whether you are a varsity contender competing for prize pools or an aspiring indie creator building 3D game engines, VRGC offers structured bootcamps, student mentorship, and live tournament arenas.
             </p>
             <Link href="/about" className="btn-ink-explore">
-              EXPLORE STUDIO &nbsp;&nearr;
+              EXPLORE STUDIO &amp; RESEARCH &nbsp;&nearr;
             </Link>
           </div>
           <div className="isf-card-media">
@@ -297,8 +299,11 @@ export default function HomePage() {
           GAMERS, DEVELOPERS &amp; CHAMPIONS.
         </ScrollFloat>
         <p className="iss-desc">
-          Founded in 2017 at VIT Bhopal University, the <strong>Virtual Reality &amp; Gaming Club (VRGC)</strong> has expanded into an institutional pioneer with over 1000+ active members.
-          Operating under four core pillars &mdash; <em>Esports, Development, Workshops, and Bootcamps</em> &mdash; our mission is to cultivate collegiate championship varsity teams while driving frontier student research in spatial computing, Unity/Unreal game development, and live tournament broadcasting.
+          Founded in 2017 at VIT Bhopal University, the <strong>Virtual Reality &amp; Gaming Club (VRGC)</strong> has expanded into an institutional esports and development pioneer with over 1000+ active collegiate gamers.
+          Operating under four core pillars &mdash; <em>Esports, Development, Workshops, and Bootcamps</em> &mdash; our mission is to cultivate collegiate championship varsity teams while driving frontier student research in spatial computing, Unity and Unreal game development, and high-production live tournament broadcasting in our dedicated VR Research Lab.
+        </p>
+        <p style={{ color: 'rgba(255, 255, 255, 0.72)', maxWidth: '780px', margin: '1.25rem auto 0', textAlign: 'center', fontSize: '1rem', lineHeight: 1.7, position: 'relative', zIndex: 2 }}>
+          From organizing flagship college events like Gamer&apos;s Asylum, XP Exchange game development workshops, and GAMIECON hackathons, to managing competitive rosters across Valorant, BGMI, and Free Fire, VRGC stands as Central India&apos;s premier collegiate esports organization.
         </p>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center', gap: '1rem', position: 'relative', zIndex: 2, flexWrap: 'wrap' }}>

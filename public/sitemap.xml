@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="https://www.xml-sitemaps.com/css/sitemap.css"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+       <loc>https://vrgc.live/</loc>
+       <lastmod>2026-09-05T02:35:16+00:00</lastmod>
+       <priority>1.0000</priority>
+  </url>
+  <url>
+       <loc>https://vrgc.live/about</loc>
+       <lastmod>2026-09-05T05:57:28+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://vrgc.live/live</loc>
+       <lastmod>2026-09-05T02:35:18+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://vrgc.live/events</loc>
+       <lastmod>2026-09-05T02:35:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://vrgc.live/community</loc>
+       <lastmod>2026-09-05T02:35:16+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://vrgc.live/tools</loc>
+       <lastmod>2026-09-05T02:35:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://vrgc.live/tools/fixture-generator</loc>
+       <lastmod>2026-09-05T05:57:28+00:00</lastmod>
+       <priority>0.6400</priority>
+  </url>
+</urlset>

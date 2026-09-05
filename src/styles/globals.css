@@ -596,11 +596,12 @@ img { display: block; max-width: 100%; }
 .ink-marquee-item .star { color: rgba(255, 255, 255, 0.5); font-size: 1.4rem; }
 @keyframes inkMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-/* ── FOOTER (INKGAMES STYLE) ── */
+/* ── FOOTER (INKGAMES STYLE - CLEAN WHITE) ── */
 .ink-footer {
-  background: #05000A;
-  border-top: 1px solid var(--border-subtle);
+  background: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding: 5rem var(--pad) 3rem;
+  color: #0f172a;
 }
 .if-top {
   max-width: var(--max-w); margin: 0 auto 4rem;
@@ -609,26 +610,39 @@ img { display: block; max-width: 100%; }
 }
 .if-brand-title {
   font-family: var(--font-display); font-size: 2.5rem;
-  font-weight: 900; letter-spacing: 0.05em; color: var(--white);
+  font-weight: 900; letter-spacing: 0.05em; color: #090314;
 }
 .if-brand-desc {
-  font-size: 0.9rem; color: var(--white-muted); max-width: 380px; line-height: 1.6; margin-top: 0.75rem;
+  font-size: 0.9rem; color: #475569; max-width: 380px; line-height: 1.6; margin-top: 0.75rem;
 }
 .if-links-grid { display: flex; gap: 4rem; flex-wrap: wrap; }
 .if-col h4 {
   font-family: var(--font-head); font-size: 0.8rem; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--white); margin-bottom: 1.25rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #090314; margin-bottom: 1.25rem;
 }
 .if-col ul { display: flex; flex-direction: column; gap: 0.75rem; }
-.if-col a { font-size: 0.88rem; color: var(--white-muted); transition: color 0.2s; }
-.if-col a:hover { color: var(--white); }
+.if-col a { 
+  font-size: 0.88rem; 
+  color: #334155; 
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); 
+  font-weight: 500; 
+  display: inline-block;
+}
+.if-col a:hover { 
+  color: #581c87; 
+  transform: translateX(4px);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 .if-bottom {
   max-width: var(--max-w); margin: 0 auto;
-  padding-top: 2rem; border-top: 1px solid var(--border-subtle);
+  padding-top: 2rem; border-top: 1px solid rgba(0, 0, 0, 0.08);
   display: flex; justify-content: space-between; align-items: center;
-  font-family: var(--font-mono); font-size: 0.7rem; color: var(--white-subtle);
+  font-family: var(--font-mono); font-size: 0.72rem; color: #475569;
   flex-wrap: wrap; gap: 1rem;
 }
+.if-bottom a { color: #334155; font-weight: 600; transition: color 0.2s; }
+.if-bottom a:hover { color: #581c87; text-decoration: underline; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
@@ -708,6 +722,10 @@ img { display: block; max-width: 100%; }
 }
 
 /* Polished Light Card Container for Leadership Council */
+.circular-team-grid {
+  display: grid;
+  width: 100%;
+}
 .circ-member-card {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -718,12 +736,38 @@ img { display: block; max-width: 100%; }
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
   transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s;
 }
 .circ-member-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 36px rgba(123, 47, 255, 0.12);
   border-color: rgba(123, 47, 255, 0.35);
+}
+
+@media (max-width: 640px) {
+  .circular-team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+    gap: 1.25rem !important;
+  }
+  .circ-member-card {
+    padding: 1.5rem 0.75rem !important;
+  }
+  .circ-avatar-wrap {
+    width: 110px !important;
+    height: 110px !important;
+  }
+  .circ-avatar-wrap .skeleton-shimmer-light {
+    width: 110px !important;
+    height: 110px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .circular-team-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 .circ-member-badge {
   display: inline-block;

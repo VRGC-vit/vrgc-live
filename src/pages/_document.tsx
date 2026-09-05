@@ -5,6 +5,13 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta name="google-site-verification" content="S407UCrPfoGx3m4cy_Iyg4ZNstgTT96G59PfXdO1FSk" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="alternate" hrefLang="en" href="https://vrgc.live/" />
+        <link rel="alternate" hrefLang="x-default" href="https://vrgc.live/" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Non-blocking async font load */}

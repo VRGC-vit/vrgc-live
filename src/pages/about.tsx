@@ -174,7 +174,7 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               THE MINDS BEHIND THE GAMIVERSE
             </ScrollFloat>
 
-            <div className="circular-team-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '2rem' }}>
+            <div className="circular-team-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '2rem' }}>
               {isLoading && council.length === 0 ? (
                 Array.from({ length: 4 }).map((_, idx) => (
                   <div

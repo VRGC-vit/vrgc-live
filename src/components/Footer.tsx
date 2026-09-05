@@ -30,17 +30,16 @@ export function Footer() {
           <div className="if-col">
             <h4>CONNECT</h4>
             <ul>
-              <li><Link href="/community">Discord Server</Link></li>
+              <li><a href="https://discord.gg/QWAtNrfZ7" target="_blank" rel="noreferrer">Discord Server</a></li>
               <li><a href="https://instagram.com/vrgc.vitb" target="_blank" rel="noreferrer">Instagram @vrgcvitbhopal</a></li>
-              <li><Link href="https://youtube.com/@vrgcvitb">YouTube Channel</Link></li>
-              <li><Link href="/community">Twitter / X</Link></li>
+              <li><a href="https://youtube.com/@vrgcvitb" target="_blank" rel="noreferrer">YouTube Channel</a></li>
             </ul>
           </div>
         </div>
       </div>
       <div className="if-bottom">
-        <span>&copy; {new Date().getFullYear()} VIRTUAL REALITY AND GAMING CLUB (VRGC) &mdash; VIT BHOPAL. ALL RIGHTS RESERVED.</span>
-        <span style={{ color: 'var(--purple-bright)' }}>E-SPORTS | DEVELOPMENT | WORKSHOP | BOOTCAMP</span>
+        <span>&copy; {new Date().getFullYear()} VIRTUAL REALITY AND GAMING CLUB (VRGC) &mdash; VIT BHOPAL. ALL RIGHTS RESERVED. &bull; <Link href="/sitemap.xml" target="_blank" style={{ textDecoration: 'underline' }}>SITEMAP</Link></span>
+        <span style={{ color: '#7c3aed' }}>E-SPORTS | DEVELOPMENT | WORKSHOP | BOOTCAMP</span>
       </div>
     </footer>
   );
