@@ -2,6 +2,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase/client";
 import { createClient } from "@supabase/supabase-js";
 
+
 export type CouncilMember = {
   id: string;
   name: string;
@@ -65,8 +66,45 @@ export const facultyMembers: FacultyMember[] = [
   },
 ];
 
-// Default Council data (dynamically loaded from id_cards table where team = 'Leadership')
-export const defaultCouncilMembers: CouncilMember[] = [];
+// Default Council data with local UUID webp photos (deterministic UUIDv5 from registration number + salt)
+export const defaultCouncilMembers: CouncilMember[] = [
+  {
+    id: "23BCE11158",
+    name: "Shivansh Sharma",
+    role: "Co-President",
+    tier: "EXECUTIVE COUNCIL",
+    team: "Leadership",
+    photoUrl: "/members/23BCE11158.webp",
+    bio: "Co-President spearheading varsity tournament operations, live broadcast production, and partner circuits.",
+  },
+  {
+    id: "23BCG10015",
+    name: "Lokesh Sharma",
+    role: "Co-President",
+    tier: "EXECUTIVE COUNCIL",
+    team: "Leadership",
+    photoUrl: "/members/23BCG10015.webp",
+    bio: "Co-President directing game development incubators, technical workshops, and competitive gaming divisions.",
+  },
+  {
+    id: "24BCG10003",
+    name: "Parardha Dhar",
+    role: "Student Coordinator",
+    tier: "EXECUTIVE COUNCIL",
+    team: "Leadership",
+    photoUrl: "/members/24BCG10003.webp",
+    bio: "Student Coordinator managing university symposiums, esports player registrations, and club logistics.",
+  },
+  {
+    id: "24BCG10051",
+    name: "Haardik Pahlajani",
+    role: "Student Coordinator",
+    tier: "EXECUTIVE COUNCIL",
+    team: "Leadership",
+    photoUrl: "/members/24BCG10051.webp",
+    bio: "Student Coordinator coordinating varsity scrim schedules, event broadcasts, and member communications.",
+  },
+];
 
 /** Races a promise-like against a timeout. Returns null if the timeout fires first. */
 function withTimeout<T>(promise: PromiseLike<T>, ms = 5000): Promise<T | null> {
@@ -78,17 +116,9 @@ function withTimeout<T>(promise: PromiseLike<T>, ms = 5000): Promise<T | null> {
 
 export async function fetchClubData() {
   try {
-    // 1. Parallelise all three async data sources with a 5s timeout each
-    // Note: Supabase builder is a PromiseLike, not a real Promise — call .then() to materialise
-    // If supabase client is null (URL missing/blocked), pass pre-resolved null so we skip gracefully
-    const [membersResult, storageResult, idCardsResult] = await Promise.allSettled([
+    // Parallelise async data sources with a 5s timeout each
+    const [membersResult, idCardsResult] = await Promise.allSettled([
       withTimeout(getDocs(collection(db, "members")).catch(() => null), 5000),
-      supabase
-        ? withTimeout(
-            supabase.storage.from("id-cards").list("id-photos", { limit: 500 }).then((r) => r),
-            5000
-          )
-        : Promise.resolve(null),
       supabase
         ? withTimeout(
             supabase
@@ -106,73 +136,27 @@ export async function fetchClubData() {
         ? (membersResult.value as any).docs?.map((d: any) => ({ id: d.id, ...d.data() })) ?? []
         : [];
 
-    const storageData: Array<{ name: string }> =
-      storageResult.status === "fulfilled" && storageResult.value
-        ? ((storageResult.value as any).data as Array<{ name: string }>) ?? []
-        : [];
-
     const idCardsData: Array<Record<string, string>> =
       idCardsResult.status === "fulfilled" && idCardsResult.value
         ? ((idCardsResult.value as any).data as Array<Record<string, string>>) ?? []
         : [];
 
-    const validFiles: Array<{ name: string }> = storageData
-      .filter((f) => f.name && f.name !== ".emptyFolderPlaceholder")
-      .sort((a, b) => {
-        const timeA = Number((a.name.match(/_(\d+)\./) || [0, 0])[1]) || 0;
-        const timeB = Number((b.name.match(/_(\d+)\./) || [0, 0])[1]) || 0;
-        return timeB - timeA;
-      });
-
     const idCards: Array<Record<string, string>> = idCardsData;
 
+    /**
+     * Resolves member photo directly from public/members/ using deterministic UUIDv5
+     * Generated format: registrationNumber_salt -> <uuid>.webp
+     */
+    const coreRegSet = new Set<string>(
+      rawMembers.map((m) => (m.registrationNumber || m.id || "").trim())
+    );
 
-    const getPhotoUrl = (regNo?: string, name?: string, email?: string): string => {
-      const cleanReg = (regNo || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-      const cleanEmail = (email || "").toLowerCase().trim();
-      const cleanName = (name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-
-      // 1st Priority: Match verified live file in storage bucket
-      let match = validFiles.find((f) => {
-        const cleanF = f.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-        return cleanReg && cleanF.includes(cleanReg);
-      });
-
-      if (!match && cleanEmail) {
-        match = validFiles.find((f) => {
-          const cleanF = f.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-          return cleanF.includes(cleanEmail.replace(/[^a-z0-9]/g, ""));
-        });
-      }
-
-      if (!match && cleanName) {
-        match = validFiles.find((f) => {
-          const cleanF = f.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-          return cleanF.includes(cleanName);
-        });
-      }
-
-      if (match) {
-        return `${supabaseUrl}/storage/v1/object/public/id-cards/id-photos/${encodeURIComponent(match.name)}`;
-      }
-
-      // 2nd Priority: id_cards table
-      const cardMatch = idCards.find((card) => {
-        const cardReg = (card.registrationNumber || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-        const cardEmail = (card.email || "").toLowerCase().trim();
-        const cardName = (card.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-
-        if (cleanReg && cardReg && cleanReg === cardReg) return true;
-        if (cleanEmail && cardEmail && cleanEmail === cardEmail) return true;
-        if (cleanName && cardName && (cleanName.includes(cardName) || cardName.includes(cleanName))) return true;
-        return false;
-      });
-
-      if (cardMatch && cardMatch.photoUrl) {
-        return cardMatch.photoUrl;
-      }
-
-      return "/vrgc_logo.jpg";
+    // Helper that returns a deterministic URL only for core members
+    const getCorePhotoUrl = (regNo?: string): string => {
+      if (!regNo) return "";
+      const cleaned = regNo.trim();
+      if (!coreRegSet.has(cleaned)) return ""; // not a core member
+      return `/members/${cleaned}.webp`;
     };
 
     // 3. Extract Leadership members directly from id_cards table and Firestore (team = 'Leadership')
@@ -181,32 +165,22 @@ export async function fetchClubData() {
     const addLeadCandidate = (c: any) => {
       if (!c) return;
       const cleanReg = (c.registrationNumber || c.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-      const cleanName = (c.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-
       const existing = combinedLeads.find((item) => {
         const itemReg = (item.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-        const itemName = (item.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-        return (cleanReg && itemReg && cleanReg === itemReg) || (cleanName && itemName && cleanName === itemName);
+        return cleanReg && itemReg && cleanReg === itemReg;
       });
-
+      const photo = getCorePhotoUrl(c.registrationNumber || c.id);
       if (existing) {
         if (!existing.bio && (c.description || c.bio)) {
           existing.bio = c.description || c.bio;
         }
-        const live = getPhotoUrl(c.registrationNumber || c.id, c.name, c.email);
-        if (live && !live.includes("vrgc_logo")) {
-          existing.photoUrl = live;
-        } else if ((!existing.photoUrl || existing.photoUrl.includes("vrgc_logo")) && c.photoUrl) {
-          existing.photoUrl = c.photoUrl;
-        }
+        // Always use the locally generated URL
+        existing.photoUrl = photo;
         if (!existing.role && (c.position || c.role)) {
           existing.role = c.position || c.role;
         }
         return;
       }
-
-      const livePhoto = getPhotoUrl(c.registrationNumber || c.id, c.name, c.email);
-      const photo = livePhoto && !livePhoto.includes("vrgc_logo") ? livePhoto : (c.photoUrl || "/vrgc_logo.jpg");
       combinedLeads.push({
         id: c.id || c.registrationNumber,
         name: c.name || "Council Member",
@@ -218,7 +192,6 @@ export async function fetchClubData() {
         bio: c.description || c.bio || "",
       });
     };
-
     // Filter id_cards with Leadership team or role
     idCards
       .filter((c) => 
@@ -281,8 +254,8 @@ export async function fetchClubData() {
       const isMember = /member/i.test(position) || /coordinator/i.test(position);
       if (!isLead && !isMember) return;
 
-      const photo = getPhotoUrl(m.registrationNumber || m.id, m.name, m.email);
-      const teams = (m.team || "").split(/[,/&]/).map((t: string) => t.trim());
+      const photo = getCorePhotoUrl(m.registrationNumber || m.id);
+      const teams = (m.team || "").split(/[,/\u0026]/).map((t: string) => t.trim());
 
       teams.forEach((t: string) => {
         const targetKeys = normalizeTeamKey(t);

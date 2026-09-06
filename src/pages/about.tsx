@@ -8,10 +8,10 @@ import {
   CouncilMember,
   FacultyMember,
   WheelMember,
+  defaultCouncilMembers,
   facultyMembers as defaultFaculty,
   fetchClubData,
 } from '@/services/membersService';
-
 
 type AboutPageProps = {
   initialData: {
@@ -25,18 +25,14 @@ export default function AboutPage({ initialData }: AboutPageProps) {
   useScrollAnimations();
 
   const [council, setCouncil] = useState<CouncilMember[]>(
-    initialData?.council && initialData.council.length > 0 ? initialData.council : []
+    initialData?.council && initialData.council.length > 0 ? initialData.council : defaultCouncilMembers
   );
   const [faculty, setFaculty] = useState<FacultyMember[]>(initialData?.faculty || defaultFaculty);
   const [wheelCategories, setWheelCategories] = useState<Record<string, WheelMember[]>>(
     initialData?.wheelCategories || {}
   );
-  // Only show loading skeleton when SSR produced no council data at all
-  const [isLoading, setIsLoading] = useState<boolean>(
-    !initialData?.council || initialData.council.length === 0
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Only client-refetch when ISR didn't produce council data (e.g. first cold build)
   useEffect(() => {
     if (initialData?.council && initialData.council.length > 0) {
       setIsLoading(false);
@@ -56,7 +52,6 @@ export default function AboutPage({ initialData }: AboutPageProps) {
   }, [initialData]);
 
   const allVerifiedMembers = useMemo(() => {
-    // Only squad members from wheelCategories (excluding executive leadership / council)
     const all = Object.values(wheelCategories)
       .flat()
       .map((m) => ({
@@ -68,8 +63,9 @@ export default function AboutPage({ initialData }: AboutPageProps) {
         team: m.team,
       }));
 
-    // Exclude council minds and any executive leadership
-    const councilIds = new Set(council.map((c) => (c.id || c.name || '').toLowerCase().replace(/[^a-z0-9]/g, '')));
+    const councilIds = new Set(
+      council.map((c) => (c.id || c.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''))
+    );
 
     const uniqueMap = new Map<string, { id: string; name: string; role: string; photoUrl: string }>();
     all.forEach((m) => {
@@ -77,9 +73,7 @@ export default function AboutPage({ initialData }: AboutPageProps) {
       const lowerTeam = (m.team || '').toLowerCase();
       const key = (m.id || m.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-      // Skip council minds
       if (councilIds.has(key)) return;
-      // Skip leadership team or executive / president council roles
       if (
         lowerTeam.includes('leadership') ||
         lowerRole.includes('president') ||
@@ -92,7 +86,6 @@ export default function AboutPage({ initialData }: AboutPageProps) {
       }
     });
 
-    // Strictly filter out any placeholder (/vrgc_logo.jpg) so 100% of tiles are real photos
     return Array.from(uniqueMap.values())
       .filter((m) => m.photoUrl && !m.photoUrl.includes('vrgc_logo'))
       .map((m) => ({
@@ -114,325 +107,360 @@ export default function AboutPage({ initialData }: AboutPageProps) {
         />
       </Head>
 
-      <main>
-        {/* STUDIO HERO */}
-        <section className="ink-studio-light">
-          <div className="polaroid-float pf-1 iss-floating-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/hero_purple.jpg" alt="VRGC Lab Rig" />
-          </div>
-          <div className="polaroid-float pf-2 iss-floating-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/event_trophy.jpg" alt="Trophy Victory" />
-          </div>
-
-          <div className="ink-sec-tag-dark" style={{ justifyContent: 'center' }}>
-            <span className="tag-sq"></span> WHO WE ARE &bull; EST. 2017
-          </div>
-          <h1
-            className="isl-title text-reveal-sub"
+      <main style={{ background: '#05000a', color: '#ffffff', minHeight: '100vh' }}>
+        {/* ══════════════════════════════════════════════════
+             SECTION 1: STUDIO HERO
+             ══════════════════════════════════════════════════ */}
+        <section
+          style={{
+            position: 'relative',
+            padding: '7rem var(--pad, 2rem) 5rem',
+            background: 'radial-gradient(circle at 50% 20%, #1e0338 0%, #0b0117 55%, #05000a 100%)',
+            overflow: 'hidden',
+            borderBottom: '1px solid rgba(168, 85, 247, 0.2)',
+          }}
+        >
+          {/* Subtle Ambient Glow */}
+          <div
             style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(3.8rem, 9.5vw, 8.5rem)',
-              lineHeight: 0.92,
-              color: '#05000A',
-              textAlign: 'center',
-              margin: '0 auto',
+              position: 'absolute',
+              top: '10%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '600px',
+              height: '350px',
+              background: 'radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)',
+              filter: 'blur(60px)',
+              pointerEvents: 'none',
             }}
-          >
-            <span style={{ display: 'block' }}>GAMERS,</span>
-            <span style={{ display: 'block' }}>DEVELOPERS &amp;</span>
-            <span style={{ display: 'block' }}>CHAMPIONS.</span>
-          </h1>
-          <p
-            className="isl-desc text-reveal-sub"
-            style={{
-              maxWidth: '740px',
-              margin: '1.5rem auto 0',
-              textAlign: 'center',
-              fontSize: 'clamp(1rem, 2vw, 1.22rem)',
-              lineHeight: 1.6,
-              color: '#1e293b',
-              animationDelay: '0.2s',
-            }}
-          >
-            Premier College Esports and Game Dev and immersive VR and Game Research Studio at VIT Bhopal University. 1000+ active student competitors, tier-1 varsity tournament rosters, game development bootcamps, and dedicated VR hardware laboratories.
-          </p>
+          />
 
-          {/* ══════════════════════════════════════════════════
-               CIRCULAR EXECUTIVE COUNCIL: THE MINDS BEHIND THE GAMIVERSE
-               ══════════════════════════════════════════════════ */}
-          <div style={{ marginTop: '5rem', textAlign: 'center', position: 'relative', zIndex: 2, maxWidth: '1280px', marginLeft: 'auto', marginRight: 'auto' }}>
-            <div className="ink-sec-tag-dark" style={{ justifyContent: 'center' }}>
-              <span className="tag-sq"></span> EXECUTIVE COUNCIL
+          <div style={{ maxWidth: '1280px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2 }}>
+            <div className="ink-sec-tag" style={{ justifyContent: 'center', marginBottom: '1.25rem' }}>
+              <span className="tag-sq"></span> WHO WE ARE &bull; EST. 2017
             </div>
-            <ScrollFloat
-              as="h2"
-              containerClassName="isl-council-title"
-              style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: '#05000A', lineHeight: 1, marginTop: '0.5rem', marginBottom: '3rem' }}
+
+            <h1
+              className="text-reveal-sub"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(3.5rem, 8.5vw, 7.5rem)',
+                lineHeight: 0.94,
+                color: '#ffffff',
+                textAlign: 'center',
+                margin: '0 auto',
+                letterSpacing: '0.02em',
+              }}
             >
-              THE MINDS BEHIND THE GAMIVERSE
-            </ScrollFloat>
+              <span style={{ display: 'block' }}>GAMERS,</span>
+              <span style={{ display: 'block', color: 'var(--purple-light, #c084fc)' }}>DEVELOPERS &amp;</span>
+              <span style={{ display: 'block' }}>CHAMPIONS.</span>
+            </h1>
 
-            <div className="circular-team-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '2rem' }}>
-              {isLoading && council.length === 0 ? (
-                Array.from({ length: 4 }).map((_, idx) => (
-                  <div
-                    key={`skel-council-${idx}`}
-                    className="skeleton-card"
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid rgba(124, 58, 237, 0.15)',
-                      borderRadius: '16px',
-                      padding: '2.2rem 1.8rem',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.04)',
-                      textAlign: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                    }}
-                  >
+            <p
+              className="text-reveal-sub"
+              style={{
+                maxWidth: '740px',
+                margin: '1.8rem auto 0',
+                textAlign: 'center',
+                fontSize: 'clamp(1rem, 2vw, 1.18rem)',
+                lineHeight: 1.65,
+                color: '#cbd5e1',
+              }}
+            >
+              Premier College Esports and Game Dev and immersive VR and Game Research Studio at VIT Bhopal University. 1000+ active student competitors, tier-1 varsity tournament rosters, game development bootcamps, and dedicated VR hardware laboratories.
+            </p>
+
+            {/* ══════════════════════════════════════════════════
+                 CIRCULAR EXECUTIVE COUNCIL: THE MINDS BEHIND THE GAMIVERSE
+                 ══════════════════════════════════════════════════ */}
+            <div style={{ marginTop: '5.5rem', textAlign: 'center' }}>
+              <div className="ink-sec-tag" style={{ justifyContent: 'center', marginBottom: '0.8rem' }}>
+                <span className="tag-sq"></span> EXECUTIVE COUNCIL
+              </div>
+
+              <ScrollFloat
+                as="h2"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)',
+                  color: '#ffffff',
+                  lineHeight: 1,
+                  marginTop: '0.5rem',
+                  marginBottom: '3.5rem',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                THE MINDS BEHIND THE GAMIVERSE
+              </ScrollFloat>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))',
+                  gap: '2rem',
+                  maxWidth: '1200px',
+                  margin: '0 auto',
+                }}
+              >
+                {isLoading && council.length === 0 ? (
+                  Array.from({ length: 4 }).map((_, idx) => (
                     <div
-                      className="skeleton-shimmer-light"
+                      key={`skel-council-${idx}`}
                       style={{
-                        width: '130px',
-                        height: '130px',
-                        borderRadius: '50%',
-                        marginBottom: '1.25rem',
-                        border: '3px solid rgba(124, 58, 237, 0.2)',
-                      }}
-                    />
-                    <div
-                      className="skeleton-shimmer-light"
-                      style={{ width: '130px', height: '22px', borderRadius: '4px', marginBottom: '0.65rem' }}
-                    />
-                    <div
-                      className="skeleton-shimmer-light"
-                      style={{ width: '90px', height: '14px', borderRadius: '4px', marginBottom: '0.75rem' }}
-                    />
-                    <div
-                      className="skeleton-shimmer-light"
-                      style={{ width: '80px', height: '18px', borderRadius: '6px', marginBottom: '1rem' }}
-                    />
-                    <div
-                      className="skeleton-shimmer-light"
-                      style={{ width: '100%', height: '12px', borderRadius: '3px', marginBottom: '0.4rem' }}
-                    />
-                    <div
-                      className="skeleton-shimmer-light"
-                      style={{ width: '85%', height: '12px', borderRadius: '3px' }}
-                    />
-                  </div>
-                ))
-              ) : (
-                council.map((lead, idx) => {
-                  const ringColors = [
-                    'rgba(124, 58, 237, 0.4)',
-                    'rgba(234, 179, 8, 0.4)',
-                    'rgba(2, 132, 199, 0.4)',
-                    'rgba(16, 185, 129, 0.4)',
-                  ];
-                  const badgeColors = ['#7c3aed', '#b45309', '#0284c7', '#059669'];
-                  const ringColor = ringColors[idx % ringColors.length];
-                  const badgeColor = badgeColors[idx % badgeColors.length];
-
-                  const photoSrc = lead.photoUrl || '/vrgc_logo.jpg';
-
-                  return (
-                    <div
-                      key={lead.id || lead.name}
-                      className="circ-member-card"
-                      style={{
-                        background: '#ffffff',
-                        border: '1px solid rgba(124, 58, 237, 0.2)',
+                        background: 'rgba(20, 4, 38, 0.7)',
+                        border: '1px solid rgba(168, 85, 247, 0.2)',
                         borderRadius: '16px',
-                        padding: '2.2rem 1.8rem',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.04)',
+                        padding: '2.5rem 1.8rem',
                         textAlign: 'center',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
                       }}
                     >
                       <div
-                        className="circ-avatar-wrap"
                         style={{
-                          position: 'relative',
                           width: '130px',
                           height: '130px',
-                          margin: '0 auto 1.25rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
                           borderRadius: '50%',
+                          marginBottom: '1.25rem',
+                          background: 'rgba(168, 85, 247, 0.1)',
+                          border: '2px dashed rgba(168, 85, 247, 0.3)',
+                        }}
+                      />
+                      <div style={{ width: '130px', height: '22px', borderRadius: '4px', background: 'rgba(255,255,255,0.08)', marginBottom: '0.65rem' }} />
+                      <div style={{ width: '90px', height: '14px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', marginBottom: '0.75rem' }} />
+                      <div style={{ width: '80px', height: '18px', borderRadius: '6px', background: 'rgba(168, 85, 247, 0.15)', marginBottom: '1rem' }} />
+                    </div>
+                  ))
+                ) : (
+                  council.map((lead, idx) => {
+                    const badgeColors = ['#a855f7', '#fbbf24', '#38bdf8', '#34d399'];
+                    const ringColors = [
+                      'rgba(168, 85, 247, 0.6)',
+                      'rgba(251, 191, 36, 0.6)',
+                      'rgba(56, 189, 248, 0.6)',
+                      'rgba(52, 211, 153, 0.6)',
+                    ];
+                    const ringColor = ringColors[idx % ringColors.length];
+                    const badgeColor = badgeColors[idx % badgeColors.length];
+                    const photoSrc = lead.photoUrl;
+
+                    return (
+                      <div
+                        key={lead.id || lead.name}
+                        style={{
+                          background: 'rgba(20, 4, 38, 0.75)',
+                          border: '1px solid rgba(168, 85, 247, 0.25)',
+                          borderRadius: '16px',
+                          padding: '2.5rem 1.8rem',
+                          boxShadow: '0 12px 35px rgba(0, 0, 0, 0.5)',
+                          textAlign: 'center',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          backdropFilter: 'blur(16px)',
+                          transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease',
                         }}
                       >
                         <div
-                          className="circ-ring"
                           style={{
-                            position: 'absolute',
-                            inset: '-6px',
-                            borderRadius: '50%',
-                            border: `2px dashed ${ringColor}`,
-                            pointerEvents: 'none',
-                          }}
-                        ></div>
-                        <div 
-                          className="skeleton-shimmer-light"
-                          style={{
+                            position: 'relative',
                             width: '130px',
                             height: '130px',
-                            borderRadius: '50%',
+                            margin: '0 auto 1.35rem',
                             display: 'flex',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            border: `3px solid ${badgeColor}`,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '50%',
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: 'absolute',
+                              inset: '-6px',
+                              borderRadius: '50%',
+                              border: `2px dashed ${ringColor}`,
+                              pointerEvents: 'none',
+                            }}
+                          />
+                          <div
+                            style={{
+                              width: '130px',
+                              height: '130px',
+                              borderRadius: '50%',
+                              display: 'flex',
+                              position: 'relative',
+                              overflow: 'hidden',
+                              border: `3px solid ${badgeColor}`,
+                              background: '#0d011a',
+                            }}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={photoSrc}
+                              alt={lead.name}
+                              loading="eager"
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                display: 'block',
+                              }}
+                              onError={(e) => {
+                                if (process.env.NODE_ENV !== 'production') {
+                                  console.warn('Member Image Load Failed:', {
+                                    Member: lead.name,
+                                    Registration: lead.id,
+                                    UUID: (lead.photoUrl || '').replace('/images/', '').replace('.webp', ''),
+                                    'Image URL': lead.photoUrl,
+                                  });
+                                }
+                                const target = e.currentTarget;
+                                if (target.src !== '/vrgc_logo.jpg' && !target.src.endsWith('/vrgc_logo.jpg')) {
+                                  target.src = '/vrgc_logo.jpg';
+                                }
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        <h3
+                          style={{
+                            fontFamily: 'var(--font-head)',
+                            fontSize: '1.45rem',
+                            fontWeight: 800,
+                            color: '#ffffff',
+                            marginBottom: '0.35rem',
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {lead.name}
+                        </h3>
+
+                        <span style={{ color: badgeColor, fontWeight: 700, fontSize: '0.92rem', marginBottom: '0.4rem' }}>
+                          {lead.role}
+                        </span>
+
+                        <span
+                          style={{
+                            background: 'rgba(168, 85, 247, 0.15)',
+                            color: '#e2e8f0',
+                            border: '1px solid rgba(168, 85, 247, 0.3)',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.12em',
+                            padding: '0.25rem 0.65rem',
+                            borderRadius: '6px',
+                            marginTop: '0.25rem',
+                          }}
+                        >
+                          {(lead.team || 'LEADERSHIP').toUpperCase()}
+                        </span>
+
+                        <p style={{ color: '#94a3b8', marginTop: '0.95rem', fontSize: '0.88rem', lineHeight: 1.6, margin: '0.95rem 0 0' }}>
+                          {lead.bio}
+                        </p>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              {/* ══════════════════════════════════════════════════
+                   FACULTY ADVISORY: DR. RAMRAJ DANGI & DR. SIVABALAN KR
+                   ══════════════════════════════════════════════════ */}
+              <div style={{ marginTop: '6rem', paddingTop: '4rem', borderTop: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                <div className="ink-sec-tag" style={{ justifyContent: 'center', marginBottom: '0.8rem' }}>
+                  <span className="tag-sq"></span> INSTITUTIONAL MENTORSHIP
+                </div>
+
+                <ScrollFloat
+                  as="h3"
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
+                    color: '#ffffff',
+                    lineHeight: 1,
+                    marginTop: '0.5rem',
+                    marginBottom: '2.5rem',
+                    textAlign: 'center',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  FACULTY COORDINATORS
+                </ScrollFloat>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                    gap: '2rem',
+                    maxWidth: '920px',
+                    margin: '0 auto',
+                  }}
+                >
+                  {faculty.map((fac) => {
+                    const facultyImg =
+                      fac.image ||
+                      (fac.name.toLowerCase().includes('ramraj')
+                        ? '/faculty/ramraj_dangi.png'
+                        : '/faculty/siva_balan.png');
+
+                    return (
+                      <div
+                        key={fac.name}
+                        style={{
+                          background: 'rgba(20, 4, 38, 0.75)',
+                          border: '1px solid rgba(168, 85, 247, 0.25)',
+                          borderRadius: '16px',
+                          padding: '2.5rem 2rem',
+                          boxShadow: '0 12px 35px rgba(0, 0, 0, 0.5)',
+                          textAlign: 'center',
+                          backdropFilter: 'blur(16px)',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '104px',
+                            height: '104px',
+                            borderRadius: '50%',
+                            margin: '0 auto 1.25rem',
+                            padding: '3px',
+                            background: 'linear-gradient(135deg, #7c3aed, #c084fc)',
+                            boxShadow: '0 8px 24px rgba(124, 58, 237, 0.35)',
                           }}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                            src={photoSrc}
-                            alt={lead.name}
-                            className="circ-avatar"
-                            loading="lazy"
+                            src={facultyImg}
+                            alt={fac.name}
                             style={{
                               width: '100%',
                               height: '100%',
                               objectFit: 'cover',
-                              display: 'block',
-                              opacity: 0,
-                              transition: 'opacity 0.4s ease',
-                              background: '#f1f5f9',
-                            }}
-                            onLoad={(e) => {
-                              (e.target as HTMLElement).style.opacity = '1';
-                              (e.target as HTMLElement).parentElement?.classList.remove('skeleton-shimmer-light');
-                            }}
-                            onError={(e) => {
-                              const target = e.currentTarget;
-                              if (target.src !== '/vrgc_logo.jpg' && !target.src.endsWith('/vrgc_logo.jpg')) {
-                                target.src = '/vrgc_logo.jpg';
-                              }
+                              borderRadius: '50%',
+                              background: '#0d011a',
                             }}
                           />
                         </div>
+                        <h4 style={{ fontFamily: 'var(--font-head)', fontSize: '1.4rem', color: '#ffffff', fontWeight: 800, marginBottom: '0.35rem' }}>
+                          {fac.name}
+                        </h4>
+                        <div style={{ color: '#c084fc', fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.4rem' }}>
+                          {fac.role}
+                        </div>
+                        <div style={{ color: '#94a3b8', fontSize: '0.85rem', marginBottom: '0.85rem' }}>
+                          {fac.department}
+                        </div>
+                        <p style={{ color: '#cbd5e1', fontSize: '0.9rem', lineHeight: 1.65, margin: 0 }}>
+                          {fac.bio}
+                        </p>
                       </div>
-                      <h3
-                        className="circ-name"
-                        style={{
-                          fontFamily: 'var(--font-head)',
-                          fontSize: '1.45rem',
-                          fontWeight: 800,
-                          color: '#0f172a',
-                          marginBottom: '0.35rem',
-                          lineHeight: 1.2,
-                        }}
-                      >
-                        {lead.name}
-                      </h3>
-                      <span className="circ-role" style={{ color: badgeColor, fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.35rem' }}>
-                        {lead.role}
-                      </span>
-                      <span
-                        className="circ-member-badge"
-                        style={{
-                          background: 'rgba(124, 58, 237, 0.08)',
-                          color: badgeColor,
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.68rem',
-                          fontWeight: 700,
-                          letterSpacing: '0.12em',
-                          padding: '0.25rem 0.65rem',
-                          borderRadius: '6px',
-                          marginTop: '0.25rem',
-                        }}
-                      >
-                        {(lead.team || 'LEADERSHIP').toUpperCase()}
-                      </span>
-                      <p className="circ-bio" style={{ color: '#334155', marginTop: '0.85rem', fontSize: '0.88rem', lineHeight: 1.55 }}>
-                        {lead.bio}
-                      </p>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-
-            {/* ══════════════════════════════════════════════════
-                 FACULTY ADVISORY: DR. RAMRAJ DANGI & DR. SIVABALAN KR
-                 ══════════════════════════════════════════════════ */}
-            <div style={{ marginTop: '5.5rem', paddingTop: '3.5rem', borderTop: '1px solid rgba(124, 58, 237, 0.15)' }}>
-              <div className="ink-sec-tag-dark" style={{ justifyContent: 'center' }}>
-                <span className="tag-sq"></span> INSTITUTIONAL MENTORSHIP
-              </div>
-              <ScrollFloat
-                as="h3"
-                style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', color: '#111111', lineHeight: 1, marginTop: '0.5rem', marginBottom: '2.5rem', textAlign: 'center' }}
-              >
-                FACULTY COORDINATORS
-              </ScrollFloat>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-                {faculty.map((fac) => {
-                  const facultyImg =
-                    fac.image ||
-                    (fac.name.toLowerCase().includes('ramraj')
-                      ? '/faculty/ramraj_dangi.png'
-                      : '/faculty/siva_balan.png');
-
-                  return (
-                    <div
-                      key={fac.name}
-                      className="faculty-card"
-                      style={{
-                        background: '#ffffff',
-                        border: '1px solid rgba(124, 58, 237, 0.2)',
-                        borderRadius: '16px',
-                        padding: '2.2rem 1.8rem',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.04)',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '104px',
-                          height: '104px',
-                          borderRadius: '50%',
-                          margin: '0 auto 1.25rem',
-                          padding: '3px',
-                          background: 'linear-gradient(135deg, #7c3aed, #c084fc)',
-                          boxShadow: '0 8px 24px rgba(124, 58, 237, 0.25)',
-                        }}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={facultyImg}
-                          alt={fac.name}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            borderRadius: '50%',
-                            background: '#f8fafc',
-                          }}
-                        />
-                      </div>
-                      <h4 style={{ fontFamily: 'var(--font-head)', fontSize: '1.4rem', color: '#0f172a', fontWeight: 800, marginBottom: '0.35rem' }}>
-                        {fac.name}
-                      </h4>
-                      <div style={{ color: '#7c3aed', fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.4rem' }}>
-                        {fac.role}
-                      </div>
-                      <div style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '0.85rem' }}>
-                        {fac.department}
-                      </div>
-                      <p style={{ color: '#334155', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
-                        {fac.bio}
-                      </p>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -466,8 +494,8 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               alignItems: 'center',
               gap: '0.65rem',
               padding: '0.5rem 1.25rem',
-              background: 'rgba(12, 2, 24, 0.8)',
-              border: '1px solid rgba(168, 85, 247, 0.3)',
+              background: 'rgba(12, 2, 24, 0.85)',
+              border: '1px solid rgba(168, 85, 247, 0.35)',
               borderRadius: '999px',
               backdropFilter: 'blur(12px)',
               fontFamily: 'var(--font-mono)',
@@ -506,18 +534,20 @@ export default function AboutPage({ initialData }: AboutPageProps) {
           />
         </section>
 
-        {/* 4 PILLARS OF VRGC */}
-        <section className="ink-sec-layout" style={{ background: '#080010', position: 'relative' }}>
+        {/* ══════════════════════════════════════════════════
+             SECTION 3: 4 PILLARS OF VRGC
+             ══════════════════════════════════════════════════ */}
+        <section className="ink-sec-layout" style={{ background: '#080010', position: 'relative', padding: '6rem var(--pad, 2rem)' }}>
           <div className="ink-sec-tag" style={{ justifyContent: 'center' }}>
             <span className="tag-sq"></span> OUR ECOSYSTEM
           </div>
           <ScrollFloat
             as="h2"
-            style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 7vw, 5.5rem)', textAlign: 'center', color: '#fff', lineHeight: 0.95, marginBottom: '1rem' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 7vw, 5.5rem)', textAlign: 'center', color: '#fff', lineHeight: 0.95, marginBottom: '1rem', letterSpacing: '0.03em' }}
           >
             THE FOUR PILLARS OF VRGC
           </ScrollFloat>
-          <p style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 3rem', color: 'var(--white-muted)', fontSize: '1.05rem' }}>
+          <p style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 3.5rem', color: '#94a3b8', fontSize: '1.05rem', lineHeight: 1.6 }}>
             Every domain is engineered for excellence. Whether competing on the national stage or writing spatial shaders, our departments operate with professional rigor.
           </p>
 
@@ -566,7 +596,7 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               <div className="dept-stats">
                 <div><div className="dept-stat-num">10+</div><div className="dept-stat-label">Sessions Held</div></div>
                 <div><div className="dept-stat-num">150+</div><div className="dept-stat-label">Students Trained</div></div>
-                <div><div className="dept-stat-num">Quaterly</div><div className="dept-stat-label">Cadence</div></div>
+                <div><div className="dept-stat-num">Quarterly</div><div className="dept-stat-label">Cadence</div></div>
               </div>
             </div>
 
@@ -588,18 +618,20 @@ export default function AboutPage({ initialData }: AboutPageProps) {
           </div>
         </section>
 
-        {/* VR HARDWARE SHOWCASE */}
-        <section className="ink-sec-layout" style={{ background: '#0d011a', borderTop: '1px solid rgba(168, 85, 247, 0.15)' }}>
+        {/* ══════════════════════════════════════════════════
+             SECTION 4: VR HARDWARE SHOWCASE
+             ══════════════════════════════════════════════════ */}
+        <section className="ink-sec-layout" style={{ background: '#0d011a', borderTop: '1px solid rgba(168, 85, 247, 0.15)', padding: '6rem var(--pad, 2rem)' }}>
           <div className="ink-sec-tag" style={{ justifyContent: 'center' }}>
             <span className="tag-sq"></span> CAMPUS RESEARCH FACILITY
           </div>
           <ScrollFloat
             as="h2"
-            style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 7vw, 5rem)', textAlign: 'center', color: '#fff', lineHeight: 0.95, marginBottom: '1rem' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 7vw, 5rem)', textAlign: 'center', color: '#fff', lineHeight: 0.95, marginBottom: '1rem', letterSpacing: '0.03em' }}
           >
             THE VR HARDWARE &amp; ESPORTS LAB
           </ScrollFloat>
-          <p style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 3rem', color: 'var(--white-muted)', fontSize: '1.05rem' }}>
+          <p style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 3.5rem', color: '#94a3b8', fontSize: '1.05rem', lineHeight: 1.6 }}>
             Our flagship campus facility serves as both a high-performance tournament practice arena and a spatial computing incubation lab.
           </p>
 
@@ -612,11 +644,11 @@ export default function AboutPage({ initialData }: AboutPageProps) {
             <div className="lab-spec-box">
               <div className="lab-spec-val">3x</div>
               <div className="lab-spec-title">Meta Quest 2 &amp; 3</div>
-              <div className="lab-spec-sub">Oculusrift and HTC Vive</div>
+              <div className="lab-spec-sub">Oculus Rift &amp; HTC Vive</div>
             </div>
             <div className="lab-spec-box">
               <div className="lab-spec-val">1 Gbps</div>
-              <div className="lab-spec-title">Multiple Routers and Hubs</div>
+              <div className="lab-spec-title">Multiple Routers &amp; Hubs</div>
               <div className="lab-spec-sub">&lt; 5ms LAN Ping</div>
             </div>
             <div className="lab-spec-box">
@@ -636,7 +668,7 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     data = await fetchClubData();
   } catch {
-    // Supabase/Firestore unreachable — render page with empty state
+    // Supabase/Firestore unreachable — render page with fallback state
   }
   return {
     props: {
