@@ -445,13 +445,20 @@ export const DriftWall: React.FC<DriftWallProps> = ({
           loading="lazy"
           decoding="async"
           draggable={false}
-          style={{ opacity: 0, transition: 'opacity 0.4s ease', position: 'relative', zIndex: 1 }}
-          onLoad={(e) => {
-            const target = e.target as HTMLElement;
-            target.style.opacity = '1';
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            position: 'relative',
+            zIndex: 1,
+            transition: 'opacity 0.3s ease',
           }}
           onError={(e) => {
-            (e.target as HTMLElement).style.opacity = '0';
+            const target = e.currentTarget;
+            if (target.src !== '/vrgc_logo.jpg' && !target.src.endsWith('/vrgc_logo.jpg')) {
+              target.src = '/vrgc_logo.jpg';
+            }
           }}
         />
         <span className="drift-wall__overlay" aria-hidden="true" style={{ zIndex: 2 }} />

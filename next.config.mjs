@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    VITE_IMAGE_SECRET_SALT:
+      process.env.VITE_IMAGE_SECRET_SALT ||
+      process.env.NEXT_PUBLIC_IMAGE_SECRET_SALT ||
+      process.env.IMAGE_SECRET_SALT ||
+      '',
+  },
   images: {
-    // Using unoptimized while Supabase storage is blocked.
-    // When Supabase is restored, switch to remotePatterns:
-    // remotePatterns: [
-    //   { protocol: 'https', hostname: '**.supabase.co', pathname: '/storage/v1/object/public/**' },
-    //   { protocol: 'https', hostname: 'firebasestorage.googleapis.com', pathname: '/v0/b/**' },
-    //   { protocol: 'https', hostname: 'picsum.photos' },
-    // ],
     unoptimized: true,
   },
 };
