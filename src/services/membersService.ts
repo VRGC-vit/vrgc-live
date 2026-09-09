@@ -1,10 +1,23 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase/client";
-import { createClient } from "@supabase/supabase-js";
+import { getMemberPhotoUrl } from "@/utils/memberUuid";
 
+export type FirebaseMember = {
+  id?: string;
+  registrationNumber?: string;
+  name?: string;
+  email?: string;
+  team?: string;
+  position?: string;
+  role?: string;
+  description?: string;
+  bio?: string;
+  [key: string]: any;
+};
 
 export type CouncilMember = {
   id: string;
+  registrationNumber?: string;
   name: string;
   role: string;
   tier: string;
@@ -24,6 +37,7 @@ export type FacultyMember = {
 
 export type WheelMember = {
   id: string;
+  registrationNumber?: string;
   name: string;
   role: string;
   tier: string;
@@ -38,15 +52,6 @@ export type WheelMember = {
   };
   bio: string;
 };
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "";
-
-// Guard: only create the client if the URL is present.
-// When Supabase is blocked/unconfigured, fetchClubData returns empty data gracefully.
-export const supabase = supabaseUrl && supabaseKey
-  ? createClient(supabaseUrl, supabaseKey)
-  : null;
 
 // Fallback faculty data
 export const facultyMembers: FacultyMember[] = [
@@ -70,44 +75,48 @@ export const facultyMembers: FacultyMember[] = [
 export const defaultCouncilMembers: CouncilMember[] = [
   {
     id: "23BCE11158",
+    registrationNumber: "23BCE11158",
     name: "Shivansh Sharma",
     role: "Co-President",
     tier: "EXECUTIVE COUNCIL",
     team: "Leadership",
-    photoUrl: "/members/23BCE11158.webp",
+    photoUrl: getMemberPhotoUrl("23BCE11158"),
     bio: "Co-President spearheading varsity tournament operations, live broadcast production, and partner circuits.",
   },
   {
     id: "23BCG10015",
+    registrationNumber: "23BCG10015",
     name: "Lokesh Sharma",
     role: "Co-President",
     tier: "EXECUTIVE COUNCIL",
     team: "Leadership",
-    photoUrl: "/members/23BCG10015.webp",
+    photoUrl: getMemberPhotoUrl("23BCG10015"),
     bio: "Co-President directing game development incubators, technical workshops, and competitive gaming divisions.",
   },
   {
     id: "24BCG10003",
+    registrationNumber: "24BCG10003",
     name: "Parardha Dhar",
     role: "Student Coordinator",
     tier: "EXECUTIVE COUNCIL",
     team: "Leadership",
-    photoUrl: "/members/24BCG10003.webp",
+    photoUrl: getMemberPhotoUrl("24BCG10003"),
     bio: "Student Coordinator managing university symposiums, esports player registrations, and club logistics.",
   },
   {
     id: "24BCG10051",
+    registrationNumber: "24BCG10051",
     name: "Haardik Pahlajani",
     role: "Student Coordinator",
     tier: "EXECUTIVE COUNCIL",
     team: "Leadership",
-    photoUrl: "/members/24BCG10051.webp",
+    photoUrl: getMemberPhotoUrl("24BCG10051"),
     bio: "Student Coordinator coordinating varsity scrim schedules, event broadcasts, and member communications.",
   },
 ];
 
 /** Races a promise-like against a timeout. Returns null if the timeout fires first. */
-function withTimeout<T>(promise: PromiseLike<T>, ms = 5000): Promise<T | null> {
+function withTimeout<T>(promise: PromiseLike<T>, ms = 8000): Promise<T | null> {
   return Promise.race([
     Promise.resolve(promise),
     new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
@@ -116,73 +125,64 @@ function withTimeout<T>(promise: PromiseLike<T>, ms = 5000): Promise<T | null> {
 
 export async function fetchClubData() {
   try {
-    // Parallelise async data sources with a 5s timeout each
-    const [membersResult, idCardsResult] = await Promise.allSettled([
-      withTimeout(getDocs(collection(db, "members")).catch(() => null), 5000),
-      supabase
-        ? withTimeout(
-            supabase
-              .from("id_cards")
-              .select("id, registrationNumber, name, email, team, position, role, photoUrl, description, bio")
-              .then((r) => r),
-            5000
-          )
-        : Promise.resolve(null),
-    ]);
-
-    // null means timed out; treat the same as a failed promise
-    const rawMembers: any[] =
-      membersResult.status === "fulfilled" && membersResult.value
-        ? (membersResult.value as any).docs?.map((d: any) => ({ id: d.id, ...d.data() })) ?? []
-        : [];
-
-    const idCardsData: Array<Record<string, string>> =
-      idCardsResult.status === "fulfilled" && idCardsResult.value
-        ? ((idCardsResult.value as any).data as Array<Record<string, string>>) ?? []
-        : [];
-
-    const idCards: Array<Record<string, string>> = idCardsData;
-
-    /**
-     * Resolves member photo directly from public/members/ using deterministic UUIDv5
-     * Generated format: registrationNumber_salt -> <uuid>.webp
-     */
-    const coreRegSet = new Set<string>(
-      rawMembers.map((m) => (m.registrationNumber || m.id || "").trim())
+    const snapshot = await withTimeout(
+      getDocs(collection(db, "members")).catch((err) => {
+        console.warn("Firestore getDocs members error:", err);
+        return null;
+      }),
+      8000
     );
 
-    // Helper that returns a deterministic URL only for core members
-    const getCorePhotoUrl = (regNo?: string): string => {
-      if (!regNo) return "";
-      const cleaned = regNo.trim();
-      if (!coreRegSet.has(cleaned)) return ""; // not a core member
-      return `/members/${cleaned}.webp`;
+    const rawMembers: FirebaseMember[] =
+      snapshot && "docs" in snapshot
+        ? (snapshot as any).docs.map((d: any) => ({ id: d.id, ...d.data() }))
+        : [];
+
+    /**
+     * Resolves member photo directly from public/members/ using deterministic UUIDv5.
+     * Generated format: registrationNumber_salt -> /members/<uuid>.webp
+     */
+    const getCorePhotoUrl = (registrationNumber?: string): string => {
+      if (!registrationNumber?.trim()) {
+        return "/vrgc_logo.jpg";
+      }
+      return getMemberPhotoUrl(registrationNumber.trim());
     };
 
-    // 3. Extract Leadership members directly from id_cards table and Firestore (team = 'Leadership')
+    // Extract Leadership members directly from Firestore (team = 'Leadership' or leadership roles)
     const combinedLeads: CouncilMember[] = [];
 
-    const addLeadCandidate = (c: any) => {
+    const addLeadCandidate = (c: FirebaseMember) => {
       if (!c) return;
-      const cleanReg = (c.registrationNumber || c.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+      const regNo = String(c.registrationNumber || "").trim();
+      if (!regNo && process.env.NODE_ENV !== "production") {
+        console.warn("Leadership member missing registrationNumber:", c.name || c.id);
+      }
+      const cleanReg = regNo.toLowerCase().replace(/[^a-z0-9]/g, "");
       const existing = combinedLeads.find((item) => {
-        const itemReg = (item.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const itemReg = (item.registrationNumber || item.id || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "");
         return cleanReg && itemReg && cleanReg === itemReg;
       });
-      const photo = getCorePhotoUrl(c.registrationNumber || c.id);
+
+      const photo = getCorePhotoUrl(regNo);
+
       if (existing) {
         if (!existing.bio && (c.description || c.bio)) {
-          existing.bio = c.description || c.bio;
+          existing.bio = c.description || c.bio || "";
         }
-        // Always use the locally generated URL
+        // Always use the deterministic local UUID photo URL
         existing.photoUrl = photo;
         if (!existing.role && (c.position || c.role)) {
-          existing.role = c.position || c.role;
+          existing.role = c.position || c.role || "Executive Council";
         }
         return;
       }
+
       combinedLeads.push({
-        id: c.id || c.registrationNumber,
+        id: c.id || regNo,
+        registrationNumber: regNo,
         name: c.name || "Council Member",
         role: c.position || c.role || "Executive Council",
         tier: "EXECUTIVE COUNCIL",
@@ -192,18 +192,11 @@ export async function fetchClubData() {
         bio: c.description || c.bio || "",
       });
     };
-    // Filter id_cards with Leadership team or role
-    idCards
-      .filter((c) => 
-        (c.team || "").toLowerCase().includes("leadership") || 
-        /(president|executive|leadership|coordinator)/i.test(c.position || c.role || "")
-      )
-      .forEach(addLeadCandidate);
 
     // Filter rawMembers with Leadership team or role
     rawMembers
-      .filter((m) => 
-        (m.team || "").toLowerCase().includes("leadership") || 
+      .filter((m) =>
+        (m.team || "").toLowerCase().includes("leadership") ||
         /(president|executive|leadership|coordinator)/i.test(m.position || m.role || "")
       )
       .forEach(addLeadCandidate);
@@ -220,9 +213,9 @@ export async function fetchClubData() {
       return getScore(b.role) - getScore(a.role);
     });
 
-    const finalCouncil: CouncilMember[] = combinedLeads;
+    const finalCouncil: CouncilMember[] = combinedLeads.length > 0 ? combinedLeads : defaultCouncilMembers;
 
-    // 4. Group remaining teams for the Tactical Weapon Wheel
+    // Group remaining teams for the Tactical Weapon Wheel
     // Normalized categories: Education, Design, Social Media, Esports (PC), Esports (Mobile), PR, Technical
     const categoryMap: Record<string, WheelMember[]> = {
       esports_pc: [],
@@ -248,25 +241,27 @@ export async function fetchClubData() {
     };
 
     rawMembers.forEach((m) => {
-      const position = m.position || "Member";
+      const position = m.position || m.role || "Member";
       // Filter to team leads, coleads, and core members/members
       const isLead = /lead/i.test(position);
       const isMember = /member/i.test(position) || /coordinator/i.test(position);
       if (!isLead && !isMember) return;
 
-      const photo = getCorePhotoUrl(m.registrationNumber || m.id);
-      const teams = (m.team || "").split(/[,/\u0026]/).map((t: string) => t.trim());
+      const regNo = String(m.registrationNumber || "").trim();
+      const photo = getCorePhotoUrl(regNo);
+      const teams = (m.team || "").split(/[,/&]/).map((t: string) => t.trim());
 
       teams.forEach((t: string) => {
         const targetKeys = normalizeTeamKey(t);
         targetKeys.forEach((key) => {
           if (categoryMap[key]) {
             // Avoid duplicate in same team
-            if (!categoryMap[key].some((exist) => exist.id === m.id)) {
+            if (!categoryMap[key].some((exist) => exist.id === m.id || (regNo && exist.registrationNumber === regNo))) {
               categoryMap[key].push({
-                id: m.id || m.registrationNumber,
+                id: m.id || regNo,
+                registrationNumber: regNo,
                 name: m.name || "Club Member",
-                role: m.position || "Core Member",
+                role: m.position || m.role || "Core Member",
                 tier: isLead ? "TEAM LEADERSHIP" : "CORE SQUAD",
                 team: t || key.toUpperCase(),
                 weapon: `${(t || key).toUpperCase()} // ${position.toUpperCase()}`,
@@ -277,7 +272,7 @@ export async function fetchClubData() {
                   s2: ["TECHNICAL SKILL", 92],
                   s3: ["CONSISTENCY", 94],
                 },
-                bio: `Active ${position} in the ${t || key} team driving VRGC tournaments, workshops, and student community initiatives.`,
+                bio: m.bio || m.description || `Active ${position} in the ${t || key} team driving VRGC tournaments, workshops, and student community initiatives.`,
               });
             }
           }
@@ -299,7 +294,7 @@ export async function fetchClubData() {
       wheelCategories: categoryMap,
     };
   } catch (error) {
-    console.error("Error fetching club data from Firestore/Supabase:", error);
+    console.error("Error fetching club data from Firestore:", error);
     return {
       council: defaultCouncilMembers,
       faculty: facultyMembers,

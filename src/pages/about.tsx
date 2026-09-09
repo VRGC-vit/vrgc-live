@@ -311,13 +311,13 @@ export default function AboutPage({ initialData }: AboutPageProps) {
                                 if (process.env.NODE_ENV !== 'production') {
                                   console.warn('Member Image Load Failed:', {
                                     Member: lead.name,
-                                    Registration: lead.id,
-                                    UUID: (lead.photoUrl || '').replace('/images/', '').replace('.webp', ''),
+                                    Registration: lead.registrationNumber || lead.id,
+                                    UUID: (lead.photoUrl || '').replace('/members/', '').replace('.webp', ''),
                                     'Image URL': lead.photoUrl,
                                   });
                                 }
                                 const target = e.currentTarget;
-                                if (target.src !== '/vrgc_logo.jpg' && !target.src.endsWith('/vrgc_logo.jpg')) {
+                                if (!target.src.endsWith('/vrgc_logo.jpg')) {
                                   target.src = '/vrgc_logo.jpg';
                                 }
                               }}
@@ -668,7 +668,7 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     data = await fetchClubData();
   } catch {
-    // Supabase/Firestore unreachable — render page with fallback state
+    // Firestore unreachable — render page with fallback state
   }
   return {
     props: {

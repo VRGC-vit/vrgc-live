@@ -7,22 +7,19 @@ export const DNS_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
 
 /**
  * Retrieves the secret salt from environment variables without any hardcoded fallback.
- * Checks VITE_IMAGE_SECRET_SALT, NEXT_PUBLIC_IMAGE_SECRET_SALT, and IMAGE_SECRET_SALT.
+ * Checks NEXT_PUBLIC_IMAGE_SECRET_SALT, VITE_IMAGE_SECRET_SALT, and IMAGE_SECRET_SALT.
  */
 export function getImageSecretSalt(): string {
   const salt =
-    process.env.VITE_IMAGE_SECRET_SALT ||
     process.env.NEXT_PUBLIC_IMAGE_SECRET_SALT ||
+    process.env.VITE_IMAGE_SECRET_SALT ||
     process.env.IMAGE_SECRET_SALT;
 
   if (!salt) {
     if (process.env.NODE_ENV !== 'production') {
-      console.error(
-        'VITE_IMAGE_SECRET_SALT / NEXT_PUBLIC_IMAGE_SECRET_SALT is not configured. Please set it in your environment variables.'
+      console.warn(
+        'NEXT_PUBLIC_IMAGE_SECRET_SALT is not configured. Please set it in your environment variables.'
       );
-    } else {
-      // Throw to avoid generating empty UUIDs which cause 404s.
-      throw new Error('Missing image secret salt environment variable. Set VITE_IMAGE_SECRET_SALT or NEXT_PUBLIC_IMAGE_SECRET_SALT.');
     }
     return '';
   }
@@ -47,7 +44,10 @@ export function generateMemberUUID(
   let regNo = '';
 
   if (typeof memberOrRegNo === 'object' && memberOrRegNo !== null) {
-    regNo = memberOrRegNo.registrationNumber || memberOrRegNo.id || '';
+    regNo = memberOrRegNo.registrationNumber || '';
+    if (!regNo && process.env.NODE_ENV !== 'production') {
+      console.warn('Member document missing registrationNumber:', memberOrRegNo.name || memberOrRegNo.id || memberOrRegNo);
+    }
   } else if (typeof memberOrRegNo === 'string') {
     regNo = memberOrRegNo;
   }
@@ -60,17 +60,19 @@ export function generateMemberUUID(
   }
 
   const identityString = `${cleanReg}_${salt}`;
-  const uuid = uuidv5(identityString, uuidv5.DNS);
-  // Diagnostic logging (salt redacted)
-  console.log({
-    registrationNumber: cleanReg,
-    identityString: `${cleanReg}_[REDACTED]`,
-    generatedUUID: uuid,
-    imageUrl: `/members/${uuid}.webp`
-  });
+  const uuid = uuidv5(identityString, DNS_NAMESPACE);
+
+  // Diagnostic logging (salt never exposed)
+  if (process.env.NODE_ENV !== 'production') {
+    console.log({
+      registrationNumber: cleanReg,
+      generatedUUID: uuid,
+      imageUrl: `/members/${uuid}.webp`,
+    });
+  }
+
   return uuid;
 }
-
 
 /**
  * Resolves the member's photo URL from public/members/ using the deterministic UUIDv5.
