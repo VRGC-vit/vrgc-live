@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import type { GetStaticProps } from 'next';
 import { useScrollAnimations } from '@/hooks/useScrollAnimations';
@@ -97,14 +96,16 @@ export default function AboutPage({ initialData }: AboutPageProps) {
       }));
   }, [wheelCategories, council]);
 
+export default function AboutPage() {
   return (
     <>
       <Head>
-        <title>Studio &amp; Leadership — VRGC VIT Bhopal</title>
+        <title>Maintenance — Studio &amp; About | VRGC VIT Bhopal</title>
         <meta
           name="description"
-          content="Meet the student leadership, faculty coordinators, and competitive rosters of the Virtual Reality &amp; Gaming Club at VIT Bhopal University."
+          content="The VRGC Studio &amp; Member Directory is currently undergoing scheduled maintenance and roster updates."
         />
+        <meta name="robots" content="noindex, follow" />
       </Head>
 
       <main style={{ background: '#05000a', color: '#ffffff', minHeight: '100vh' }}>
@@ -466,31 +467,25 @@ export default function AboutPage({ initialData }: AboutPageProps) {
           </div>
         </section>
 
-        {/* ══════════════════════════════════════════════════
-             FULLSCREEN ROSTER DRIFT WALL GALLERY
-             FULL-BLEED EDGE-TO-EDGE CANVAS
-             ══════════════════════════════════════════════════ */}
-        <section
+        <div
           style={{
-            position: 'relative',
+            maxWidth: '640px',
             width: '100%',
-            height: '100vh',
-            minHeight: '720px',
-            overflow: 'hidden',
-            background: 'radial-gradient(ellipse at 50% 50%, #17042c 0%, #0c0217 60%, #05000a 100%)',
-            borderTop: '1px solid rgba(168, 85, 247, 0.25)',
-            borderBottom: '1px solid rgba(168, 85, 247, 0.25)',
+            background: 'rgba(15, 3, 28, 0.75)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(234, 179, 8, 0.35)',
+            borderRadius: '24px',
+            padding: 'clamp(2.5rem, 6vw, 3.5rem) clamp(1.5rem, 5vw, 2.5rem)',
+            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(234, 179, 8, 0.1)',
+            position: 'relative',
+            zIndex: 1,
           }}
         >
-          {/* Floating Navigation Pill */}
+          {/* Status Badge */}
           <div
             style={{
-              position: 'absolute',
-              top: '1.5rem',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 20,
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               gap: '0.65rem',
               padding: '0.5rem 1.25rem',
@@ -500,15 +495,23 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               backdropFilter: 'blur(12px)',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.72rem',
-              color: '#e2e8f0',
+              fontWeight: 700,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              pointerEvents: 'none',
-              boxShadow: '0 8px 30px rgba(0, 0, 0, 0.6)',
+              marginBottom: '1.75rem',
             }}
           >
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#a855f7', boxShadow: '0 0 10px #a855f7' }}></span>
-            <span>HOLD &amp; DRAG TO EXPLORE &bull; HOVER FOR INTEL</span>
+            <span
+              style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: '#fbbf24',
+                boxShadow: '0 0 10px #fbbf24',
+                display: 'inline-block',
+              }}
+            />
+            ROSTER &amp; STUDIO UPDATE IN PROGRESS
           </div>
 
           <DriftWall
@@ -568,21 +571,18 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               </div>
             </div>
 
-            <div className="dept-card">
-              <span className="dept-num">02</span>
-              <span className="dept-badge">INNOVATION LAB</span>
-              <ScrollFloat as="h3" containerClassName="dept-title">
-                DEVELOPMENT
-              </ScrollFloat>
-              <p className="dept-desc">
-                Building next-generation virtual environments, spatial audio experiments, and custom Unreal Engine 5 games. Our teams publish games on itch.io and Steam, and build proprietary VR tools.
-              </p>
-              <div className="dept-stats">
-                <div><div className="dept-stat-num">9</div><div className="dept-stat-label">Published Games</div></div>
-                <div><div className="dept-stat-num">Meta Q3</div><div className="dept-stat-label">Hardware Rig</div></div>
-                <div><div className="dept-stat-num">UE5 &bull; Unity</div><div className="dept-stat-label">Core Stacks</div></div>
-              </div>
-            </div>
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(2.4rem, 6vw, 3.8rem)',
+              color: '#ffffff',
+              lineHeight: 1,
+              letterSpacing: '0.02em',
+              marginBottom: '1rem',
+            }}
+          >
+            PAGE UNDER <span style={{ color: '#fbbf24' }}>MAINTENANCE</span>
+          </h1>
 
             <div className="dept-card">
               <span className="dept-num">03</span>
@@ -600,23 +600,20 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               </div>
             </div>
 
-            <div className="dept-card">
-              <span className="dept-num">04</span>
-              <span className="dept-badge">BROADCAST &amp; MEDIA</span>
-              <ScrollFloat as="h3" containerClassName="dept-title">
-                CASTING
-              </ScrollFloat>
-              <p className="dept-desc">
-                High quality Hinglish Casting with over 10k+ views on youtube streams with 100+ watching hours. Conducted 50+ live streams in youtube.
-              </p>
-              <div className="dept-stats">
-                <div><div className="dept-stat-num">10K+</div><div className="dept-stat-label">YouTube Views</div></div>
-                <div><div className="dept-stat-num">100+</div><div className="dept-stat-label">Watch Hours</div></div>
-                <div><div className="dept-stat-num">50+</div><div className="dept-stat-label">Live Streams</div></div>
-              </div>
-            </div>
+          <div
+            style={{
+              background: 'rgba(234, 179, 8, 0.06)',
+              borderLeft: '3px solid #fbbf24',
+              borderRadius: '8px',
+              padding: '0.9rem 1.2rem',
+              textAlign: 'left',
+              marginBottom: '2.5rem',
+            }}
+          >
+            <p style={{ margin: 0, fontSize: '0.84rem', color: '#fef08a', lineHeight: 1.5 }}>
+              💡 In the meantime, you can explore ongoing campus tournaments, tune into our live stream arena, or join our community Discord.
+            </p>
           </div>
-        </section>
 
         {/* ══════════════════════════════════════════════════
              SECTION 4: VR HARDWARE SHOWCASE
@@ -657,7 +654,7 @@ export default function AboutPage({ initialData }: AboutPageProps) {
               <div className="lab-spec-sub">Studio Setup</div>
             </div>
           </div>
-        </section>
+        </div>
       </main>
     </>
   );
